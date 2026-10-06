@@ -110,7 +110,7 @@ function VerifyEmailForm() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-[#0d0d0d] via-[#22293a] to-[#0a0a0a] px-4 py-16">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-[#061B3D] via-[#123A73] to-[#061B3D] px-4 py-16">
       <div className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-[#FFFFFF]/15 blur-[130px]" />
       <div className="pointer-events-none absolute top-1/3 right-[-120px] h-[380px] w-[380px] rounded-full bg-[#D41F2D]/20 blur-[130px]" />
       <div
@@ -137,7 +137,7 @@ function VerifyEmailForm() {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-white/10 bg-[#111111]/70 p-6 text-center shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8"
+          className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-6 text-center shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8"
         >
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#D41F2D]">
             <MailCheck size={22} />
@@ -149,12 +149,12 @@ function VerifyEmailForm() {
           </p>
 
           {error && (
-            <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            <div className="mt-4 rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
               {error}
             </div>
           )}
           {notice && !error && (
-            <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            <div className="mt-4 rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
               {notice}
             </div>
           )}
@@ -172,7 +172,7 @@ function VerifyEmailForm() {
                 value={digit}
                 onChange={(e) => handleDigitChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className="h-12 w-11 rounded-xl border border-white/10 bg-[#0a0a0a]/60 text-center text-lg font-semibold text-white outline-none transition-colors focus:border-[#D41F2D]/60"
+                className="h-12 w-11 rounded-xl border border-white/10 bg-[#061B3D]/60 text-center text-lg font-semibold text-white outline-none transition-colors focus:border-[#D41F2D]/60"
               />
             ))}
           </div>

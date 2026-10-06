@@ -16,9 +16,9 @@ const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-[#171410] px-3.5 py-3 text-sm text-white placeholder:text-zinc-500 [color-scheme:dark] focus:border-[#D41F2D] focus:outline-none";
+  "w-full rounded-xl border border-white/10 bg-[#0A2A5C] px-3.5 py-3 text-sm text-white placeholder:text-zinc-500 [color-scheme:dark] focus:border-[#D41F2D] focus:outline-none";
 
-const inputInvalidClass = "!border-red-500/60 focus:!border-red-500";
+const inputInvalidClass = "!border-[#D41F2D]/60 focus:!border-[#D41F2D]";
 
 /** Local YYYY-MM-DD, `daysFromNow` days ahead. */
 function localDate(daysFromNow: number): string {
@@ -420,7 +420,7 @@ export default function TestDriveDialog({
         if (e.target === dialogRef.current) onClose();
       }}
       aria-labelledby="test-drive-title"
-      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[28px] border border-[#D41F2D]/20 bg-[#120f0d] p-0 text-white shadow-[0_25px_80px_rgba(0,0,0,0.6)] backdrop:bg-[#061B3D]/70 backdrop:backdrop-blur-sm"
+      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-0 text-white shadow-[0_25px_80px_rgba(0,0,0,0.6)] backdrop:bg-[#061B3D]/70 backdrop:backdrop-blur-sm"
     >
       <div className="max-h-[90vh] overflow-y-auto p-5 sm:p-6">
         {/* Header */}
@@ -450,7 +450,7 @@ export default function TestDriveDialog({
         {result ? (
           /* Success */
           <div className="py-4 text-center">
-            <CheckCircle2 className="mx-auto text-red-400" size={48} />
+            <CheckCircle2 className="mx-auto text-[#E8404B]" size={48} />
             <h3 className="mt-4 text-xl font-bold">Request received</h3>
             <p className="mt-2 text-sm leading-6 text-zinc-300">
               {dateLabel(result.preferred_date)} at{" "}
@@ -458,7 +458,7 @@ export default function TestDriveDialog({
             </p>
             <p className="mt-1 text-sm text-zinc-500">
               Reference{" "}
-              <span className="font-semibold text-[#F3D77A]">
+              <span className="font-semibold text-[#5FA8E8]">
                 {result.reference}
               </span>
             </p>
@@ -468,7 +468,7 @@ export default function TestDriveDialog({
             <button
               type="button"
               onClick={onClose}
-              className={`mt-6 inline-flex items-center justify-center rounded-full bg-[#D41F2D] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#d8b53c] ${focusRing}`}
+              className={`mt-6 inline-flex items-center justify-center rounded-full bg-[#D41F2D] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#3D8FD9] ${focusRing}`}
             >
               Done
             </button>
@@ -479,7 +479,7 @@ export default function TestDriveDialog({
             {formError && (
               <p
                 role="alert"
-                className="rounded-xl border border-red-500/30 bg-red-500/5 px-3.5 py-2.5 text-sm text-red-300"
+                className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 px-3.5 py-2.5 text-sm text-[#E8404B]"
               >
                 {formError}
               </p>
@@ -580,7 +580,7 @@ export default function TestDriveDialog({
                         className={`rounded-xl border px-2 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:text-zinc-600 disabled:line-through ${
                           selected
                             ? "border-[#D41F2D] bg-[#D41F2D] text-black"
-                            : "border-white/10 bg-[#171410] text-white hover:border-[#D41F2D]/60 disabled:hover:border-white/10"
+                            : "border-white/10 bg-[#0A2A5C] text-white hover:border-[#D41F2D]/60 disabled:hover:border-white/10"
                         } ${focusRing}`}
                       >
                         {timeLabel(slot.time)}
@@ -612,7 +612,7 @@ export default function TestDriveDialog({
                 !form.preferred_date ||
                 !form.preferred_time
               }
-              className={`flex w-full items-center justify-center rounded-full bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#d8b53c] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#D41F2D] ${focusRing}`}
+              className={`flex w-full items-center justify-center rounded-full bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#3D8FD9] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#D41F2D] ${focusRing}`}
             >
               {submitting ? "Sending request…" : "Request test drive"}
             </button>
@@ -644,7 +644,7 @@ function Field({
       </span>
       {children}
       {error && (
-        <span role="alert" className="mt-1.5 block text-xs text-red-400">
+        <span role="alert" className="mt-1.5 block text-xs text-[#E8404B]">
           {error}
         </span>
       )}

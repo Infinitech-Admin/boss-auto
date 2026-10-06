@@ -45,7 +45,7 @@ const STEPS = [
 ] as const;
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-[#0a0a0a]/60 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60";
+  "w-full rounded-xl border border-white/10 bg-[#061B3D]/60 px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60";
 
 function Field({
   label,
@@ -87,7 +87,7 @@ function GalleryTile({
   const poster = media.poster ? resolveMediaUrl(media.poster, baseUrl) : "";
 
   return (
-    <div className="group relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-[#0a0a0a]">
+    <div className="group relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-[#061B3D]">
       {!isVideo || poster ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -166,12 +166,12 @@ function ConfirmDeleteDialog({
         aria-labelledby="confirm-delete-title"
         aria-describedby="confirm-delete-desc"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
+        className="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-[#061B3D] shadow-2xl"
       >
         <div className="px-6 pt-6">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/15">
-              <AlertTriangle size={20} className="text-red-400" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15">
+              <AlertTriangle size={20} className="text-[#E8404B]" />
             </div>
             <div>
               <h3
@@ -191,7 +191,7 @@ function ConfirmDeleteDialog({
           </div>
 
           {/* Preview of what's being deleted */}
-          <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-[#0a0a0a]">
+          <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-[#061B3D]">
             {!isVideo || poster ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -224,7 +224,7 @@ function ConfirmDeleteDialog({
             type="button"
             onClick={onConfirm}
             disabled={deleting}
-            className="flex items-center gap-2 rounded-full bg-red-600 px-5 py-2 text-sm font-bold text-white hover:bg-red-700 disabled:opacity-60"
+            className="flex items-center gap-2 rounded-full bg-[#D41F2D] px-5 py-2 text-sm font-bold text-white hover:bg-[#A8161F] disabled:opacity-60"
           >
             {deleting && <Loader2 size={15} className="animate-spin" />}
             {deleting ? "Removing..." : "Yes, remove"}
@@ -466,7 +466,7 @@ export default function VehicleFormDrawer({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#061B3D]/60 p-4 backdrop-blur-sm">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-[#0d0d0d] shadow-2xl">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-[#061B3D] shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
           <h2 className="text-lg font-bold text-white">
@@ -528,7 +528,7 @@ export default function VehicleFormDrawer({
         >
           <div className="flex-1 space-y-5 overflow-y-auto px-6 py-6">
             {error && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              <div className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
                 {error}
               </div>
             )}
@@ -562,7 +562,7 @@ export default function VehicleFormDrawer({
                     className={inputClass}
                   >
                     {VEHICLE_TYPES.map((t) => (
-                      <option key={t} value={t} className="bg-[#0a0a0a]">
+                      <option key={t} value={t} className="bg-[#061B3D]">
                         {t}
                       </option>
                     ))}
@@ -606,7 +606,7 @@ export default function VehicleFormDrawer({
                       <option
                         key={s}
                         value={s}
-                        className="bg-[#0a0a0a] capitalize"
+                        className="bg-[#061B3D] capitalize"
                       >
                         {s}
                       </option>
@@ -703,7 +703,7 @@ export default function VehicleFormDrawer({
                     Cover image
                   </label>
                   <div className="flex items-center gap-3">
-                    <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a]">
+                    <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#061B3D]">
                       {imagePreview ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -762,7 +762,7 @@ export default function VehicleFormDrawer({
                   )}
 
                   {galleryUploading && (
-                    <div className="mb-3 rounded-lg border border-white/10 bg-[#0a0a0a] px-3 py-2 text-xs text-zinc-400">
+                    <div className="mb-3 rounded-lg border border-white/10 bg-[#061B3D] px-3 py-2 text-xs text-zinc-400">
                       <div className="mb-1 flex items-center justify-between">
                         <span className="truncate">
                           {galleryUploading.name}

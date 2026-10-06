@@ -117,9 +117,9 @@ export default function ChatWidget() {
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
       {/* Chat panel */}
       {isOpen && (
-        <div className="flex h-[min(70vh,560px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080b0f] shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
+        <div className="flex h-[min(70vh,560px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#061B3D] shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
           {/* Header */}
-          <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-[#0d1117] px-4 py-3.5">
+          <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-[#0A2A5C] px-4 py-3.5">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D41F2D] text-black">
                 <Bot size={18} strokeWidth={2.25} />
@@ -131,7 +131,7 @@ export default function ChatWidget() {
                 </div>
 
                 <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#D41F2D]" />
                   Online now
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function ChatWidget() {
                 }`}
               >
                 {message.role === "bot" && (
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15 text-[#F3D77A]">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15 text-[#5FA8E8]">
                     <Bot size={14} />
                   </div>
                 )}
@@ -186,7 +186,7 @@ export default function ChatWidget() {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex items-end gap-2">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15 text-[#F3D77A]">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15 text-[#5FA8E8]">
                   <Bot size={14} />
                 </div>
 
@@ -206,7 +206,7 @@ export default function ChatWidget() {
                     key={reply}
                     type="button"
                     onClick={() => sendMessage(reply)}
-                    className={`rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-3 py-1.5 text-xs font-medium text-[#F3D77A] transition-colors hover:bg-[#D41F2D]/20 ${focusRing}`}
+                    className={`rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-3 py-1.5 text-xs font-medium text-[#5FA8E8] transition-colors hover:bg-[#D41F2D]/20 ${focusRing}`}
                   >
                     {reply}
                   </button>
@@ -218,7 +218,7 @@ export default function ChatWidget() {
           {/* Input */}
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-white/10 bg-[#0d1117] p-3"
+            className="flex items-center gap-2 border-t border-white/10 bg-[#0A2A5C] p-3"
           >
             <input
               type="text"
@@ -255,8 +255,8 @@ export default function ChatWidget() {
         )}
 
         {hasUnread && !isOpen && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 ring-2 ring-[#080b0f]">
-            <span className="h-2 w-2 animate-ping rounded-full bg-red-400" />
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#D41F2D] ring-2 ring-[#061B3D]">
+            <span className="h-2 w-2 animate-ping rounded-full bg-[#E8404B]" />
           </span>
         )}
       </button>

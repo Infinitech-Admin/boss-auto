@@ -33,7 +33,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 );
 
 // Auto-Prime Car Trading palette
-// primary  #D41F2D | hover #E8404B | text #FFFFFF | background #000000
+// primary  #D41F2D | hover #E8404B | text #FFFFFF | background #061B3D
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 

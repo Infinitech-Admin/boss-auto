@@ -287,8 +287,8 @@ export default function CheckoutPage() {
     return (
       <>
         <Navbar />
-        <main className="flex min-h-screen items-center justify-center bg-[#191610] px-4 text-white">
-          <div className="w-full max-w-lg rounded-[28px] border border-[#D41F2D]/30 bg-[#120f0d] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:px-10">
+        <main className="flex min-h-screen items-center justify-center bg-[#0A2A5C] px-4 text-white">
+          <div className="w-full max-w-lg rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:px-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10">
               <CheckCircle2 className="text-[#D41F2D]" size={30} />
             </div>
@@ -299,7 +299,7 @@ export default function CheckoutPage() {
             <p className="mt-3 text-sm leading-7 text-zinc-300">
               Thank you! Your order{" "}
               {orderNumber && (
-                <span className="font-semibold text-[#F3D77A]">
+                <span className="font-semibold text-[#5FA8E8]">
                   {orderNumber}
                 </span>
               )}{" "}
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#191610]" />
+        <main className="min-h-screen bg-[#0A2A5C]" />
         <Footer />
       </>
     );
@@ -354,8 +354,8 @@ export default function CheckoutPage() {
     return (
       <>
         <Navbar />
-        <main className="flex min-h-screen items-center justify-center bg-[#191610] px-4 text-white">
-          <div className="w-full max-w-md rounded-[28px] border border-dashed border-white/15 bg-[#120f0d] px-6 py-14 text-center">
+        <main className="flex min-h-screen items-center justify-center bg-[#0A2A5C] px-4 text-white">
+          <div className="w-full max-w-md rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-14 text-center">
             <p className="text-xl font-semibold text-white">
               Your cart is empty
             </p>
@@ -378,11 +378,11 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#191610] text-white">
+      <main className="min-h-screen bg-[#0A2A5C] text-white">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
           <Link
             href="/cart"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#dbc15b]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
           >
             <ArrowLeft size={16} />
             Back to cart
@@ -404,7 +404,7 @@ export default function CheckoutPage() {
               Checking out as a guest. No account needed.{" "}
               <Link
                 href={LOGIN_URL}
-                className="font-semibold text-[#D41F2D] transition-colors hover:text-[#dbc15b]"
+                className="font-semibold text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
               >
                 Already have an account? Log in
               </Link>
@@ -416,7 +416,7 @@ export default function CheckoutPage() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="rounded-[28px] border border-white/10 bg-[#120f0d] p-6 sm:p-8"
+              className="rounded-[28px] border border-white/10 bg-[#0A2A5C] p-6 sm:p-8"
             >
               <h2 className="text-lg font-bold text-white">
                 Contact information
@@ -437,7 +437,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.fullName)}
                   />
                   {errors.fullName && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-[#E8404B]">
                       {errors.fullName}
                     </p>
                   )}
@@ -457,7 +457,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.email)}
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-[#E8404B]">
                       {errors.email}
                     </p>
                   )}
@@ -477,7 +477,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.phone)}
                   />
                   {errors.phone && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-[#E8404B]">
                       {errors.phone}
                     </p>
                   )}
@@ -497,7 +497,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.address)}
                   />
                   {errors.address && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-[#E8404B]">
                       {errors.address}
                     </p>
                   )}
@@ -526,7 +526,7 @@ export default function CheckoutPage() {
                 </h2>
                 <p className="mt-1 text-sm text-zinc-400">
                   Send{" "}
-                  <span className="font-semibold text-[#F3D77A]">
+                  <span className="font-semibold text-[#5FA8E8]">
                     {formatPrice(downpayment)}
                   </span>{" "}
                   using any method below, then upload your screenshot.
@@ -543,7 +543,7 @@ export default function CheckoutPage() {
                         aria-pressed={active}
                         className={`rounded-2xl border px-3 py-3 text-sm font-semibold transition-colors ${
                           active
-                            ? "border-[#D41F2D] bg-[#D41F2D]/10 text-[#F3D77A]"
+                            ? "border-[#D41F2D] bg-[#D41F2D]/10 text-[#5FA8E8]"
                             : "border-white/10 bg-[#061B3D]/20 text-zinc-300 hover:border-white/25"
                         }`}
                       >
@@ -631,7 +631,7 @@ export default function CheckoutPage() {
                         type="button"
                         onClick={removeProof}
                         aria-label="Remove screenshot"
-                        className="rounded-full border border-white/10 p-2 text-zinc-300 transition-colors hover:border-red-400/60 hover:text-red-400"
+                        className="rounded-full border border-white/10 p-2 text-zinc-300 transition-colors hover:border-[#E8404B]/60 hover:text-[#E8404B]"
                       >
                         <X size={14} />
                       </button>
@@ -642,7 +642,7 @@ export default function CheckoutPage() {
                       onClick={() => fileInputRef.current?.click()}
                       className={`flex w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed px-4 py-8 text-sm transition-colors hover:border-[#D41F2D]/60 ${
                         errors.proof
-                          ? "border-red-400/60 text-red-300"
+                          ? "border-[#E8404B]/60 text-[#E8404B]"
                           : "border-white/20 text-zinc-400"
                       }`}
                     >
@@ -655,7 +655,7 @@ export default function CheckoutPage() {
                   )}
 
                   {errors.proof && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-[#E8404B]">
                       {errors.proof}
                     </p>
                   )}
@@ -675,7 +675,7 @@ export default function CheckoutPage() {
                     className={inputClasses}
                   />
                   {errors.reference && (
-                    <p className="mt-1.5 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-[#E8404B]">
                       {errors.reference}
                     </p>
                   )}
@@ -695,7 +695,7 @@ export default function CheckoutPage() {
               {submitError && (
                 <p
                   role="alert"
-                  className="mt-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+                  className="mt-4 rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]"
                 >
                   {submitError}
                 </p>
@@ -704,7 +704,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#d8b53c] disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#3D8FD9] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting
                   ? "Submitting..."
@@ -713,13 +713,13 @@ export default function CheckoutPage() {
             </form>
 
             {/* Order summary */}
-            <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#120f0d] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
+            <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
               <h2 className="text-lg font-bold text-white">Your order</h2>
 
               <div className="mt-5 space-y-4 border-b border-white/10 pb-5">
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-[#0d0d0d]">
+                    <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-[#061B3D]">
                       {item.image ? (
                         <Image
                           src={item.image}

@@ -43,12 +43,12 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#191610] text-white">
-        <section className="border-b border-[#D41F2D]/20 bg-[#0d0b09]">
+      <main className="min-h-screen bg-[#0A2A5C] text-white">
+        <section className="border-b border-[#D41F2D]/20 bg-[#061B3D]">
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
             <Link
               href="/showroom"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#dbc15b]"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
             >
               <ArrowLeft size={16} />
               Continue browsing
@@ -83,14 +83,14 @@ export default function CartPage() {
                 {[0, 1].map((i) => (
                   <div
                     key={i}
-                    className="h-40 animate-pulse rounded-[26px] border border-white/10 bg-[#12110f] sm:h-32"
+                    className="h-40 animate-pulse rounded-[26px] border border-white/10 bg-[#0A2A5C] sm:h-32"
                   />
                 ))}
               </div>
-              <div className="h-56 animate-pulse rounded-[28px] border border-[#D41F2D]/20 bg-[#120f0d]" />
+              <div className="h-56 animate-pulse rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C]" />
             </div>
           ) : items.length === 0 ? (
-            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#120f0d] px-6 py-20 text-center">
+            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-20 text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/10">
                 <ShoppingBag className="text-[#D41F2D]" size={26} />
               </div>
@@ -115,11 +115,11 @@ export default function CartPage() {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col gap-4 rounded-[26px] border border-white/10 bg-[#12110f] p-4 sm:flex-row sm:items-center sm:p-5"
+                    className="flex flex-col gap-4 rounded-[26px] border border-white/10 bg-[#0A2A5C] p-4 sm:flex-row sm:items-center sm:p-5"
                   >
                     <Link
                       href={`/showroom/car/${item.id}`}
-                      className="relative h-32 w-full shrink-0 overflow-hidden rounded-2xl bg-[#0d0d0d] sm:h-24 sm:w-36"
+                      className="relative h-32 w-full shrink-0 overflow-hidden rounded-2xl bg-[#061B3D] sm:h-24 sm:w-36"
                     >
                       {item.image ? (
                         // `unoptimized` — same as the showroom & details
@@ -148,7 +148,7 @@ export default function CartPage() {
                       </p>
                       <Link
                         href={`/showroom/car/${item.id}`}
-                        className="mt-1 block text-xl font-semibold text-white transition-colors hover:text-[#F3D77A]"
+                        className="mt-1 block text-xl font-semibold text-white transition-colors hover:text-[#5FA8E8]"
                       >
                         {item.name}
                       </Link>
@@ -166,7 +166,7 @@ export default function CartPage() {
                             updateQuantity(item.id, item.quantity - 1)
                           }
                           aria-label="Decrease quantity"
-                          className="flex h-8 w-8 items-center justify-center rounded-full text-zinc-300 transition-colors hover:bg-[#D41F2D]/10 hover:text-[#F3D77A]"
+                          className="flex h-8 w-8 items-center justify-center rounded-full text-zinc-300 transition-colors hover:bg-[#D41F2D]/10 hover:text-[#5FA8E8]"
                         >
                           <Minus size={14} />
                         </button>
@@ -179,7 +179,7 @@ export default function CartPage() {
                             updateQuantity(item.id, item.quantity + 1)
                           }
                           aria-label="Increase quantity"
-                          className="flex h-8 w-8 items-center justify-center rounded-full text-zinc-300 transition-colors hover:bg-[#D41F2D]/10 hover:text-[#F3D77A]"
+                          className="flex h-8 w-8 items-center justify-center rounded-full text-zinc-300 transition-colors hover:bg-[#D41F2D]/10 hover:text-[#5FA8E8]"
                         >
                           <Plus size={14} />
                         </button>
@@ -188,7 +188,7 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.id)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 transition-colors hover:text-red-400"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 transition-colors hover:text-[#E8404B]"
                       >
                         <Trash2 size={14} />
                         Remove
@@ -200,14 +200,14 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={clearCart}
-                  className="text-xs font-semibold text-zinc-500 transition-colors hover:text-red-400"
+                  className="text-xs font-semibold text-zinc-500 transition-colors hover:text-[#E8404B]"
                 >
                   Clear entire cart
                 </button>
               </div>
 
               {/* Summary */}
-              <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#120f0d] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
+              <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
                 <h2 className="text-lg font-bold text-white">Order summary</h2>
 
                 <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-5">
@@ -226,7 +226,7 @@ export default function CartPage() {
 
                 <Link
                   href="/checkout"
-                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#d8b53c]"
+                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#3D8FD9]"
                 >
                   Proceed to checkout
                   <ArrowRight size={16} />

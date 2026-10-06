@@ -166,8 +166,8 @@ export default function ShowroomPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#191610] text-white">
-        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#0d0b09]">
+      <main className="min-h-screen bg-[#0A2A5C] text-white">
+        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#061B3D]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(191,152,13,0.18),transparent_50%)]" />
           <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
@@ -195,7 +195,7 @@ export default function ShowroomPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <div className="mb-8 rounded-[28px] border border-white/10 bg-[#120f0d] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-5">
+          <div className="mb-8 rounded-[28px] border border-white/10 bg-[#0A2A5C] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-5">
             <div className="mb-4 flex items-center justify-between gap-3 text-[#D41F2D]">
               <div className="flex gap-2 items-center">
                 <SlidersHorizontal size={18} />
@@ -230,7 +230,7 @@ export default function ShowroomPage() {
                 className="rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
               >
                 {modelOptions.map((model) => (
-                  <option key={model} value={model} className="bg-[#120f0d]">
+                  <option key={model} value={model} className="bg-[#0A2A5C]">
                     {model === "all" ? "All models" : model}
                   </option>
                 ))}
@@ -241,16 +241,16 @@ export default function ShowroomPage() {
                 onChange={(event) => setSortOrder(event.target.value)}
                 className="rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
               >
-                <option value="newest" className="bg-[#120f0d]">
+                <option value="newest" className="bg-[#0A2A5C]">
                   Newest first
                 </option>
-                <option value="oldest" className="bg-[#120f0d]">
+                <option value="oldest" className="bg-[#0A2A5C]">
                   Oldest first
                 </option>
-                <option value="price-low" className="bg-[#120f0d]">
+                <option value="price-low" className="bg-[#0A2A5C]">
                   Price: low to high
                 </option>
-                <option value="price-high" className="bg-[#120f0d]">
+                <option value="price-high" className="bg-[#0A2A5C]">
                   Price: high to low
                 </option>
               </select>
@@ -260,16 +260,16 @@ export default function ShowroomPage() {
                 onChange={(event) => setPriceRange(event.target.value)}
                 className="rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
               >
-                <option value="all" className="bg-[#120f0d]">
+                <option value="all" className="bg-[#0A2A5C]">
                   All price ranges
                 </option>
-                <option value="under-50k" className="bg-[#120f0d]">
+                <option value="under-50k" className="bg-[#0A2A5C]">
                   Under ₱50k
                 </option>
-                <option value="50k-70k" className="bg-[#120f0d]">
+                <option value="50k-70k" className="bg-[#0A2A5C]">
                   ₱50k - ₱70k
                 </option>
-                <option value="70k-plus" className="bg-[#120f0d]">
+                <option value="70k-plus" className="bg-[#0A2A5C]">
                   ₱70k+
                 </option>
               </select>
@@ -292,7 +292,7 @@ export default function ShowroomPage() {
           </div>
 
           {isLoading ? (
-            <div className="rounded-[28px] border border-white/10 bg-[#120f0d] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+            <div className="rounded-[28px] border border-white/10 bg-[#0A2A5C] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/10">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#D41F2D]/40 border-t-[#D41F2D]" />
               </div>
@@ -304,7 +304,7 @@ export default function ShowroomPage() {
               </p>
             </div>
           ) : loadError ? (
-            <div className="rounded-[28px] border border-red-500/30 bg-[#160f0f] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+            <div className="rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
               <p className="text-2xl font-bold text-white">
                 Something went wrong
               </p>
@@ -321,7 +321,7 @@ export default function ShowroomPage() {
               </button>
             </div>
           ) : filteredCars.length === 0 ? (
-            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#120f0d] px-6 py-16 text-center">
+            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-16 text-center">
               <p className="text-xl font-semibold text-white">
                 {vehicles.length === 0
                   ? "No vehicles in the showroom yet"
@@ -336,7 +336,7 @@ export default function ShowroomPage() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#D41F2D]/50 bg-[#D41F2D]/10 px-5 py-3 text-sm font-semibold text-[#F3D77A] transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D]/20"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#D41F2D]/50 bg-[#D41F2D]/10 px-5 py-3 text-sm font-semibold text-[#5FA8E8] transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D]/20"
                 >
                   <X size={15} />
                   Clear filters
@@ -364,11 +364,11 @@ export default function ShowroomPage() {
                     <Link
                       key={car.id}
                       href={`/showroom/car/${car.id}`}
-                      className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-white/10 bg-[#12110f] transition-all duration-300 hover:-translate-y-1 hover:border-[#D41F2D]/50 hover:shadow-[0_25px_60px_rgba(191,152,13,0.12)]"
+                      className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-white/10 bg-[#0A2A5C] transition-all duration-300 hover:-translate-y-1 hover:border-[#D41F2D]/50 hover:shadow-[0_25px_60px_rgba(191,152,13,0.12)]"
                     >
-                      <div className="relative overflow-hidden bg-[#0d0d0d] p-3">
+                      <div className="relative overflow-hidden bg-[#061B3D] p-3">
                         {(car.badge || unavailable) && (
-                          <div className="absolute right-4 top-4 z-10 rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#F3D77A]">
+                          <div className="absolute right-4 top-4 z-10 rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#5FA8E8]">
                             {unavailable && car.status !== "available"
                               ? car.status
                               : car.badge}
@@ -467,7 +467,7 @@ export default function ShowroomPage() {
                       setCurrentPage((page) => Math.max(1, page - 1))
                     }
                     disabled={currentPage === 1}
-                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-[#D41F2D] hover:text-[#F3D77A] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-[#D41F2D] hover:text-[#5FA8E8] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Previous
                   </button>
@@ -484,7 +484,7 @@ export default function ShowroomPage() {
                         className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${
                           currentPage === page
                             ? "bg-[#D41F2D] text-black"
-                            : "border border-white/10 bg-white/5 text-white hover:border-[#D41F2D] hover:text-[#F3D77A]"
+                            : "border border-white/10 bg-white/5 text-white hover:border-[#D41F2D] hover:text-[#5FA8E8]"
                         }`}
                       >
                         {page}
@@ -498,7 +498,7 @@ export default function ShowroomPage() {
                       setCurrentPage((page) => Math.min(totalPages, page + 1))
                     }
                     disabled={currentPage === totalPages}
-                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-[#D41F2D] hover:text-[#F3D77A] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-[#D41F2D] hover:text-[#5FA8E8] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Next
                   </button>
@@ -509,7 +509,7 @@ export default function ShowroomPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-          <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#120f0d] p-6 sm:p-8">
+          <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 sm:p-8">
             <div className="flex items-center gap-3">
               <h3 className="text-2xl font-bold text-white">
                 Why drivers choose AutoTrade?

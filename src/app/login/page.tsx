@@ -92,18 +92,18 @@ export default function LoginPage() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-zinc-800 bg-[#061B3D] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-red-600 focus:ring-2 focus:ring-red-600/30";
+    "w-full rounded-lg border border-[#123A73] bg-[#061B3D] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-[#D41F2D] focus:ring-2 focus:ring-[#D41F2D]/30";
 
   return (
     <main className="relative flex min-h-screen overflow-hidden bg-[#061B3D]">
       {/* The one bold moment: a red racing stripe cutting across the page */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-1/4 top-0 h-full w-[60%] -skew-x-12 bg-gradient-to-br from-red-700 via-red-600 to-red-950 lg:left-[-8%] lg:w-[48%]"
+        className="pointer-events-none absolute -left-1/4 top-0 h-full w-[60%] -skew-x-12 bg-gradient-to-br from-[#A8161F] via-[#D41F2D] to-[#A8161F] lg:left-[-8%] lg:w-[48%]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-1/4 top-0 hidden h-full w-[3px] -skew-x-12 bg-red-500 lg:left-[40%] lg:block"
+        className="pointer-events-none absolute -left-1/4 top-0 hidden h-full w-[3px] -skew-x-12 bg-[#D41F2D] lg:left-[40%] lg:block"
       />
 
       {/* Brand panel (desktop) */}
@@ -112,7 +112,7 @@ export default function LoginPage() {
           href="/"
           className="inline-flex items-center gap-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#061B3D] text-red-500">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#061B3D] text-[#D41F2D]">
             <Car size={20} />
           </span>
           <span className="text-xl font-black tracking-tight">AutoPrime</span>
@@ -138,7 +138,7 @@ export default function LoginPage() {
               href="/"
               className="inline-flex items-center gap-2 text-2xl font-black tracking-tight text-white"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-600/15 text-red-500">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
                 <Car size={20} />
               </span>
               AutoPrime
@@ -148,7 +148,7 @@ export default function LoginPage() {
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="rounded-2xl border border-zinc-800 bg-[#061B3D] p-6 shadow-[0_0_0_1px_rgba(220,38,38,0.15),0_30px_80px_rgba(220,38,38,0.18)] sm:p-8"
+            className="rounded-2xl border border-[#123A73] bg-[#061B3D] p-6 shadow-[0_0_0_1px_rgba(212,31,45,0.15),0_30px_80px_rgba(212,31,45,0.18)] sm:p-8"
           >
             <h1 className="mb-1 text-2xl font-bold text-white">Welcome back</h1>
             <p className="mb-6 text-sm text-zinc-400">
@@ -158,7 +158,7 @@ export default function LoginPage() {
             {formError && (
               <div
                 role="alert"
-                className="mb-5 rounded-lg border border-red-600/40 bg-red-600/10 px-4 py-3 text-sm text-red-300"
+                className="mb-5 rounded-lg border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]"
               >
                 {formError}
               </div>
@@ -189,7 +189,7 @@ export default function LoginPage() {
                 />
               </div>
               {errors.email && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>
+                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.email}</p>
               )}
             </div>
 
@@ -226,7 +226,7 @@ export default function LoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.password}</p>
+                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.password}</p>
               )}
             </div>
 
@@ -237,13 +237,13 @@ export default function LoginPage() {
                   name="remember"
                   checked={form.remember}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-zinc-700 bg-[#061B3D] accent-red-600"
+                  className="h-4 w-4 rounded border-zinc-700 bg-[#061B3D] accent-[#D41F2D]"
                 />
                 Remember me
               </label>
               {/* <Link
                 href="/forgot-password"
-                className="text-sm font-medium text-red-500 hover:text-red-400"
+                className="text-sm font-medium text-[#D41F2D] hover:text-[#E8404B]"
               >
                 Forgot password?
               </Link> */}
@@ -252,7 +252,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 py-3.5 text-sm font-bold text-white transition-colors hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#D41F2D] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#D41F2D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8404B] focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading && <Loader2 size={16} className="animate-spin" />}
               {loading ? "Signing in..." : "Sign in"}
@@ -262,7 +262,7 @@ export default function LoginPage() {
               New to AutoPrime?{" "}
               <Link
                 href="/register"
-                className="font-semibold text-red-500 hover:text-red-400"
+                className="font-semibold text-[#D41F2D] hover:text-[#E8404B]"
               >
                 Create an account
               </Link>

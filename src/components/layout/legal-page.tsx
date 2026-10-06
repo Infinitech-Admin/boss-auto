@@ -27,8 +27,8 @@ export default function LegalPage({
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#191610] text-white">
-        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#0d0b09]">
+      <main className="min-h-screen bg-[#0A2A5C] text-white">
+        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#061B3D]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(191,152,13,0.18),transparent_50%)]" />
 
           <div className="relative mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -50,7 +50,7 @@ export default function LegalPage({
         </section>
 
         <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
-          <div className="rounded-[28px] border border-white/10 bg-[#120f0d] p-6 sm:p-10">
+          <div className="rounded-[28px] border border-white/10 bg-[#0A2A5C] p-6 sm:p-10">
             <p className="text-base leading-7 text-zinc-300">{intro}</p>
 
             <div className="mt-10 space-y-10">

@@ -352,7 +352,7 @@ export default function FinancingCalculator({
   h3{font-size:12pt;margin-top:18pt;border-bottom:2px solid #D41F2D}
   table{border-collapse:collapse;width:100%;margin-top:8pt}
   th,td{border:1px solid #999;padding:6pt;text-align:left}
-  th{background:#D41F2D;color:#000}
+  th{background:#D41F2D;color:#061B3D}
   .meta{color:#777;font-size:9pt}
   .note{color:#777;font-size:9pt;margin-top:16pt}
 </style></head>
@@ -392,7 +392,7 @@ export default function FinancingCalculator({
   return (
     <section
       aria-label="Financing"
-      className="min-w-0 rounded-[28px] border border-white/10 bg-[#100e0c] p-5 sm:p-6"
+      className="min-w-0 rounded-[28px] border border-white/10 bg-[#0A2A5C] p-5 sm:p-6"
     >
       {/* Header */}
       <div className="mb-5 flex items-center gap-3 sm:mb-6">
@@ -432,7 +432,7 @@ export default function FinancingCalculator({
       </div>
 
       {/* Summary: one compact list, so it never wraps awkwardly */}
-      <dl className="mt-6 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#171410] text-sm">
+      <dl className="mt-6 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#0A2A5C] text-sm">
         {[
           ["Vehicle price", fmt(total)],
           [`Down payment (${dp}%)`, fmt(downPayment)],
@@ -458,11 +458,11 @@ export default function FinancingCalculator({
         {plans.map((p) => (
           <li
             key={`${dp}-${p.years}`}
-            className="min-w-0 rounded-2xl border border-[#D41F2D]/25 bg-[#171410] px-4 py-3 transition-colors hover:border-[#D41F2D]/60"
+            className="min-w-0 rounded-2xl border border-[#D41F2D]/25 bg-[#0A2A5C] px-4 py-3 transition-colors hover:border-[#D41F2D]/60"
           >
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#F3D77A]">
+                <p className="text-sm font-bold text-[#5FA8E8]">
                   {p.years} year{p.years > 1 ? "s" : ""}
                 </p>
                 <p className="text-xs text-zinc-500">
@@ -504,7 +504,7 @@ export default function FinancingCalculator({
           type="button"
           disabled={disabled}
           onClick={downloadPdf}
-          className={`inline-flex min-w-[9rem] flex-1 items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-3 text-sm font-bold text-white transition-all hover:bg-[#d8b53c] disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
+          className={`inline-flex min-w-[9rem] flex-1 items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-3 text-sm font-bold text-white transition-all hover:bg-[#3D8FD9] disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
         >
           <Download size={16} />
           Download PDF

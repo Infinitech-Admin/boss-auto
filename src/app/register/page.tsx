@@ -167,7 +167,7 @@ export default function RegisterPage() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-zinc-800 bg-[#061B3D] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-red-600 focus:ring-2 focus:ring-red-600/30";
+    "w-full rounded-lg border border-[#123A73] bg-[#061B3D] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-[#D41F2D] focus:ring-2 focus:ring-[#D41F2D]/30";
 
   const labelClass = "mb-1.5 block text-sm font-medium text-zinc-300";
 
@@ -179,11 +179,11 @@ export default function RegisterPage() {
       {/* The one bold moment: a red racing stripe cutting across the page */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-1/4 top-0 h-full w-[60%] -skew-x-12 bg-gradient-to-br from-red-700 via-red-600 to-red-950 lg:left-[-8%] lg:w-[48%]"
+        className="pointer-events-none absolute -left-1/4 top-0 h-full w-[60%] -skew-x-12 bg-gradient-to-br from-[#A8161F] via-[#D41F2D] to-[#A8161F] lg:left-[-8%] lg:w-[48%]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-1/4 top-0 hidden h-full w-[3px] -skew-x-12 bg-red-500 lg:left-[40%] lg:block"
+        className="pointer-events-none absolute -left-1/4 top-0 hidden h-full w-[3px] -skew-x-12 bg-[#D41F2D] lg:left-[40%] lg:block"
       />
 
       {/* Brand panel (desktop) */}
@@ -192,7 +192,7 @@ export default function RegisterPage() {
           href="/"
           className="inline-flex items-center gap-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#061B3D] text-red-500">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#061B3D] text-[#D41F2D]">
             <Car size={20} />
           </span>
           <span className="text-xl font-black tracking-tight">AutoPrime</span>
@@ -218,7 +218,7 @@ export default function RegisterPage() {
               href="/"
               className="inline-flex items-center gap-2 text-2xl font-black tracking-tight text-white"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-600/15 text-red-500">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
                 <Car size={20} />
               </span>
               AutoPrime
@@ -228,7 +228,7 @@ export default function RegisterPage() {
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="rounded-2xl border border-zinc-800 bg-[#061B3D] p-6 shadow-[0_0_0_1px_rgba(220,38,38,0.15),0_30px_80px_rgba(220,38,38,0.18)] sm:p-8"
+            className="rounded-2xl border border-[#123A73] bg-[#061B3D] p-6 shadow-[0_0_0_1px_rgba(212,31,45,0.15),0_30px_80px_rgba(212,31,45,0.18)] sm:p-8"
           >
             <h1 className="mb-1 text-2xl font-bold text-white">
               Create your account
@@ -240,7 +240,7 @@ export default function RegisterPage() {
             {formError && (
               <div
                 role="alert"
-                className="mb-5 rounded-lg border border-red-600/40 bg-red-600/10 px-4 py-3 text-sm text-red-300"
+                className="mb-5 rounded-lg border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]"
               >
                 {formError}
               </div>
@@ -266,7 +266,7 @@ export default function RegisterPage() {
                 />
               </div>
               {errors.name && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>
+                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.name}</p>
               )}
             </div>
 
@@ -293,7 +293,7 @@ export default function RegisterPage() {
                 />
               </div>
               {errors.phone && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.phone}</p>
+                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.phone}</p>
               )}
             </div>
 
@@ -318,7 +318,7 @@ export default function RegisterPage() {
                 />
               </div>
               {errors.email && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>
+                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.email}</p>
               )}
             </div>
 
@@ -350,7 +350,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.password}</p>
+                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.password}</p>
               )}
 
               {form.password.length > 0 && (
@@ -385,12 +385,12 @@ export default function RegisterPage() {
                 />
               </div>
               {form.password_confirmation.length > 0 && !passwordsMatch && (
-                <p className="mt-1.5 text-xs text-red-400">
+                <p className="mt-1.5 text-xs text-[#E8404B]">
                   Passwords do not match.
                 </p>
               )}
               {errors.password_confirmation && (
-                <p className="mt-1.5 text-xs text-red-400">
+                <p className="mt-1.5 text-xs text-[#E8404B]">
                   {errors.password_confirmation}
                 </p>
               )}
@@ -399,7 +399,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 py-3.5 text-sm font-bold text-white transition-colors hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#D41F2D] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#D41F2D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8404B] focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading && <Loader2 size={16} className="animate-spin" />}
               {loading ? "Creating account..." : "Create Account"}
@@ -409,7 +409,7 @@ export default function RegisterPage() {
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-semibold text-red-500 hover:text-red-400"
+                className="font-semibold text-[#D41F2D] hover:text-[#E8404B]"
               >
                 Sign in
               </Link>
@@ -424,7 +424,7 @@ export default function RegisterPage() {
 function RuleItem({ met, children }: { met: boolean; children: ReactNode }) {
   return (
     <li
-      className={`flex items-center gap-1.5 ${met ? "text-red-400" : "text-zinc-500"}`}
+      className={`flex items-center gap-1.5 ${met ? "text-[#E8404B]" : "text-zinc-500"}`}
     >
       {met ? <Check size={13} /> : <X size={13} />}
       {children}

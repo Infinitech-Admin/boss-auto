@@ -42,11 +42,11 @@ const CATEGORY_COLORS = [
   "#9CA3AF",
   "#E8404B",
   "#6B7280",
-  "#7F1D1D",
+  "#8E1520",
 ];
 
 const TOOLTIP_STYLE = {
-  background: "#111111",
+  background: "#0A2A5C",
   border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 12,
   color: "#fff",
@@ -54,13 +54,13 @@ const TOOLTIP_STYLE = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  confirmed: "bg-red-500/10 text-red-400",
-  completed: "bg-red-500/10 text-red-400",
+  confirmed: "bg-[#D41F2D]/10 text-[#E8404B]",
+  completed: "bg-[#D41F2D]/10 text-[#E8404B]",
   ready_for_pick_up: "bg-zinc-500/15 text-zinc-300",
-  pending_verification: "bg-red-500/10 text-red-400",
+  pending_verification: "bg-[#D41F2D]/10 text-[#E8404B]",
   reserved: "bg-zinc-500/15 text-zinc-300",
-  cancelled: "bg-red-500/10 text-red-400",
-  rejected: "bg-red-500/10 text-red-400",
+  cancelled: "bg-[#D41F2D]/10 text-[#E8404B]",
+  rejected: "bg-[#D41F2D]/10 text-[#E8404B]",
 };
 
 function statusLabel(status: string): string {
@@ -137,7 +137,7 @@ export default function AdminDashboardPage() {
         <div
           role="group"
           aria-label="Date range"
-          className="flex rounded-full border border-white/10 bg-[#111111]/70 p-1"
+          className="flex rounded-full border border-white/10 bg-[#0A2A5C]/70 p-1"
         >
           {RANGES.map((range) => (
             <button
@@ -158,7 +158,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {error && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-red-500/30 bg-red-500/5 p-4 text-sm text-red-300">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 p-4 text-sm text-[#E8404B]">
           <span>{error}</span>
           <button
             type="button"
@@ -407,7 +407,7 @@ function DashboardContent({
                   <Bar
                     dataKey="removed"
                     name="Removed"
-                    fill="#ef4444"
+                    fill="#D41F2D"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -429,7 +429,7 @@ function DashboardContent({
                       {row.vehicle}
                     </span>
                     <span className="shrink-0 text-xs text-zinc-400">
-                      <span className="font-semibold text-red-400">
+                      <span className="font-semibold text-[#E8404B]">
                         {row.removed}
                       </span>{" "}
                       removed / {row.added} added
@@ -488,7 +488,7 @@ function DashboardContent({
           )}
         </ChartCard>
 
-        <div className="rounded-2xl border border-white/10 bg-[#111111]/70 p-4 sm:p-5 xl:col-span-2">
+        <div className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 sm:p-5 xl:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-sm font-semibold text-white">
@@ -576,7 +576,7 @@ function StatCard({
   const trend = change !== null && change < 0 ? "down" : "up";
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111]/70 p-4 sm:p-5">
+    <div className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 sm:p-5">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium uppercase tracking-wide text-zinc-400">
           {label}
@@ -590,7 +590,7 @@ function StatCard({
         {change !== null && (
           <span
             className={`flex items-center gap-1 text-xs font-semibold ${
-              trend === "up" ? "text-red-400" : "text-red-400"
+              trend === "up" ? "text-[#E8404B]" : "text-[#E8404B]"
             }`}
           >
             {trend === "up" ? (
@@ -618,7 +618,7 @@ function MiniStat({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-white/10 bg-[#111111]/70 p-4 ${className}`}
+      className={`rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 ${className}`}
     >
       <p className="text-xs text-zinc-400">{label}</p>
       <p className="mt-1 text-2xl font-bold text-white">
@@ -641,7 +641,7 @@ function ChartCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-white/10 bg-[#111111]/70 p-4 sm:p-5 ${className}`}
+      className={`rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 sm:p-5 ${className}`}
     >
       <div className="mb-2">
         <h2 className="text-sm font-semibold text-white">{title}</h2>
@@ -667,13 +667,13 @@ function DashboardSkeleton() {
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-[104px] rounded-2xl border border-white/10 bg-[#111111]/50"
+            className="h-[104px] rounded-2xl border border-white/10 bg-[#0A2A5C]/50"
           />
         ))}
       </div>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#111111]/50 xl:col-span-2" />
-        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#111111]/50" />
+        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#0A2A5C]/50 xl:col-span-2" />
+        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#0A2A5C]/50" />
       </div>
     </div>
   );

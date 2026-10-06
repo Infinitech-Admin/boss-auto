@@ -118,7 +118,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   if (authState === "checking") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+      <div className="flex min-h-screen items-center justify-center bg-[#061B3D]">
         <div className="flex items-center gap-2 text-sm text-zinc-400">
           <Loader2 size={18} className="animate-spin text-[#D41F2D]" />
           Checking session...
@@ -128,7 +128,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#061B3D] text-white">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -139,7 +139,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#0d0d0d] transition-transform duration-200 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#061B3D] transition-transform duration-200 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -223,7 +223,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       {/* Main column */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-white/10 bg-[#0a0a0a]/90 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-white/10 bg-[#061B3D]/90 px-4 backdrop-blur sm:px-6">
           {/* Mobile menu */}
           <button
             onClick={() => setSidebarOpen(true)}
@@ -243,7 +243,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <input
               type="text"
               placeholder="Search vehicles, orders..."
-              className="w-full rounded-lg border border-white/10 bg-[#111111]/70 py-2 pl-9 pr-3 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
+              className="w-full rounded-lg border border-white/10 bg-[#0A2A5C]/70 py-2 pl-9 pr-3 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
             />
           </div>
 

@@ -58,9 +58,9 @@ export default function About() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#0B0714] text-white">
-        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#080b0f]">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(225,29,46,0.18),transparent_50%)]" />
+      <main className="min-h-screen bg-[#0A2A5C] text-white">
+        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#061B3D]">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(212,31,45,0.18),transparent_50%)]" />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:pt-24">
             <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
@@ -85,7 +85,7 @@ export default function About() {
                 </p>
               </div>
 
-              <div className="rounded-[30px] border border-white/10 bg-[#120f0d] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.35)] sm:p-7">
+              <div className="rounded-[30px] border border-white/10 bg-[#0A2A5C] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.35)] sm:p-7">
                 <div className="flex items-center justify-between border-b border-white/10 pb-5">
                   <div>
                     <p className="text-xs uppercase tracking-[0.22em] text-zinc-400">
@@ -122,7 +122,7 @@ export default function About() {
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-[24px] border border-white/10 bg-[#120f0d] p-6 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+                  className="rounded-[24px] border border-white/10 bg-[#0A2A5C] p-6 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
                 >
                   <div className="text-2xl font-black text-[#D41F2D] sm:text-3xl">
                     {stat.value}
@@ -136,7 +136,7 @@ export default function About() {
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center">
-            <div className="rounded-[30px] border border-[#D41F2D]/20 bg-[#120f0d] p-6 sm:p-8">
+            <div className="rounded-[30px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-3 text-[#D41F2D]">
                 <Award size={20} />
                 <span className="text-xs font-semibold uppercase tracking-[0.28em]">
@@ -164,7 +164,7 @@ export default function About() {
               </ul>
             </div>
 
-            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(225,29,46,0.18),transparent_45%)] p-6 sm:p-8">
+            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(212,31,45,0.18),transparent_45%)] p-6 sm:p-8">
               <div className="relative">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
                   The Auto Prime difference
@@ -214,7 +214,7 @@ export default function About() {
                 return (
                   <div
                     key={value.title}
-                    className="group rounded-[26px] border border-white/10 bg-[#120f0d] p-6 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#15120f] hover:shadow-[0_15px_50px_rgba(0,0,0,0.25)]"
+                    className="group rounded-[26px] border border-white/10 bg-[#0A2A5C] p-6 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#0A2A5C] hover:shadow-[0_15px_50px_rgba(0,0,0,0.25)]"
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#D41F2D] transition-all duration-300 group-hover:border-[#D41F2D]/60 group-hover:bg-[#D41F2D]/20">

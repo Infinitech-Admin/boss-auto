@@ -119,7 +119,7 @@ const NAME_PATTERN = new RegExp("^[\\p{L}\\p{M}\\s.'’-]+$", "u");
 const PHONE_PATTERN = /^09\d{9}$/;
 
 const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-[#0f0d0a] px-4 py-3 text-white placeholder:text-zinc-500 focus:border-[#D41F2D] focus:outline-none";
+  "w-full rounded-2xl border border-white/10 bg-[#061B3D] px-4 py-3 text-white placeholder:text-zinc-500 focus:border-[#D41F2D] focus:outline-none";
 
 export default function Contact() {
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
@@ -271,9 +271,9 @@ export default function Contact() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#0B0714] text-white">
-        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#080b0f]">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(225,29,46,0.18),transparent_50%)]" />
+      <main className="min-h-screen bg-[#0A2A5C] text-white">
+        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#061B3D]">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(212,31,45,0.18),transparent_50%)]" />
 
           <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
@@ -310,7 +310,7 @@ export default function Contact() {
                   rel={
                     href.startsWith("http") ? "noopener noreferrer" : undefined
                   }
-                  className="group flex items-start gap-4 rounded-[24px] border border-white/10 bg-[#120f0d] p-5 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#15120f]"
+                  className="group flex items-start gap-4 rounded-[24px] border border-white/10 bg-[#0A2A5C] p-5 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#0A2A5C]"
                 >
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#D41F2D]">
                     <Icon size={20} />
@@ -327,7 +327,7 @@ export default function Contact() {
                 </a>
               ))}
 
-              <div className="rounded-[24px] border border-white/10 bg-[#120f0d] p-5">
+              <div className="rounded-[24px] border border-white/10 bg-[#0A2A5C] p-5">
                 <div className="mb-4 flex items-center gap-3 text-[#D41F2D]">
                   <Clock3 size={18} />
                   <p className="text-xs font-semibold uppercase tracking-[0.25em]">
@@ -358,7 +358,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="rounded-[30px] border border-[#D41F2D]/20 bg-[#120f0d] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:p-7">
+            <div className="rounded-[30px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:p-7">
               <div className="mb-6 flex items-center gap-3 text-[#D41F2D]">
                 <Send size={18} />
                 <span className="text-xs font-semibold uppercase tracking-[0.28em]">
@@ -371,7 +371,7 @@ export default function Contact() {
                   <label className="block">
                     <span className="mb-2 flex items-center gap-1 text-sm text-zinc-300">
                       First name
-                      <span className="text-[#f7b5a8]" aria-label="required">
+                      <span className="text-[#F59AA2]" aria-label="required">
                         *
                       </span>
                     </span>
@@ -389,7 +389,7 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.firstName ? (
-                      <span className="mt-2 block text-sm text-[#f7b5a8]">
+                      <span className="mt-2 block text-sm text-[#F59AA2]">
                         {errors.firstName}
                       </span>
                     ) : null}
@@ -398,7 +398,7 @@ export default function Contact() {
                   <label className="block">
                     <span className="mb-2 flex items-center gap-1 text-sm text-zinc-300">
                       Last name
-                      <span className="text-[#f7b5a8]" aria-label="required">
+                      <span className="text-[#F59AA2]" aria-label="required">
                         *
                       </span>
                     </span>
@@ -416,7 +416,7 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.lastName ? (
-                      <span className="mt-2 block text-sm text-[#f7b5a8]">
+                      <span className="mt-2 block text-sm text-[#F59AA2]">
                         {errors.lastName}
                       </span>
                     ) : null}
@@ -427,7 +427,7 @@ export default function Contact() {
                   <label className="block">
                     <span className="mb-2 flex items-center gap-1 text-sm text-zinc-300">
                       Email
-                      <span className="text-[#f7b5a8]" aria-label="required">
+                      <span className="text-[#F59AA2]" aria-label="required">
                         *
                       </span>
                     </span>
@@ -445,7 +445,7 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.email ? (
-                      <span className="mt-2 block text-sm text-[#f7b5a8]">
+                      <span className="mt-2 block text-sm text-[#F59AA2]">
                         {errors.email}
                       </span>
                     ) : null}
@@ -454,7 +454,7 @@ export default function Contact() {
                   <label className="block">
                     <span className="mb-2 flex items-center gap-1 text-sm text-zinc-300">
                       Phone
-                      <span className="text-[#f7b5a8]" aria-label="required">
+                      <span className="text-[#F59AA2]" aria-label="required">
                         *
                       </span>
                     </span>
@@ -476,7 +476,7 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.phone ? (
-                      <span className="mt-2 block text-sm text-[#f7b5a8]">
+                      <span className="mt-2 block text-sm text-[#F59AA2]">
                         {errors.phone}
                       </span>
                     ) : null}
@@ -498,7 +498,7 @@ export default function Contact() {
                     className={inputClass}
                   />
                   {errors.lookingFor ? (
-                    <span className="mt-2 block text-sm text-[#f7b5a8]">
+                    <span className="mt-2 block text-sm text-[#F59AA2]">
                       {errors.lookingFor}
                     </span>
                   ) : null}
@@ -507,7 +507,7 @@ export default function Contact() {
                 <label className="block">
                   <span className="mb-2 flex items-center gap-1 text-sm text-zinc-300">
                     Message
-                    <span className="text-[#f7b5a8]" aria-label="required">
+                    <span className="text-[#F59AA2]" aria-label="required">
                       *
                     </span>
                   </span>
@@ -524,7 +524,7 @@ export default function Contact() {
                     className={`${inputClass} resize-none`}
                   />
                   {errors.message ? (
-                    <span className="mt-2 block text-sm text-[#f7b5a8]">
+                    <span className="mt-2 block text-sm text-[#F59AA2]">
                       {errors.message}
                     </span>
                   ) : null}
@@ -560,7 +560,7 @@ export default function Contact() {
                         setErrors((current) => ({ ...current, privacy: "" }));
                       }
                     }}
-                    className="h-4 w-4 rounded border-white/20 bg-[#0f0d0a] text-[#D41F2D] focus:ring-[#D41F2D]"
+                    className="h-4 w-4 rounded border-white/20 bg-[#061B3D] text-[#D41F2D] focus:ring-[#D41F2D]"
                   />
                   <span>
                     I agree to the{" "}
@@ -576,7 +576,7 @@ export default function Contact() {
                 </label>
 
                 {errors.privacy || privacyError ? (
-                  <p className="text-sm text-[#f7b5a8]">
+                  <p className="text-sm text-[#F59AA2]">
                     {errors.privacy || privacyError}
                   </p>
                 ) : null}
@@ -586,8 +586,8 @@ export default function Contact() {
                     role="status"
                     className={`rounded-2xl border px-4 py-3 text-sm ${
                       status.type === "success"
-                        ? "border-red-500/30 bg-red-500/10 text-red-300"
-                        : "border-[#f7b5a8]/30 bg-[#f7b5a8]/10 text-[#f7b5a8]"
+                        ? "border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#E8404B]"
+                        : "border-[#F59AA2]/30 bg-[#F59AA2]/10 text-[#F59AA2]"
                     }`}
                   >
                     {status.message}
@@ -639,7 +639,7 @@ export default function Contact() {
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
                 href="/showroom"
-                className="inline-flex items-center justify-center rounded-full bg-[#D41F2D] px-7 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-[#E8404B] hover:shadow-[0_0_30px_rgba(225,29,46,0.25)]"
+                className="inline-flex items-center justify-center rounded-full bg-[#D41F2D] px-7 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-[#E8404B] hover:shadow-[0_0_30px_rgba(212,31,45,0.25)]"
               >
                 Visit Showroom
               </Link>
@@ -659,7 +659,7 @@ export default function Contact() {
 
       {activeModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#061B3D]/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-[28px] border border-[#D41F2D]/20 bg-[#120f0d] shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
+          <div className="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
               <h3 className="text-xl font-bold text-white">
                 {privacyCopy.title}

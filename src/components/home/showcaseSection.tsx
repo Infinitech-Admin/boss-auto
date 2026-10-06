@@ -177,7 +177,7 @@ export default function ShowcaseSection() {
 
         {/* Error */}
         {!isLoading && loadError && (
-          <div className="mx-auto mt-16 flex max-w-xl flex-col items-center rounded-[28px] border border-red-500/30 bg-[#160f0f] px-6 py-12 text-center">
+          <div className="mx-auto mt-16 flex max-w-xl flex-col items-center rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-12 text-center">
             <p className="text-xl font-bold text-white">Something went wrong</p>
             <p className="mt-3 text-sm leading-6 text-zinc-300">{loadError}</p>
             <button

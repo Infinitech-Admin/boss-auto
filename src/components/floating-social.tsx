@@ -127,7 +127,7 @@ export default function FloatingSocial({
               <Icon size={18} strokeWidth={2.25} className="sm:h-5 sm:w-5" />
 
               {/* Tooltip */}
-              <span className="pointer-events-none absolute right-full mr-3 translate-x-1 whitespace-nowrap rounded-md border border-white/10 bg-[#080b0f] px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+              <span className="pointer-events-none absolute right-full mr-3 translate-x-1 whitespace-nowrap rounded-md border border-white/10 bg-[#061B3D] px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                 {link.name}
               </span>
             </Link>

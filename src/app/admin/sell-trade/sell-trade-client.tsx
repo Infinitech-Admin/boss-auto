@@ -95,7 +95,7 @@ function Dialog({
         }}
       />
       <div
-        className={`relative max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-white/10 bg-[#0d0d0d] p-6 shadow-2xl ${
+        className={`relative max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-white/10 bg-[#061B3D] p-6 shadow-2xl ${
           wide ? "max-w-lg" : "max-w-md"
         }`}
       >
@@ -135,7 +135,7 @@ function RowActions({
         onClick={() => onDelete(item)}
         title="Delete"
         aria-label={`Delete request from ${item.full_name}`}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-400"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#E8404B]"
       >
         <Trash2 size={14} />
       </button>
@@ -303,7 +303,7 @@ export default function SellTradeClient() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search by name, contact, brand or model..."
-            className="w-full rounded-xl border border-white/10 bg-[#111111]/70 py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
+            className="w-full rounded-xl border border-white/10 bg-[#0A2A5C]/70 py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
           />
         </div>
 
@@ -332,13 +332,13 @@ export default function SellTradeClient() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-[#111111]/70 py-16 text-sm text-zinc-400">
+        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-[#0A2A5C]/70 py-16 text-sm text-zinc-400">
           <Loader2 size={18} className="mr-2 animate-spin text-[#D41F2D]" />
           Loading requests...
         </div>
@@ -349,7 +349,7 @@ export default function SellTradeClient() {
           </p>
 
           {/* Desktop table */}
-          <div className="hidden overflow-hidden rounded-2xl border border-white/10 bg-[#111111]/70 lg:block">
+          <div className="hidden overflow-hidden rounded-2xl border border-white/10 bg-[#0A2A5C]/70 lg:block">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-500">
@@ -433,7 +433,7 @@ export default function SellTradeClient() {
             {items.map((i) => (
               <div
                 key={i.id}
-                className="rounded-2xl border border-white/10 bg-[#111111]/70 p-4"
+                className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -474,7 +474,7 @@ export default function SellTradeClient() {
               </div>
             ))}
             {items.length === 0 && (
-              <div className="col-span-full rounded-2xl border border-white/10 bg-[#111111]/70 py-10 text-center text-sm text-zinc-500">
+              <div className="col-span-full rounded-2xl border border-white/10 bg-[#0A2A5C]/70 py-10 text-center text-sm text-zinc-500">
                 No requests match your search.
               </div>
             )}
@@ -574,7 +574,7 @@ export default function SellTradeClient() {
                     setStatusDraft(e.target.value as SellTradeStatus)
                   }
                   disabled={saving}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-[#111111]/70 px-4 py-2.5 text-sm text-white outline-none focus:border-[#D41F2D]/60"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-[#0A2A5C]/70 px-4 py-2.5 text-sm text-white outline-none focus:border-[#D41F2D]/60"
                 >
                   {STATUS_OPTIONS.map((s) => (
                     <option key={s} value={s}>
@@ -598,12 +598,12 @@ export default function SellTradeClient() {
                   onChange={(e) => setNotesDraft(e.target.value)}
                   disabled={saving}
                   placeholder="Add notes about this lead..."
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-[#111111]/70 px-4 py-3 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-[#0A2A5C]/70 px-4 py-3 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
                 />
               </div>
 
               {saveError && (
-                <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                <div className="mt-4 rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
                   {saveError}
                 </div>
               )}
@@ -613,7 +613,7 @@ export default function SellTradeClient() {
                   type="button"
                   onClick={() => openDeleteDialog(selected)}
                   disabled={saving}
-                  className="flex items-center justify-center gap-2 rounded-full border border-red-500/30 px-5 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 rounded-full border border-[#D41F2D]/30 px-5 py-2.5 text-sm font-medium text-[#E8404B] transition-colors hover:bg-[#D41F2D]/10 disabled:opacity-50"
                 >
                   <Trash2 size={15} />
                   Delete
@@ -658,7 +658,7 @@ export default function SellTradeClient() {
           busy={deleting}
         >
           <div className="flex items-start gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/10 text-[#E8404B]">
               <AlertTriangle size={20} />
             </span>
             <div className="min-w-0">
@@ -674,7 +674,7 @@ export default function SellTradeClient() {
           </div>
 
           {deleteError && (
-            <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            <div className="mt-4 rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
               {deleteError}
             </div>
           )}
@@ -692,7 +692,7 @@ export default function SellTradeClient() {
               type="button"
               onClick={confirmDelete}
               disabled={deleting}
-              className="flex items-center justify-center gap-2 rounded-full bg-red-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+              className="flex items-center justify-center gap-2 rounded-full bg-[#D41F2D] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#D41F2D] disabled:opacity-60"
             >
               {deleting ? (
                 <>
