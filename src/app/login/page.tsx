@@ -5,8 +5,16 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Car, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { login, fetchMe, type ApiError } from "@/lib/api";
+import {
+  AuthShell,
+  authButtonClass,
+  authErrorClass,
+  authInputClass,
+  authLabelClass,
+  authLinkClass,
+} from "@/components/auth/auth-shell";
 
 interface LoginForm {
   email: string;
@@ -91,185 +99,112 @@ export default function LoginPage() {
     }
   }
 
-  const inputClass =
-    "w-full rounded-lg border border-[#0C2347] bg-[#040E21] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-[#D41F2D] focus:ring-2 focus:ring-[#D41F2D]/30";
-
   return (
-    <main className="relative flex min-h-screen overflow-hidden bg-[#040E21]">
-      {/* The one bold moment: a red racing stripe cutting across the page */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-1/4 top-0 h-full w-[60%] -skew-x-12 bg-gradient-to-br from-[#A8161F] via-[#D41F2D] to-[#A8161F] lg:left-[-8%] lg:w-[48%]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-1/4 top-0 hidden h-full w-[3px] -skew-x-12 bg-[#D41F2D] lg:left-[40%] lg:block"
-      />
+    <AuthShell
+      headline="Your next car is waiting."
+      blurb="Sign in to save listings, track offers and pick up where you left off."
+    >
+      <form onSubmit={handleSubmit} noValidate>
+        <h1 className="mb-1 text-2xl font-bold text-white">Welcome back</h1>
+        <p className="mb-6 text-sm text-zinc-400">
+          Sign in to your Boss Auto Exchange account.
+        </p>
 
-      {/* Brand panel (desktop) */}
-      <section className="relative z-10 hidden w-1/2 flex-col justify-between p-12 lg:flex">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-        >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#040E21] text-[#FF5C68]">
-            <Car size={20} />
-          </span>
-          <span className="text-xl font-black tracking-tight">AutoPrime</span>
-        </Link>
-
-        <div className="max-w-sm">
-          <h2 className="text-5xl font-black leading-[1.05] tracking-tight text-white">
-            Your next car is waiting.
-          </h2>
-          <p className="mt-4 text-base text-red-100/90">
-            Sign in to save listings, track offers and pick up where you left
-            off.
-          </p>
-        </div>
-      </section>
-
-      {/* Form panel */}
-      <section className="relative z-10 flex w-full items-center justify-center px-4 py-16 lg:w-1/2">
-        <div className="w-full max-w-md">
-          {/* Brand (mobile) */}
-          <div className="mb-8 text-center lg:hidden">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-2xl font-black tracking-tight text-white"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
-                <Car size={20} />
-              </span>
-              AutoPrime
-            </Link>
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="rounded-2xl border border-[#0C2347] bg-[#040E21] p-6 shadow-[0_0_0_1px_rgba(212,31,45,0.15),0_30px_80px_rgba(212,31,45,0.18)] sm:p-8"
+        {formError && (
+          <div
+            role="alert"
+            className="mb-5 rounded-lg border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]"
           >
-            <h1 className="mb-1 text-2xl font-bold text-white">Welcome back</h1>
-            <p className="mb-6 text-sm text-zinc-400">
-              Sign in to your AutoPrime account.
+            {formError}
+          </div>
+        )}
+
+        <div className="mb-4">
+          <label htmlFor="email" className={authLabelClass}>
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={form.email}
+            onChange={handleChange}
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
+            className={authInputClass}
+            placeholder="you@example.com"
+          />
+          {errors.email && (
+            <p id="email-error" className={authErrorClass}>
+              {errors.email}
             </p>
-
-            {formError && (
-              <div
-                role="alert"
-                className="mb-5 rounded-lg border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]"
-              >
-                {formError}
-              </div>
-            )}
-
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="mb-1.5 block text-sm font-medium text-zinc-300"
-              >
-                Email
-              </label>
-              <div className="relative">
-                <Mail
-                  size={17}
-                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500"
-                />
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={form.email}
-                  onChange={handleChange}
-                  className={inputClass}
-                  placeholder="you@example.com"
-                />
-              </div>
-              {errors.email && (
-                <p className="mt-1.5 text-xs text-[#FF5C68]">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="mb-3">
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-sm font-medium text-zinc-300"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <Lock
-                  size={17}
-                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500"
-                />
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  required
-                  value={form.password}
-                  onChange={handleChange}
-                  className={`${inputClass} pr-11`}
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="mt-1.5 text-xs text-[#FF5C68]">{errors.password}</p>
-              )}
-            </div>
-
-            <div className="mb-6 flex items-center justify-between">
-              <label className="flex items-center gap-2 text-sm text-zinc-400">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  checked={form.remember}
-                  onChange={handleChange}
-                  className="h-4 w-4 rounded border-zinc-700 bg-[#040E21] accent-[#D41F2D]"
-                />
-                Remember me
-              </label>
-              {/* <Link
-                href="/forgot-password"
-                className="text-sm font-medium text-[#FF5C68] hover:text-[#FF5C68]"
-              >
-                Forgot password?
-              </Link> */}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#D41F2D] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#D41F2D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8404B] focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading && <Loader2 size={16} className="animate-spin" />}
-              {loading ? "Signing in..." : "Sign in"}
-            </button>
-
-            <p className="mt-6 text-center text-sm text-zinc-400">
-              New to AutoPrime?{" "}
-              <Link
-                href="/register"
-                className="font-semibold text-[#FF5C68] hover:text-[#FF5C68]"
-              >
-                Create an account
-              </Link>
-            </p>
-          </form>
+          )}
         </div>
-      </section>
-    </main>
+
+        <div className="mb-4">
+          <label htmlFor="password" className={authLabelClass}>
+            Password
+          </label>
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              value={form.password}
+              onChange={handleChange}
+              aria-invalid={!!errors.password}
+              aria-describedby={errors.password ? "password-error" : undefined}
+              className={`${authInputClass} pr-12`}
+              placeholder="Enter your password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-zinc-400 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D41F2D]"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+          {errors.password && (
+            <p id="password-error" className={authErrorClass}>
+              {errors.password}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-6 flex items-center justify-between">
+          <label className="flex items-center gap-2 text-sm text-zinc-400">
+            <input
+              type="checkbox"
+              name="remember"
+              checked={form.remember}
+              onChange={handleChange}
+              className="h-4 w-4 rounded border-zinc-700 bg-[#040E21] accent-[#D41F2D]"
+            />
+            Remember me
+          </label>
+          {/* <Link href="/forgot-password" className={`text-sm ${authLinkClass}`}>
+            Forgot password?
+          </Link> */}
+        </div>
+
+        <button type="submit" disabled={loading} className={authButtonClass}>
+          {loading && <Loader2 size={16} className="animate-spin" />}
+          {loading ? "Signing in..." : "Sign in"}
+        </button>
+
+        <p className="mt-6 text-center text-sm text-zinc-400">
+          New to Boss Auto Exchange?{" "}
+          <Link href="/register" className={authLinkClass}>
+            Create an account
+          </Link>
+        </p>
+      </form>
+    </AuthShell>
   );
 }
