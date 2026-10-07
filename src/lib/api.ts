@@ -18,9 +18,7 @@ const API_BASE = "/api/proxy";
 export const MEDIA_BASE_URL =
   process.env.NEXT_PUBLIC_MEDIA_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  process.env.LARAVEL_API_URL ||
-  "http://localhost:8000";
-
+  (process.env.NODE_ENV === "production" ? "" : "http://localhost:8000");
 export interface ApiError extends Error {
   status?: number;
   errors?: Record<string, string[]> | null;
