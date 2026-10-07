@@ -20,7 +20,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import TestDriveDialog from "@/components/test-drive-dialog";
-// import FinancingCalculator from "@/components/financing-calculator";
+import FinancingCalculator from "@/components/financing-calculator";
 import { useCart } from "@/context/cart-context";
 import {
   MEDIA_BASE_URL,
@@ -140,7 +140,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
   }, [safeIndex]);
 
   return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#061B3D] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.45)] sm:p-5 lg:p-6">
+    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#040E21] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.45)] sm:p-5 lg:p-6">
       {/* Media */}
       <div
         role="region"
@@ -148,7 +148,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
         aria-label={`${carName} photos`}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        className={`relative overflow-hidden rounded-[22px] bg-[#0A2A5C] ${focusRing}`}
+        className={`relative overflow-hidden rounded-[22px] bg-[#071A38] ${focusRing}`}
       >
         {/* Sliding area */}
         <div
@@ -202,7 +202,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
               type="button"
               onClick={goPrevious}
               aria-label="Previous photo"
-              className={`absolute left-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#061B3D]/60 text-white backdrop-blur-xl transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black active:scale-95 sm:left-4 sm:h-11 sm:w-11 ${focusRing}`}
+              className={`absolute left-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#040E21]/60 text-white backdrop-blur-xl transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black active:scale-95 sm:left-4 sm:h-11 sm:w-11 ${focusRing}`}
             >
               <ArrowLeft size={18} />
             </button>
@@ -212,7 +212,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
               type="button"
               onClick={goNext}
               aria-label="Next photo"
-              className={`absolute right-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#061B3D]/60 text-white backdrop-blur-xl transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black active:scale-95 sm:right-4 sm:h-11 sm:w-11 ${focusRing}`}
+              className={`absolute right-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#040E21]/60 text-white backdrop-blur-xl transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black active:scale-95 sm:right-4 sm:h-11 sm:w-11 ${focusRing}`}
             >
               <ArrowRight size={18} />
             </button>
@@ -220,13 +220,13 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
         )}
 
         {/* COUNTER */}
-        <div className="pointer-events-none absolute bottom-3 right-3 z-20 rounded-full border border-white/10 bg-[#061B3D]/60 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-md sm:bottom-4 sm:right-4">
+        <div className="pointer-events-none absolute bottom-3 right-3 z-20 rounded-full border border-white/10 bg-[#040E21]/60 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-md sm:bottom-4 sm:right-4">
           {safeIndex + 1} / {slides.length}
         </div>
 
         {/* Swipe hint */}
         {safeIndex === 0 && slides.length > 1 && (
-          <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 hidden -translate-x-1/2 rounded-full border border-white/10 bg-[#061B3D]/50 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] text-zinc-300 backdrop-blur-md sm:block">
+          <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 hidden -translate-x-1/2 rounded-full border border-white/10 bg-[#040E21]/50 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] text-zinc-300 backdrop-blur-md sm:block">
             Swipe to explore
           </div>
         )}
@@ -251,7 +251,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
                 onClick={() => setIndex(i)}
                 aria-label={`Show photo ${i + 1}`}
                 aria-current={isActive}
-                className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border bg-[#0A2A5C] transition-all duration-300 sm:h-20 sm:w-28 ${isActive ? "border-[#D41F2D] opacity-100 ring-1 ring-[#D41F2D]/30" : "border-white/10 opacity-50 hover:border-white/20 hover:opacity-100"} ${focusRing}`}
+                className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border bg-[#071A38] transition-all duration-300 sm:h-20 sm:w-28 ${isActive ? "border-[#D41F2D] opacity-100 ring-1 ring-[#D41F2D]/30" : "border-white/10 opacity-50 hover:border-white/20 hover:opacity-100"} ${focusRing}`}
               >
                 <Image
                   src={slide.src}
@@ -292,24 +292,24 @@ function VideoSection({
   return (
     <section
       aria-label={`${carName} videos`}
-      className="rounded-[28px] border border-white/10 bg-[#061B3D] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.45)] sm:p-5 lg:p-6"
+      className="rounded-[28px] border border-white/10 bg-[#040E21] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.45)] sm:p-5 lg:p-6"
     >
       {/* Header */}
       <div className="mb-4 flex items-center justify-between gap-3 px-1 sm:mb-5">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D41F2D]/10">
-            <Video className="text-[#D41F2D]" size={18} />
+            <Video className="text-[#FF5C68]" size={18} />
           </div>
           <h2 className="text-xl font-bold text-white">Videos</h2>
         </div>
 
-        <span className="rounded-full border border-white/10 bg-[#061B3D]/60 px-3 py-1.5 text-[11px] font-semibold text-white">
+        <span className="rounded-full border border-white/10 bg-[#040E21]/60 px-3 py-1.5 text-[11px] font-semibold text-white">
           {videos.length} {videos.length === 1 ? "video" : "videos"}
         </span>
       </div>
 
       {/* Player */}
-      <div className="relative overflow-hidden rounded-[22px] bg-[#0A2A5C]">
+      <div className="relative overflow-hidden rounded-[22px] bg-[#071A38]">
         <div className="relative aspect-video w-full">
           {/* key forces a fresh <video> whenever the selection changes */}
           <video
@@ -323,11 +323,11 @@ function VideoSection({
             playsInline
             preload="metadata"
             aria-label={active.alt}
-            className="h-full w-full bg-[#061B3D] object-cover"
+            className="h-full w-full bg-[#040E21] object-cover"
           />
 
           {active.duration && (
-            <span className="pointer-events-none absolute left-3 top-3 z-20 rounded-full border border-white/10 bg-[#061B3D]/60 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-md">
+            <span className="pointer-events-none absolute left-3 top-3 z-20 rounded-full border border-white/10 bg-[#040E21]/60 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-md">
               {isLong ? "Full walkthrough" : "Clip"} · {active.duration}
             </span>
           )}
@@ -348,7 +348,7 @@ function VideoSection({
                 onClick={() => setIndex(i)}
                 aria-label={`Play video ${i + 1}`}
                 aria-current={isActive}
-                className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border bg-[#0A2A5C] transition-all duration-300 sm:h-20 sm:w-28 ${isActive ? "border-[#D41F2D] opacity-100 ring-1 ring-[#D41F2D]/30" : "border-white/10 opacity-50 hover:border-white/20 hover:opacity-100"} ${focusRing}`}
+                className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border bg-[#071A38] transition-all duration-300 sm:h-20 sm:w-28 ${isActive ? "border-[#D41F2D] opacity-100 ring-1 ring-[#D41F2D]/30" : "border-white/10 opacity-50 hover:border-white/20 hover:opacity-100"} ${focusRing}`}
               >
                 {/* Logo fallback (kita kung walang poster / hindi pa loaded ang video frame) */}
                 <Image
@@ -382,7 +382,7 @@ function VideoSection({
                   />
                 )}
 
-                <span className="absolute inset-0 z-10 flex items-center justify-center bg-[#061B3D]/30">
+                <span className="absolute inset-0 z-10 flex items-center justify-center bg-[#040E21]/30">
                   <Play size={16} className="fill-white text-white" />
                 </span>
               </button>
@@ -508,8 +508,8 @@ export default function CarDetailsPage() {
     return (
       <>
         <Navbar />
-        <main className="flex min-h-screen items-center justify-center bg-[#0A2A5C] px-4 text-white">
-          <div className="w-full max-w-md rounded-[28px] border border-white/10 bg-[#0A2A5C] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
+        <main className="flex min-h-screen items-center justify-center bg-[#071A38] px-4 text-white">
+          <div className="w-full max-w-md rounded-[28px] border border-white/10 bg-[#071A38] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/10">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#D41F2D]/40 border-t-[#D41F2D]" />
             </div>
@@ -530,9 +530,9 @@ export default function CarDetailsPage() {
     return (
       <>
         <Navbar />
-        <main className="flex min-h-screen items-center justify-center bg-[#0A2A5C] px-4 text-white">
-          <div className="w-full max-w-lg rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+        <main className="flex min-h-screen items-center justify-center bg-[#071A38] px-4 text-white">
+          <div className="w-full max-w-lg rounded-[28px] border border-[#D41F2D]/30 bg-[#071A38] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
               Vehicle unavailable
             </p>
             <h1 className="mt-5 text-3xl font-black tracking-tight text-white">
@@ -577,12 +577,12 @@ export default function CarDetailsPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0A2A5C] text-white">
+      <main className="min-h-screen bg-[#071A38] text-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
           {/* Back */}
           <Link
             href="/showroom"
-            className={`inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#3D8FD9] ${focusRing}`}
+            className={`inline-flex items-center gap-2 text-sm font-medium text-[#FF5C68] transition-colors hover:text-[#3D8FD9] ${focusRing}`}
           >
             <ArrowLeft size={16} />
             Back to showroom
@@ -595,7 +595,7 @@ export default function CarDetailsPage() {
               {slides.length > 0 ? (
                 <CarGallery key={car.id} carName={car.name} slides={slides} />
               ) : (
-                <div className="flex h-[300px] items-center justify-center rounded-[28px] border border-white/10 bg-[#061B3D] text-sm text-zinc-500 sm:h-[420px] lg:h-[560px]">
+                <div className="flex h-[300px] items-center justify-center rounded-[28px] border border-white/10 bg-[#040E21] text-sm text-zinc-500 sm:h-[420px] lg:h-[560px]">
                   No photos available yet
                 </div>
               )}
@@ -612,7 +612,7 @@ export default function CarDetailsPage() {
             {/* Right column: spans both rows so sticky works the whole way down */}
             <div className="min-w-0 space-y-6 lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:space-y-8">
               {/* Vehicle Info */}
-              <aside className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:p-6">
+              <aside className="rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:p-6">
                 {/* Badge */}
                 <div className="mb-4 flex items-center justify-between gap-3">
                   {car.badge ? (
@@ -641,7 +641,7 @@ export default function CarDetailsPage() {
 
                 {/* Price */}
                 <div className="mt-5 flex flex-wrap items-end gap-2 sm:mt-6 sm:gap-3">
-                  <span className="text-3xl font-black text-[#D41F2D] sm:text-4xl">
+                  <span className="text-3xl font-black text-[#FF5C68] sm:text-4xl">
                     {car.price}
                   </span>
                   <span className="pb-1 text-xs text-zinc-500 sm:text-sm">
@@ -683,7 +683,7 @@ export default function CarDetailsPage() {
                     <span className="text-zinc-500">Availability</span>
                     <span
                       className={`text-right font-semibold ${
-                        unavailable ? "text-[#E8404B]" : "text-[#E8404B]"
+                        unavailable ? "text-[#FF5C68]" : "text-[#FF5C68]"
                       }`}
                     >
                       {unavailable ? statusLabel : `${car.stock} in stock`}
@@ -726,19 +726,19 @@ export default function CarDetailsPage() {
               </aside>
 
               {/* Financing (under the info card) */}
-              {/* <FinancingCalculator
+              <FinancingCalculator
                 key={`financing-${car.id}`}
                 carName={car.name}
                 price={car.price}
                 year={car.year}
-              /> */}
+              />
             </div>
 
             {/* Highlights: sits under the media, filling the left column */}
-            <section className="min-w-0 rounded-[28px] border border-white/10 bg-[#0A2A5C] p-5 sm:p-8 lg:col-start-1 lg:row-start-2">
+            <section className="min-w-0 rounded-[28px] border border-white/10 bg-[#071A38] p-5 sm:p-8 lg:col-start-1 lg:row-start-2">
               <div className="mb-5 flex items-center gap-3 sm:mb-6">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D41F2D]/10">
-                  <Sparkles className="text-[#D41F2D]" size={18} />
+                  <Sparkles className="text-[#FF5C68]" size={18} />
                 </div>
 
                 <h2 className="text-xl font-bold text-white">
@@ -756,8 +756,8 @@ export default function CarDetailsPage() {
               {/* Specs Grid (narrower column now, so 2 cols until xl) */}
               <div className="mt-7 grid gap-3 sm:mt-8 sm:grid-cols-2 xl:grid-cols-4">
                 {/* Engine */}
-                <div className="rounded-2xl border border-white/10 bg-[#0A2A5C] p-4 transition-colors hover:border-[#D41F2D]/30">
-                  <Gauge className="text-[#D41F2D]" size={18} />
+                <div className="rounded-2xl border border-white/10 bg-[#071A38] p-4 transition-colors hover:border-[#D41F2D]/30">
+                  <Gauge className="text-[#FF5C68]" size={18} />
                   <p className="mt-3 text-sm text-zinc-500">Engine</p>
                   <p className="mt-1 text-lg font-bold text-white">
                     {car.engine}
@@ -765,8 +765,8 @@ export default function CarDetailsPage() {
                 </div>
 
                 {/* Transmission */}
-                <div className="rounded-2xl border border-white/10 bg-[#0A2A5C] p-4 transition-colors hover:border-[#D41F2D]/30">
-                  <Settings2 className="text-[#D41F2D]" size={18} />
+                <div className="rounded-2xl border border-white/10 bg-[#071A38] p-4 transition-colors hover:border-[#D41F2D]/30">
+                  <Settings2 className="text-[#FF5C68]" size={18} />
                   <p className="mt-3 text-sm text-zinc-500">Transmission</p>
                   <p className="mt-1 text-lg font-bold text-white">
                     {car.transmission}
@@ -774,8 +774,8 @@ export default function CarDetailsPage() {
                 </div>
 
                 {/* Location */}
-                <div className="rounded-2xl border border-white/10 bg-[#0A2A5C] p-4 transition-colors hover:border-[#D41F2D]/30">
-                  <MapPin className="text-[#D41F2D]" size={18} />
+                <div className="rounded-2xl border border-white/10 bg-[#071A38] p-4 transition-colors hover:border-[#D41F2D]/30">
+                  <MapPin className="text-[#FF5C68]" size={18} />
                   <p className="mt-3 text-sm text-zinc-500">Location</p>
                   <p className="mt-1 text-lg font-bold text-white">
                     {car.location}
@@ -783,8 +783,8 @@ export default function CarDetailsPage() {
                 </div>
 
                 {/* Fuel */}
-                <div className="rounded-2xl border border-white/10 bg-[#0A2A5C] p-4 transition-colors hover:border-[#D41F2D]/30">
-                  <Sparkles className="text-[#D41F2D]" size={18} />
+                <div className="rounded-2xl border border-white/10 bg-[#071A38] p-4 transition-colors hover:border-[#D41F2D]/30">
+                  <Sparkles className="text-[#FF5C68]" size={18} />
                   <p className="mt-3 text-sm text-zinc-500">Fuel</p>
                   <p className="mt-1 text-lg font-bold text-white">
                     {car.fuel}

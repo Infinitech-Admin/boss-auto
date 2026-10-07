@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Bot, MessageCircle, Send, User, X } from "lucide-react";
 
+const BUSINESS_NAME = "Boss Auto Exchange";
+const FACEBOOK_URL = "https://www.facebook.com/bossautoexchange";
+const ADDRESS = "L7, B132, Arellano cor. Diokno St., Muntinlupa City";
+
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 
@@ -17,25 +21,44 @@ const QUICK_REPLIES = [
   "I want to sell my car",
   "Financing options",
   "Book a test drive",
+  "Where are you located?",
 ];
 
 function getBotReply(message: string): string {
   const text = message.toLowerCase();
 
   if (text.includes("sell") || text.includes("trade")) {
-    return "Great — head to our Sell / Trade page and submit your car's details. Our team will send you a valuation within 24 hours.";
+    return "Great! Head to our Sell / Trade page and submit your car's details. Our team will review it and get back to you with a valuation.";
   }
 
   if (text.includes("financ")) {
-    return "We work with several lenders and offer flexible terms. Want me to have a finance specialist call you?";
+    return `We can go over financing options with you. Send us a message on our Facebook page (${FACEBOOK_URL}) or through our Contact page and our team will follow up.`;
   }
 
   if (text.includes("test drive") || text.includes("book")) {
     return 'Happy to help! Pick a car from our Showroom and tap "Book Test Drive" on its page, or share the model here and I\'ll pass it along.';
   }
 
+  if (
+    text.includes("where") ||
+    text.includes("location") ||
+    text.includes("address") ||
+    text.includes("visit")
+  ) {
+    return `You can find us at ${ADDRESS}. Please message us on Facebook first so we can confirm our hours before you visit.`;
+  }
+
   if (text.includes("hour") || text.includes("open")) {
-    return "We're open Mon–Sat, 9am–7pm. Feel free to drop by or reach us anytime here.";
+    return `Please message us on our Facebook page (${FACEBOOK_URL}) to confirm our current hours before you visit.`;
+  }
+
+  if (
+    text.includes("contact") ||
+    text.includes("facebook") ||
+    text.includes("message") ||
+    text.includes("call")
+  ) {
+    return `The fastest way to reach us is through our Facebook page: ${FACEBOOK_URL}. You can also use the form on our Contact page.`;
   }
 
   return "Thanks for reaching out! A member of our team will follow up shortly. Anything specific I can help you with in the meantime?";
@@ -53,7 +76,7 @@ export default function ChatWidget() {
     {
       id: "welcome",
       role: "bot",
-      text: "Hi there! 👋 I'm the AutoTrade assistant. Ask me about buying, selling, or financing a car.",
+      text: `Hi there! 👋 I'm the ${BUSINESS_NAME} assistant. Ask me about buying, selling, or financing a car.`,
     },
   ]);
 
@@ -109,7 +132,7 @@ export default function ChatWidget() {
   };
 
   // Hide chatbot on all admin pages
-  if (pathname.startsWith("/admin")) {
+  if (pathname?.startsWith("/admin")) {
     return null;
   }
 
@@ -117,9 +140,9 @@ export default function ChatWidget() {
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
       {/* Chat panel */}
       {isOpen && (
-        <div className="flex h-[min(70vh,560px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#061B3D] shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
+        <div className="flex h-[min(70vh,560px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#040E21] shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
           {/* Header */}
-          <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-[#0A2A5C] px-4 py-3.5">
+          <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-[#071A38] px-4 py-3.5">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D41F2D] text-black">
                 <Bot size={18} strokeWidth={2.25} />
@@ -127,7 +150,7 @@ export default function ChatWidget() {
 
               <div className="leading-tight">
                 <div className="text-sm font-semibold text-white">
-                  AutoTrade Assistant
+                  {BUSINESS_NAME} Assistant
                 </div>
 
                 <div className="flex items-center gap-1.5 text-xs text-zinc-400">
@@ -166,7 +189,7 @@ export default function ChatWidget() {
                 )}
 
                 <div
-                  className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                  className={`max-w-[75%] break-words rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                     message.role === "user"
                       ? "rounded-br-sm bg-[#D41F2D] text-black"
                       : "rounded-bl-sm bg-white/[0.06] text-zinc-100"
@@ -218,7 +241,7 @@ export default function ChatWidget() {
           {/* Input */}
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-white/10 bg-[#0A2A5C] p-3"
+            className="flex items-center gap-2 border-t border-white/10 bg-[#071A38] p-3"
           >
             <input
               type="text"
@@ -226,7 +249,7 @@ export default function ChatWidget() {
               onChange={(event) => setInput(event.target.value)}
               placeholder="Type your message..."
               aria-label="Type your message"
-              className={`flex-1 rounded-full border border-white/10 bg-[#061B3D]/40 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 ${focusRing}`}
+              className={`flex-1 rounded-full border border-white/10 bg-[#040E21]/40 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 ${focusRing}`}
             />
 
             <button
@@ -246,7 +269,7 @@ export default function ChatWidget() {
         type="button"
         aria-label={isOpen ? "Close chat" : "Open chat"}
         onClick={() => (isOpen ? setIsOpen(false) : handleOpen())}
-        className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-[#D41F2D] text-black shadow-[0_10px_30px_rgba(191,152,13,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_35px_rgba(191,152,13,0.55)] ${focusRing}`}
+        className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-[#D41F2D] text-black shadow-[0_10px_30px_rgba(212,31,45,0.45)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_35px_rgba(212,31,45,0.65)] ${focusRing}`}
       >
         {isOpen ? (
           <X size={24} strokeWidth={2.25} />
@@ -255,7 +278,7 @@ export default function ChatWidget() {
         )}
 
         {hasUnread && !isOpen && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#D41F2D] ring-2 ring-[#061B3D]">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#D41F2D] ring-2 ring-[#040E21]">
             <span className="h-2 w-2 animate-ping rounded-full bg-[#E8404B]" />
           </span>
         )}

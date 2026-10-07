@@ -134,14 +134,14 @@ export default function ShowcaseSection() {
           <div className="max-w-3xl mx-0 py-10">
             <div className="mb-5 flex items-center gap-3">
               <span className="h-px w-10 bg-[#D41F2D]" />
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                 Featured Vehicles
               </span>
               <span className="h-px w-10 bg-[#D41F2D]" />
             </div>
 
             <h2 className="text-4xl font-black tracking-tight text-[var(--foreground)] sm:text-5xl lg:text-6xl">
-              Drive <span className="text-[#D41F2D]">Excellence.</span>
+              Drive <span className="text-[#FF5C68]">Excellence.</span>
             </h2>
 
             <p className="mt-5 text-sm leading-7 text-[var(--muted)] sm:text-base">
@@ -152,7 +152,7 @@ export default function ShowcaseSection() {
           <div className="group mt-6 inline-block">
             <Link
               href="/showroom"
-              className="flex items-center gap-2 text-lg font-semibold text-[#D41F2D] underline decoration-transparent decoration-2 underline-offset-4 transition-all duration-300 hover:decoration-[#D41F2D]"
+              className="flex items-center gap-2 text-lg font-semibold text-[#FF5C68] underline decoration-transparent decoration-2 underline-offset-4 transition-all duration-300 hover:decoration-[#D41F2D]"
             >
               Visit Showroom
               <ArrowRight
@@ -177,7 +177,7 @@ export default function ShowcaseSection() {
 
         {/* Error */}
         {!isLoading && loadError && (
-          <div className="mx-auto mt-16 flex max-w-xl flex-col items-center rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-12 text-center">
+          <div className="mx-auto mt-16 flex max-w-xl flex-col items-center rounded-[28px] border border-[#D41F2D]/30 bg-[#071A38] px-6 py-12 text-center">
             <p className="text-xl font-bold text-white">Something went wrong</p>
             <p className="mt-3 text-sm leading-6 text-zinc-300">{loadError}</p>
             <button
@@ -212,7 +212,7 @@ export default function ShowcaseSection() {
                   type="button"
                   onClick={goPrevious}
                   aria-label="Previous vehicle"
-                  className="absolute left-1 top-1/2 z-50 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#061B3D]/60 text-white backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black sm:left-5 sm:h-12 sm:w-12 lg:left-10"
+                  className="absolute left-1 top-1/2 z-50 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#040E21]/60 text-white backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black sm:left-5 sm:h-12 sm:w-12 lg:left-10"
                 >
                   <ArrowLeft size={19} />
                 </button>
@@ -221,7 +221,7 @@ export default function ShowcaseSection() {
                   type="button"
                   onClick={goNext}
                   aria-label="Next vehicle"
-                  className="absolute right-1 top-1/2 z-50 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#061B3D]/60 text-white backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black sm:right-5 sm:h-12 sm:w-12 lg:right-10"
+                  className="absolute right-1 top-1/2 z-50 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#040E21]/60 text-white backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-[#D41F2D] hover:bg-[#D41F2D] hover:text-black sm:right-5 sm:h-12 sm:w-12 lg:right-10"
                 >
                   <ArrowRight size={19} />
                 </button>
@@ -305,7 +305,7 @@ export default function ShowcaseSection() {
               {/* Specs */}
               <div className="mt-6 flex items-center justify-center divide-x divide-[var(--border)]">
                 <div className="flex items-center gap-2 px-4 sm:px-7">
-                  <Gauge size={17} className="text-[#D41F2D]" />
+                  <Gauge size={17} className="text-[#FF5C68]" />
                   <div className="text-left">
                     <p className="text-sm font-semibold text-[var(--foreground)]">
                       {activeCar.engine}
@@ -317,7 +317,7 @@ export default function ShowcaseSection() {
                 </div>
 
                 <div className="flex items-center gap-2 px-4 sm:px-7">
-                  <CarFront size={17} className="text-[#D41F2D]" />
+                  <CarFront size={17} className="text-[#FF5C68]" />
                   <div className="text-left">
                     <p className="text-sm font-semibold text-[var(--foreground)]">
                       {activeCar.horsepower}
@@ -329,7 +329,7 @@ export default function ShowcaseSection() {
                 </div>
 
                 <div className="hidden items-center gap-2 px-4 sm:flex sm:px-7">
-                  <Settings2 size={17} className="text-[#D41F2D]" />
+                  <Settings2 size={17} className="text-[#FF5C68]" />
                   <div className="text-left">
                     <p className="text-sm font-semibold text-[var(--foreground)]">
                       {activeCar.transmission}
@@ -345,7 +345,7 @@ export default function ShowcaseSection() {
               <div className="mt-7">
                 <Link
                   href={`/showroom/car/${activeCar.id}`}
-                  className="group inline-flex items-center gap-3 rounded-full border border-[#D41F2D] px-6 py-3 text-sm font-semibold text-[#D41F2D] transition-all duration-300 hover:scale-105 hover:bg-[#D41F2D] hover:text-black"
+                  className="group inline-flex items-center gap-3 rounded-full border border-[#D41F2D] px-6 py-3 text-sm font-semibold text-[#FF5C68] transition-all duration-300 hover:scale-105 hover:bg-[#D41F2D] hover:text-black"
                 >
                   View Details
                   <ArrowRight

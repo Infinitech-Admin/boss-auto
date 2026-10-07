@@ -1,10 +1,14 @@
 import type { Metadata, Viewport } from "next";
+
 import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
+
 import { AuthProvider } from "@/context/auth-context";
 import { CartProvider } from "@/context/cart-context";
-import FloatingSocial from "@/components/floating-social";
 import ChatWidget from "@/components/chat-widget";
+import FloatingSocial from "@/components/floating-social";
+import AnimatedSplash from "@/components/animated-splash";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +22,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "AutoPrime | Premium Cars for Sale",
-    template: "%s | AutoPrime",
+    default: "Boss Auto Exchange | Cars for Sale",
+    template: "%s | Boss Auto Exchange",
   },
+
   description:
-    "Discover quality vehicles for sale. Browse premium cars, explore detailed specifications, view photos and videos, and inquire about your next vehicle.",
+    "Discover quality vehicles for sale at Boss Auto Exchange. Browse premium cars, explore detailed specifications, view photos and videos, and inquire about your next vehicle.",
+
   keywords: [
+    "Boss Auto Exchange",
     "cars for sale",
     "used cars",
     "pre-owned cars",
@@ -33,9 +40,10 @@ export const metadata: Metadata = {
     "automotive",
     "premium cars",
   ],
-  authors: [{ name: "AutoTrade" }],
-  creator: "AutoTrade",
-  publisher: "AutoTrade",
+
+  authors: [{ name: "Boss Auto Exchange" }],
+  creator: "Boss Auto Exchange",
+  publisher: "Boss Auto Exchange",
 
   robots: {
     index: true,
@@ -47,21 +55,21 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "AutoTrade",
+    title: "Boss Auto Exchange",
   },
 
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "AutoTrade | Premium Cars for Sale",
+    title: "Boss Auto Exchange | Cars for Sale",
     description:
       "Explore quality vehicles with detailed specifications, photos, videos, and easy inquiry options.",
-    siteName: "AutoTrade",
+    siteName: "Boss Auto Exchange",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "AutoTrade | Premium Cars for Sale",
+    title: "Boss Auto Exchange | Cars for Sale",
     description:
       "Find your next vehicle. Browse our latest inventory and explore every car in detail.",
   },
@@ -89,17 +97,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#061B3D] text-white">
+      <body className="min-h-full flex flex-col bg-[#040E21] text-white">
         <AuthProvider>
           <CartProvider>
             {children}
-            <FloatingSocial
-              facebookHref="https://www.facebook.com/autoprimecartrading/"
-              chatHref="#"
-              telegramHref="https://t.me/autotrade"
-              email="info@autotrade.com"
-              phone="+10000000000"
-            />
+            <AnimatedSplash />
+            <FloatingSocial />
             <ChatWidget />
           </CartProvider>
         </AuthProvider>

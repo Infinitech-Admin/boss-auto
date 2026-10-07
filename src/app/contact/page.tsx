@@ -18,16 +18,16 @@ import Footer from "../../components/layout/footer";
 
 // ---------------------------------------------------------------------------
 // Business details
-// Address is from public dealer listings (Zigwheels). Please double-check it.
+// Address is from public dealer listings (Zigwheels / Carmudi). Please
+// double-check it before going live.
 // TODO: fill in PHONE, EMAIL and HOURS. Anything left empty is hidden
 // automatically instead of showing placeholder text.
 // ---------------------------------------------------------------------------
-const BUSINESS_NAME = "Auto Prime Car Trading";
-const FACEBOOK_URL = "https://www.facebook.com/autoprimecartrading/";
-const ADDRESS_LINE_1 =
-  "Blk 21 Lot 4 Leo Alejandrino St., BF Resort Village, Brgy. Talon Dos";
-const ADDRESS_LINE_2 = "Las Piñas City, Philippines";
-const PHONE_DISPLAY = ""; // e.g. "0917 123 4567"
+const BUSINESS_NAME = "Boss Auto Exchange";
+const FACEBOOK_URL = "https://www.facebook.com/bossautoexchange";
+const ADDRESS_LINE_1 = "L7, B132, Arellano cor. Diokno St.";
+const ADDRESS_LINE_2 = "Muntinlupa City, Philippines";
+const PHONE_DISPLAY = "0906 021 8568"; // e.g. "0917 123 4567"
 const PHONE_TEL = ""; // e.g. "+639171234567"
 const EMAIL = ""; // e.g. "hello@yourdomain.com"
 const HOURS: { day: string; time: string }[] = [
@@ -119,7 +119,7 @@ const NAME_PATTERN = new RegExp("^[\\p{L}\\p{M}\\s.'’-]+$", "u");
 const PHONE_PATTERN = /^09\d{9}$/;
 
 const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-[#061B3D] px-4 py-3 text-white placeholder:text-zinc-500 focus:border-[#D41F2D] focus:outline-none";
+  "w-full rounded-2xl border border-white/10 bg-[#040E21] px-4 py-3 text-white placeholder:text-zinc-500 focus:border-[#D41F2D] focus:outline-none";
 
 export default function Contact() {
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
@@ -271,22 +271,22 @@ export default function Contact() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#0A2A5C] text-white">
-        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#061B3D]">
+      <main className="min-h-screen bg-[#071A38] text-white">
+        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#040E21]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(212,31,45,0.18),transparent_50%)]" />
 
           <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
               <div className="mb-5 flex items-center gap-3">
                 <span className="h-px w-10 bg-[#D41F2D]" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                   Contact us
                 </span>
               </div>
 
               <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Let’s find your
-                <span className="block text-[#D41F2D]">next ideal drive.</span>
+                <span className="block text-[#FF5C68]">next ideal drive.</span>
               </h1>
 
               <p className="mt-6 max-w-2xl text-base leading-7 text-zinc-300 sm:text-lg">
@@ -310,9 +310,9 @@ export default function Contact() {
                   rel={
                     href.startsWith("http") ? "noopener noreferrer" : undefined
                   }
-                  className="group flex items-start gap-4 rounded-[24px] border border-white/10 bg-[#0A2A5C] p-5 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#0A2A5C]"
+                  className="group flex items-start gap-4 rounded-[24px] border border-white/10 bg-[#071A38] p-5 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#071A38]"
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#D41F2D]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#FF5C68]">
                     <Icon size={20} />
                   </div>
 
@@ -320,15 +320,15 @@ export default function Contact() {
                     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
                       {title}
                     </p>
-                    <p className="mt-2 text-lg font-semibold text-white transition-colors group-hover:text-[#E8404B]">
+                    <p className="mt-2 text-lg font-semibold text-white transition-colors group-hover:text-[#FF5C68]">
                       {value}
                     </p>
                   </div>
                 </a>
               ))}
 
-              <div className="rounded-[24px] border border-white/10 bg-[#0A2A5C] p-5">
-                <div className="mb-4 flex items-center gap-3 text-[#D41F2D]">
+              <div className="rounded-[24px] border border-white/10 bg-[#071A38] p-5">
+                <div className="mb-4 flex items-center gap-3 text-[#FF5C68]">
                   <Clock3 size={18} />
                   <p className="text-xs font-semibold uppercase tracking-[0.25em]">
                     Opening hours
@@ -358,8 +358,8 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="rounded-[30px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:p-7">
-              <div className="mb-6 flex items-center gap-3 text-[#D41F2D]">
+            <div className="rounded-[30px] border border-[#D41F2D]/20 bg-[#071A38] p-5 shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:p-7">
+              <div className="mb-6 flex items-center gap-3 text-[#FF5C68]">
                 <Send size={18} />
                 <span className="text-xs font-semibold uppercase tracking-[0.28em]">
                   Enquire now
@@ -560,14 +560,14 @@ export default function Contact() {
                         setErrors((current) => ({ ...current, privacy: "" }));
                       }
                     }}
-                    className="h-4 w-4 rounded border-white/20 bg-[#061B3D] text-[#D41F2D] focus:ring-[#D41F2D]"
+                    className="h-4 w-4 rounded border-white/20 bg-[#040E21] text-[#FF5C68] focus:ring-[#D41F2D]"
                   />
                   <span>
                     I agree to the{" "}
                     <button
                       type="button"
                       onClick={() => setActiveModal("privacy")}
-                      className="font-medium text-[#D41F2D] transition-colors hover:text-[#E8404B]"
+                      className="font-medium text-[#FF5C68] transition-colors hover:text-[#FF5C68]"
                     >
                       Privacy Policy
                     </button>{" "}
@@ -586,7 +586,7 @@ export default function Contact() {
                     role="status"
                     className={`rounded-2xl border px-4 py-3 text-sm ${
                       status.type === "success"
-                        ? "border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#E8404B]"
+                        ? "border-[#D41F2D]/30 bg-[#D41F2D]/10 text-[#FF5C68]"
                         : "border-[#F59AA2]/30 bg-[#F59AA2]/10 text-[#F59AA2]"
                     }`}
                   >
@@ -613,14 +613,14 @@ export default function Contact() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden border-t border-[#D41F2D]/30 bg-[#061B3D] py-14 text-center">
+        <section className="relative overflow-hidden border-t border-[#D41F2D]/30 bg-[#040E21] py-14 text-center">
           {/* Background glow */}
-          <div className="absolute left-1/2 top-1/2 h-[450px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0B5BA8]/25 blur-[130px]" />
+          <div className="absolute left-1/2 top-1/2 h-[450px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.06] blur-[130px]" />
 
           <div className="relative mx-auto max-w-4xl px-5 sm:px-6">
             <div className="mb-5 flex items-center justify-center gap-3">
               <span className="h-px w-10 bg-[#D41F2D]" />
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                 Visit our showroom
               </span>
               <span className="h-px w-10 bg-[#D41F2D]" />
@@ -628,7 +628,7 @@ export default function Contact() {
 
             <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
               Book your{" "}
-              <span className="block text-[#D41F2D]">Next Journey</span>
+              <span className="block text-[#FF5C68]">Next Journey</span>
             </h2>
 
             <p className="mt-5 text-sm leading-7 text-zinc-400 sm:text-base">
@@ -658,8 +658,8 @@ export default function Contact() {
       <Footer />
 
       {activeModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#061B3D]/70 p-4 backdrop-blur-sm">
-          <div className="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#040E21]/70 p-4 backdrop-blur-sm">
+          <div className="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38] shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
               <h3 className="text-xl font-bold text-white">
                 {privacyCopy.title}
@@ -668,7 +668,7 @@ export default function Contact() {
                 type="button"
                 aria-label="Close privacy policy"
                 onClick={() => setActiveModal(null)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-300 transition-all hover:border-[#D41F2D] hover:text-[#E8404B]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-300 transition-all hover:border-[#D41F2D] hover:text-[#FF5C68]"
               >
                 ×
               </button>

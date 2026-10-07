@@ -16,7 +16,7 @@ const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-[#0A2A5C] px-3.5 py-3 text-sm text-white placeholder:text-zinc-500 [color-scheme:dark] focus:border-[#D41F2D] focus:outline-none";
+  "w-full rounded-xl border border-white/10 bg-[#071A38] px-3.5 py-3 text-sm text-white placeholder:text-zinc-500 [color-scheme:dark] focus:border-[#D41F2D] focus:outline-none";
 
 const inputInvalidClass = "!border-[#D41F2D]/60 focus:!border-[#D41F2D]";
 
@@ -420,14 +420,14 @@ export default function TestDriveDialog({
         if (e.target === dialogRef.current) onClose();
       }}
       aria-labelledby="test-drive-title"
-      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-0 text-white shadow-[0_25px_80px_rgba(0,0,0,0.6)] backdrop:bg-[#061B3D]/70 backdrop:backdrop-blur-sm"
+      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38] p-0 text-white shadow-[0_25px_80px_rgba(0,0,0,0.6)] backdrop:bg-[#040E21]/70 backdrop:backdrop-blur-sm"
     >
       <div className="max-h-[90vh] overflow-y-auto p-5 sm:p-6">
         {/* Header */}
         <div className="mb-5 flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#D41F2D]/10">
-              <CalendarCheck className="text-[#D41F2D]" size={20} />
+              <CalendarCheck className="text-[#FF5C68]" size={20} />
             </div>
             <div>
               <h2 id="test-drive-title" className="text-lg font-bold">
@@ -450,7 +450,7 @@ export default function TestDriveDialog({
         {result ? (
           /* Success */
           <div className="py-4 text-center">
-            <CheckCircle2 className="mx-auto text-[#E8404B]" size={48} />
+            <CheckCircle2 className="mx-auto text-[#FF5C68]" size={48} />
             <h3 className="mt-4 text-xl font-bold">Request received</h3>
             <p className="mt-2 text-sm leading-6 text-zinc-300">
               {dateLabel(result.preferred_date)} at{" "}
@@ -479,7 +479,7 @@ export default function TestDriveDialog({
             {formError && (
               <p
                 role="alert"
-                className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 px-3.5 py-2.5 text-sm text-[#E8404B]"
+                className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 px-3.5 py-2.5 text-sm text-[#FF5C68]"
               >
                 {formError}
               </p>
@@ -580,7 +580,7 @@ export default function TestDriveDialog({
                         className={`rounded-xl border px-2 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:text-zinc-600 disabled:line-through ${
                           selected
                             ? "border-[#D41F2D] bg-[#D41F2D] text-black"
-                            : "border-white/10 bg-[#0A2A5C] text-white hover:border-[#D41F2D]/60 disabled:hover:border-white/10"
+                            : "border-white/10 bg-[#071A38] text-white hover:border-[#D41F2D]/60 disabled:hover:border-white/10"
                         } ${focusRing}`}
                       >
                         {timeLabel(slot.time)}
@@ -644,7 +644,7 @@ function Field({
       </span>
       {children}
       {error && (
-        <span role="alert" className="mt-1.5 block text-xs text-[#E8404B]">
+        <span role="alert" className="mt-1.5 block text-xs text-[#FF5C68]">
           {error}
         </span>
       )}

@@ -167,7 +167,7 @@ export default function RegisterPage() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-[#123A73] bg-[#061B3D] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-[#D41F2D] focus:ring-2 focus:ring-[#D41F2D]/30";
+    "w-full rounded-lg border border-[#0C2347] bg-[#040E21] py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 outline-none transition-colors focus:border-[#D41F2D] focus:ring-2 focus:ring-[#D41F2D]/30";
 
   const labelClass = "mb-1.5 block text-sm font-medium text-zinc-300";
 
@@ -175,7 +175,7 @@ export default function RegisterPage() {
     "pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500";
 
   return (
-    <main className="relative flex min-h-screen overflow-hidden bg-[#061B3D]">
+    <main className="relative flex min-h-screen overflow-hidden bg-[#040E21]">
       {/* The one bold moment: a red racing stripe cutting across the page */}
       <div
         aria-hidden
@@ -192,7 +192,7 @@ export default function RegisterPage() {
           href="/"
           className="inline-flex items-center gap-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#061B3D] text-[#D41F2D]">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#040E21] text-[#FF5C68]">
             <Car size={20} />
           </span>
           <span className="text-xl font-black tracking-tight">AutoPrime</span>
@@ -218,7 +218,7 @@ export default function RegisterPage() {
               href="/"
               className="inline-flex items-center gap-2 text-2xl font-black tracking-tight text-white"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
                 <Car size={20} />
               </span>
               AutoPrime
@@ -228,7 +228,7 @@ export default function RegisterPage() {
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="rounded-2xl border border-[#123A73] bg-[#061B3D] p-6 shadow-[0_0_0_1px_rgba(212,31,45,0.15),0_30px_80px_rgba(212,31,45,0.18)] sm:p-8"
+            className="rounded-2xl border border-[#0C2347] bg-[#040E21] p-6 shadow-[0_0_0_1px_rgba(212,31,45,0.15),0_30px_80px_rgba(212,31,45,0.18)] sm:p-8"
           >
             <h1 className="mb-1 text-2xl font-bold text-white">
               Create your account
@@ -240,7 +240,7 @@ export default function RegisterPage() {
             {formError && (
               <div
                 role="alert"
-                className="mb-5 rounded-lg border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]"
+                className="mb-5 rounded-lg border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]"
               >
                 {formError}
               </div>
@@ -266,7 +266,7 @@ export default function RegisterPage() {
                 />
               </div>
               {errors.name && (
-                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.name}</p>
+                <p className="mt-1.5 text-xs text-[#FF5C68]">{errors.name}</p>
               )}
             </div>
 
@@ -293,7 +293,7 @@ export default function RegisterPage() {
                 />
               </div>
               {errors.phone && (
-                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.phone}</p>
+                <p className="mt-1.5 text-xs text-[#FF5C68]">{errors.phone}</p>
               )}
             </div>
 
@@ -318,7 +318,7 @@ export default function RegisterPage() {
                 />
               </div>
               {errors.email && (
-                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.email}</p>
+                <p className="mt-1.5 text-xs text-[#FF5C68]">{errors.email}</p>
               )}
             </div>
 
@@ -350,7 +350,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1.5 text-xs text-[#E8404B]">{errors.password}</p>
+                <p className="mt-1.5 text-xs text-[#FF5C68]">{errors.password}</p>
               )}
 
               {form.password.length > 0 && (
@@ -385,12 +385,12 @@ export default function RegisterPage() {
                 />
               </div>
               {form.password_confirmation.length > 0 && !passwordsMatch && (
-                <p className="mt-1.5 text-xs text-[#E8404B]">
+                <p className="mt-1.5 text-xs text-[#FF5C68]">
                   Passwords do not match.
                 </p>
               )}
               {errors.password_confirmation && (
-                <p className="mt-1.5 text-xs text-[#E8404B]">
+                <p className="mt-1.5 text-xs text-[#FF5C68]">
                   {errors.password_confirmation}
                 </p>
               )}
@@ -409,7 +409,7 @@ export default function RegisterPage() {
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-semibold text-[#D41F2D] hover:text-[#E8404B]"
+                className="font-semibold text-[#FF5C68] hover:text-[#FF5C68]"
               >
                 Sign in
               </Link>
@@ -424,7 +424,7 @@ export default function RegisterPage() {
 function RuleItem({ met, children }: { met: boolean; children: ReactNode }) {
   return (
     <li
-      className={`flex items-center gap-1.5 ${met ? "text-[#E8404B]" : "text-zinc-500"}`}
+      className={`flex items-center gap-1.5 ${met ? "text-[#FF5C68]" : "text-zinc-500"}`}
     >
       {met ? <Check size={13} /> : <X size={13} />}
       {children}

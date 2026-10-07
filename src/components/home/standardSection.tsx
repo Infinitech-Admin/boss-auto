@@ -51,7 +51,7 @@ export default function StandardSection() {
                     <div className="mx-auto max-w-3xl text-center">
                         <div className="mb-5 flex items-center justify-center gap-3">
                             <span className="h-px w-10 bg-[#D41F2D]" />
-                            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+                            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                                 AutoTrade Standard
                             </span>
                             <span className="h-px w-10 bg-[#D41F2D]" />
@@ -59,7 +59,7 @@ export default function StandardSection() {
 
                         <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
                             Trust, built into
-                            <span className="block text-[#D41F2D]">
+                            <span className="block text-[#FF5C68]">
                                 every detail.
                             </span>
                         </h2>
@@ -91,7 +91,7 @@ export default function StandardSection() {
                                 >
                                     {/* Icon */}
                                     <div className="flex size-12 items-center justify-center rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 transition-all duration-300 group-hover:border-[#D41F2D]/60 group-hover:bg-[#D41F2D]/20">
-                                        <Icon className="size-6 text-[#D41F2D]" />
+                                        <Icon className="size-6 text-[#FF5C68]" />
                                     </div>
 
                                     {/* Content */}

@@ -19,10 +19,10 @@ export default function NotFound() {
         <>
             <Navbar />
 
-            <main className="relative flex min-h-[calc(100svh_-_81px)] items-center overflow-hidden border-b border-white/10 bg-[#061B3D]">
+            <main className="relative flex min-h-[calc(100svh_-_81px)] items-center overflow-hidden border-b border-white/10 bg-[#040E21]">
 
                 {/* Showroom light, same gold glow as the hero */}
-                <div className="pointer-events-none absolute right-[10%] top-1/3 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-[#0B5BA8]/25 blur-[140px]" />
+                <div className="pointer-events-none absolute right-[10%] top-1/3 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-white/[0.06] blur-[140px]" />
 
                 <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16 lg:px-8 lg:py-16">
 
@@ -31,7 +31,7 @@ export default function NotFound() {
                     ========================== */}
                     <div className="max-w-xl">
 
-                        <p className="text-sm font-semibold text-[#D41F2D]">
+                        <p className="text-sm font-semibold text-[#FF5C68]">
                             Error 404
                         </p>
 
@@ -55,7 +55,7 @@ export default function NotFound() {
 
                             <Link
                                 href="/"
-                                className={`inline-flex items-center justify-center rounded-full border border-[#D41F2D]/70 bg-[#061B3D]/30 px-7 py-4 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D]/15 ${focusRing}`}
+                                className={`inline-flex items-center justify-center rounded-full border border-[#D41F2D]/70 bg-[#040E21]/30 px-7 py-4 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-[#D41F2D] hover:bg-[#D41F2D]/15 ${focusRing}`}
                             >
                                 Go to homepage
                             </Link>
@@ -65,7 +65,7 @@ export default function NotFound() {
                             Looking for a specific car?{" "}
                             <Link
                                 href="/contact"
-                                className={`font-medium text-white underline decoration-[#D41F2D] decoration-2 underline-offset-4 transition-colors hover:text-[#D41F2D] ${focusRing}`}
+                                className={`font-medium text-white underline decoration-[#D41F2D] decoration-2 underline-offset-4 transition-colors hover:text-[#FF5C68] ${focusRing}`}
                             >
                                 Contact us
                             </Link>{" "}

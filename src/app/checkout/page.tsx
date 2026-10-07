@@ -101,7 +101,7 @@ const serverFieldMap: Record<string, ErrorKey> = {
 };
 
 const inputClasses =
-  "w-full rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white placeholder:text-zinc-500 outline-none transition-colors focus:border-[#D41F2D]";
+  "w-full rounded-2xl border border-white/10 bg-[#040E21]/20 px-4 py-3 text-sm text-white placeholder:text-zinc-500 outline-none transition-colors focus:border-[#D41F2D]";
 
 const labelClasses =
   "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-zinc-400";
@@ -287,10 +287,10 @@ export default function CheckoutPage() {
     return (
       <>
         <Navbar />
-        <main className="flex min-h-screen items-center justify-center bg-[#0A2A5C] px-4 text-white">
-          <div className="w-full max-w-lg rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:px-10">
+        <main className="flex min-h-screen items-center justify-center bg-[#071A38] px-4 text-white">
+          <div className="w-full max-w-lg rounded-[28px] border border-[#D41F2D]/30 bg-[#071A38] px-6 py-12 text-center shadow-[0_25px_80px_rgba(0,0,0,0.35)] sm:px-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10">
-              <CheckCircle2 className="text-[#D41F2D]" size={30} />
+              <CheckCircle2 className="text-[#FF5C68]" size={30} />
             </div>
 
             <h1 className="mt-6 text-3xl font-black tracking-tight text-white">
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#0A2A5C]" />
+        <main className="min-h-screen bg-[#071A38]" />
         <Footer />
       </>
     );
@@ -354,8 +354,8 @@ export default function CheckoutPage() {
     return (
       <>
         <Navbar />
-        <main className="flex min-h-screen items-center justify-center bg-[#0A2A5C] px-4 text-white">
-          <div className="w-full max-w-md rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-14 text-center">
+        <main className="flex min-h-screen items-center justify-center bg-[#071A38] px-4 text-white">
+          <div className="w-full max-w-md rounded-[28px] border border-dashed border-white/15 bg-[#071A38] px-6 py-14 text-center">
             <p className="text-xl font-semibold text-white">
               Your cart is empty
             </p>
@@ -378,11 +378,11 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0A2A5C] text-white">
+      <main className="min-h-screen bg-[#071A38] text-white">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
           <Link
             href="/cart"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#FF5C68] transition-colors hover:text-[#3D8FD9]"
           >
             <ArrowLeft size={16} />
             Back to cart
@@ -390,7 +390,7 @@ export default function CheckoutPage() {
 
           <div className="mt-5 flex items-center gap-3">
             <span className="h-px w-10 bg-[#D41F2D]" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
               Order Details
             </span>
           </div>
@@ -404,7 +404,7 @@ export default function CheckoutPage() {
               Checking out as a guest. No account needed.{" "}
               <Link
                 href={LOGIN_URL}
-                className="font-semibold text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
+                className="font-semibold text-[#FF5C68] transition-colors hover:text-[#3D8FD9]"
               >
                 Already have an account? Log in
               </Link>
@@ -416,7 +416,7 @@ export default function CheckoutPage() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="rounded-[28px] border border-white/10 bg-[#0A2A5C] p-6 sm:p-8"
+              className="rounded-[28px] border border-white/10 bg-[#071A38] p-6 sm:p-8"
             >
               <h2 className="text-lg font-bold text-white">
                 Contact information
@@ -437,7 +437,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.fullName)}
                   />
                   {errors.fullName && (
-                    <p className="mt-1.5 text-xs text-[#E8404B]">
+                    <p className="mt-1.5 text-xs text-[#FF5C68]">
                       {errors.fullName}
                     </p>
                   )}
@@ -457,7 +457,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.email)}
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-xs text-[#E8404B]">
+                    <p className="mt-1.5 text-xs text-[#FF5C68]">
                       {errors.email}
                     </p>
                   )}
@@ -477,7 +477,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.phone)}
                   />
                   {errors.phone && (
-                    <p className="mt-1.5 text-xs text-[#E8404B]">
+                    <p className="mt-1.5 text-xs text-[#FF5C68]">
                       {errors.phone}
                     </p>
                   )}
@@ -497,7 +497,7 @@ export default function CheckoutPage() {
                     aria-invalid={Boolean(errors.address)}
                   />
                   {errors.address && (
-                    <p className="mt-1.5 text-xs text-[#E8404B]">
+                    <p className="mt-1.5 text-xs text-[#FF5C68]">
                       {errors.address}
                     </p>
                   )}
@@ -544,7 +544,7 @@ export default function CheckoutPage() {
                         className={`rounded-2xl border px-3 py-3 text-sm font-semibold transition-colors ${
                           active
                             ? "border-[#D41F2D] bg-[#D41F2D]/10 text-[#5FA8E8]"
-                            : "border-white/10 bg-[#061B3D]/20 text-zinc-300 hover:border-white/25"
+                            : "border-white/10 bg-[#040E21]/20 text-zinc-300 hover:border-white/25"
                         }`}
                       >
                         {method.label}
@@ -553,7 +553,7 @@ export default function CheckoutPage() {
                   })}
                 </div>
 
-                <div className="mt-4 rounded-2xl border border-[#D41F2D]/20 bg-[#061B3D]/20 p-4 text-sm">
+                <div className="mt-4 rounded-2xl border border-[#D41F2D]/20 bg-[#040E21]/20 p-4 text-sm">
                   {selectedMethod.bankName && (
                     <div className="flex items-center justify-between py-1">
                       <span className="text-zinc-400">Bank</span>
@@ -580,7 +580,7 @@ export default function CheckoutPage() {
                         type="button"
                         onClick={copyNumber}
                         aria-label="Copy account number"
-                        className="rounded-full border border-white/10 p-1.5 text-zinc-300 transition-colors hover:border-[#D41F2D]/60 hover:text-[#D41F2D]"
+                        className="rounded-full border border-white/10 p-1.5 text-zinc-300 transition-colors hover:border-[#D41F2D]/60 hover:text-[#FF5C68]"
                       >
                         {copied ? <Check size={14} /> : <Copy size={14} />}
                       </button>
@@ -588,7 +588,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-3">
                     <span className="text-zinc-400">Amount to send</span>
-                    <span className="text-base font-black text-[#D41F2D]">
+                    <span className="text-base font-black text-[#FF5C68]">
                       {formatPrice(downpayment)}
                     </span>
                   </div>
@@ -608,7 +608,7 @@ export default function CheckoutPage() {
                   />
 
                   {proof ? (
-                    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#061B3D]/20 p-3">
+                    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#040E21]/20 p-3">
                       {proofPreview ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -631,7 +631,7 @@ export default function CheckoutPage() {
                         type="button"
                         onClick={removeProof}
                         aria-label="Remove screenshot"
-                        className="rounded-full border border-white/10 p-2 text-zinc-300 transition-colors hover:border-[#E8404B]/60 hover:text-[#E8404B]"
+                        className="rounded-full border border-white/10 p-2 text-zinc-300 transition-colors hover:border-[#E8404B]/60 hover:text-[#FF5C68]"
                       >
                         <X size={14} />
                       </button>
@@ -642,11 +642,11 @@ export default function CheckoutPage() {
                       onClick={() => fileInputRef.current?.click()}
                       className={`flex w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed px-4 py-8 text-sm transition-colors hover:border-[#D41F2D]/60 ${
                         errors.proof
-                          ? "border-[#E8404B]/60 text-[#E8404B]"
+                          ? "border-[#E8404B]/60 text-[#FF5C68]"
                           : "border-white/20 text-zinc-400"
                       }`}
                     >
-                      <Upload size={20} className="text-[#D41F2D]" />
+                      <Upload size={20} className="text-[#FF5C68]" />
                       Tap to upload screenshot
                       <span className="text-xs text-zinc-600">
                         JPG, PNG or WEBP · max {MAX_PROOF_SIZE_MB}MB
@@ -655,7 +655,7 @@ export default function CheckoutPage() {
                   )}
 
                   {errors.proof && (
-                    <p className="mt-1.5 text-xs text-[#E8404B]">
+                    <p className="mt-1.5 text-xs text-[#FF5C68]">
                       {errors.proof}
                     </p>
                   )}
@@ -675,7 +675,7 @@ export default function CheckoutPage() {
                     className={inputClasses}
                   />
                   {errors.reference && (
-                    <p className="mt-1.5 text-xs text-[#E8404B]">
+                    <p className="mt-1.5 text-xs text-[#FF5C68]">
                       {errors.reference}
                     </p>
                   )}
@@ -685,7 +685,7 @@ export default function CheckoutPage() {
               <div className="mt-6 flex items-start gap-2.5 rounded-2xl border border-white/10 bg-white/5 p-4 text-xs leading-5 text-zinc-400">
                 <ShieldCheck
                   size={16}
-                  className="mt-0.5 shrink-0 text-[#D41F2D]"
+                  className="mt-0.5 shrink-0 text-[#FF5C68]"
                 />
                 Your order is confirmed once we verify your payment screenshot.
                 The remaining {formatPrice(balance)} balance will be arranged
@@ -695,7 +695,7 @@ export default function CheckoutPage() {
               {submitError && (
                 <p
                   role="alert"
-                  className="mt-4 rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]"
+                  className="mt-4 rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]"
                 >
                   {submitError}
                 </p>
@@ -713,13 +713,13 @@ export default function CheckoutPage() {
             </form>
 
             {/* Order summary */}
-            <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
+            <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
               <h2 className="text-lg font-bold text-white">Your order</h2>
 
               <div className="mt-5 space-y-4 border-b border-white/10 pb-5">
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-[#061B3D]">
+                    <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-[#040E21]">
                       {item.image ? (
                         <Image
                           src={item.image}
@@ -739,7 +739,7 @@ export default function CheckoutPage() {
                         Qty {item.quantity}
                       </p>
                     </div>
-                    <span className="text-sm font-bold text-[#D41F2D]">
+                    <span className="text-sm font-bold text-[#FF5C68]">
                       {formatPrice(getPriceValue(item.price) * item.quantity)}
                     </span>
                   </div>
@@ -767,7 +767,7 @@ export default function CheckoutPage() {
                 <span className="text-base font-semibold text-white">
                   Downpayment due today
                 </span>
-                <span className="text-2xl font-black text-[#D41F2D]">
+                <span className="text-2xl font-black text-[#FF5C68]">
                   {formatPrice(downpayment)}
                 </span>
               </div>

@@ -264,7 +264,10 @@ export interface VehiclePayload {
 
 export const fetchVehicles = (options?: { signal?: AbortSignal }) =>
   apiRequest<{ data: Vehicle[] }>("/vehicles", { signal: options?.signal });
-
+export const fetchSoldVehicles = (options?: { signal?: AbortSignal }) =>
+  apiRequest<{ data: Vehicle[] }>("/vehicles/sold", {
+    signal: options?.signal,
+  });
 export const fetchVehicle = (
   id: string | number,
   options?: { signal?: AbortSignal },
@@ -368,7 +371,9 @@ async function apiUpload<T = unknown>(
 export type UploadFolder =
   | "vehicles/images"
   | "vehicles/videos"
-  | "vehicles/posters";
+  | "vehicles/posters"
+  | "blog/images"
+  | "blog/videos";
 
 /**
  * Uploads a file in fixed-size chunks so large videos never hit PHP's
@@ -641,3 +646,123 @@ export const updateAdminTestDrive = (
 
 export const deleteAdminTestDrive = (id: number) =>
   apiRequest(`/admin/test-drives/${id}`, { method: "DELETE" });
+// ---- Blog ----
+
+export interface BlogPost {
+  id: number;
+  title: string;
+  description: string;
+  image: string | null;
+  video: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPayload {
+  title: string;
+  description: string;
+  image_path?: string | null;
+  video_path?: string | null;
+  remove_image?: boolean;
+  remove_video?: boolean;
+}
+
+// Public
+export const fetchBlogPosts = (options?: { signal?: AbortSignal }) =>
+  apiRequest<{ data: BlogPost[] }>("/blog", { signal: options?.signal });
+
+export const fetchBlogPost = (
+  id: string | number,
+  options?: { signal?: AbortSignal },
+) => apiRequest<{ data: BlogPost }>(`/blog/${id}`, { signal: options?.signal });
+
+// Admin
+export const fetchAdminBlogPosts = (params?: { search?: string }) => {
+  const qs = params?.search
+    ? `?search=${encodeURIComponent(params.search)}`
+    : "";
+  return apiRequest<{ data: BlogPost[] }>(`/admin/blog${qs}`);
+};
+
+export const createBlogPost = (payload: BlogPayload) =>
+  apiRequest<{ data: BlogPost }>("/admin/blog", {
+    method: "POST",
+    body: payload,
+  });
+
+export const updateBlogPost = (id: number, payload: BlogPayload) =>
+  apiRequest<{ data: BlogPost }>(`/admin/blog/${id}`, {
+    method: "PUT",
+    body: payload,
+  });
+
+export const deleteAdminBlogPost = (id: number) =>
+  apiRequest(`/admin/blog/${id}`, { method: "DELETE" });
+// ---------------------------------------------------------------------------
+// ADD THIS TO THE BOTTOM OF  lib/api.ts
+// ---------------------------------------------------------------------------
+
+// ---- Announcements ----
+
+export interface Announcement {
+  id: number;
+  title: string;
+  message: string;
+  url: string | null;
+  is_published: boolean;
+  published_at: string | null;
+  push_sent_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AnnouncementPayload {
+  title: string;
+  message: string;
+  url?: string | null;
+  is_published: boolean;
+}
+
+// Public
+export const fetchAnnouncements = (options?: { signal?: AbortSignal }) =>
+  apiRequest<{ data: Announcement[] }>("/announcements", {
+    signal: options?.signal,
+  });
+
+// Admin
+export const fetchAdminAnnouncements = () =>
+  apiRequest<{ data: Announcement[] }>("/admin/announcements");
+
+export const createAnnouncement = (payload: AnnouncementPayload) =>
+  apiRequest<{ data: Announcement }>("/admin/announcements", {
+    method: "POST",
+    body: payload,
+  });
+
+export const updateAnnouncement = (id: number, payload: AnnouncementPayload) =>
+  apiRequest<{ data: Announcement }>(`/admin/announcements/${id}`, {
+    method: "PUT",
+    body: payload,
+  });
+
+export const deleteAdminAnnouncement = (id: number) =>
+  apiRequest(`/admin/announcements/${id}`, { method: "DELETE" });
+export interface PushSubscriptionInput {
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+}
+
+export const subscribePush = (subscription: PushSubscriptionInput) =>
+  apiRequest("/push-subscriptions", { method: "POST", body: subscription });
+
+export const unsubscribePush = (endpoint: string) =>
+  apiRequest("/push-subscriptions/unsubscribe", {
+    method: "POST",
+    body: { endpoint },
+  });
+
+// Admin: how many devices will get the notification.
+export const fetchPushSubscriberCount = () =>
+  apiRequest<{ data: { subscribers: number } }>(
+    "/admin/announcements/subscribers",
+  );

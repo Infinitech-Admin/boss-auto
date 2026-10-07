@@ -46,7 +46,7 @@ const CATEGORY_COLORS = [
 ];
 
 const TOOLTIP_STYLE = {
-  background: "#0A2A5C",
+  background: "#071A38",
   border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 12,
   color: "#fff",
@@ -54,13 +54,13 @@ const TOOLTIP_STYLE = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  confirmed: "bg-[#D41F2D]/10 text-[#E8404B]",
-  completed: "bg-[#D41F2D]/10 text-[#E8404B]",
+  confirmed: "bg-[#D41F2D]/10 text-[#FF5C68]",
+  completed: "bg-[#D41F2D]/10 text-[#FF5C68]",
   ready_for_pick_up: "bg-zinc-500/15 text-zinc-300",
-  pending_verification: "bg-[#D41F2D]/10 text-[#E8404B]",
+  pending_verification: "bg-[#D41F2D]/10 text-[#FF5C68]",
   reserved: "bg-zinc-500/15 text-zinc-300",
-  cancelled: "bg-[#D41F2D]/10 text-[#E8404B]",
-  rejected: "bg-[#D41F2D]/10 text-[#E8404B]",
+  cancelled: "bg-[#D41F2D]/10 text-[#FF5C68]",
+  rejected: "bg-[#D41F2D]/10 text-[#FF5C68]",
 };
 
 function statusLabel(status: string): string {
@@ -137,7 +137,7 @@ export default function AdminDashboardPage() {
         <div
           role="group"
           aria-label="Date range"
-          className="flex rounded-full border border-white/10 bg-[#0A2A5C]/70 p-1"
+          className="flex rounded-full border border-white/10 bg-[#071A38]/70 p-1"
         >
           {RANGES.map((range) => (
             <button
@@ -158,7 +158,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {error && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 p-4 text-sm text-[#E8404B]">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 p-4 text-sm text-[#FF5C68]">
           <span>{error}</span>
           <button
             type="button"
@@ -335,7 +335,7 @@ function DashboardContent({
       {/* Cart analytics */}
       <section aria-label="Cart analytics" className="space-y-4">
         <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/10 text-[#D41F2D]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/10 text-[#FF5C68]">
             <ShoppingCart size={16} />
           </span>
           <div>
@@ -429,7 +429,7 @@ function DashboardContent({
                       {row.vehicle}
                     </span>
                     <span className="shrink-0 text-xs text-zinc-400">
-                      <span className="font-semibold text-[#E8404B]">
+                      <span className="font-semibold text-[#FF5C68]">
                         {row.removed}
                       </span>{" "}
                       removed / {row.added} added
@@ -488,7 +488,7 @@ function DashboardContent({
           )}
         </ChartCard>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 sm:p-5 xl:col-span-2">
+        <div className="rounded-2xl border border-white/10 bg-[#071A38]/70 p-4 sm:p-5 xl:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-sm font-semibold text-white">
@@ -498,7 +498,7 @@ function DashboardContent({
             </div>
             <a
               href="/admin/orders"
-              className="text-xs font-medium text-[#D41F2D] hover:text-[#E8404B]"
+              className="text-xs font-medium text-[#FF5C68] hover:text-[#FF5C68]"
             >
               View all
             </a>
@@ -576,12 +576,12 @@ function StatCard({
   const trend = change !== null && change < 0 ? "down" : "up";
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 sm:p-5">
+    <div className="rounded-2xl border border-white/10 bg-[#071A38]/70 p-4 sm:p-5">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium uppercase tracking-wide text-zinc-400">
           {label}
         </span>
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/10 text-[#D41F2D]">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/10 text-[#FF5C68]">
           {icon}
         </span>
       </div>
@@ -590,7 +590,7 @@ function StatCard({
         {change !== null && (
           <span
             className={`flex items-center gap-1 text-xs font-semibold ${
-              trend === "up" ? "text-[#E8404B]" : "text-[#E8404B]"
+              trend === "up" ? "text-[#FF5C68]" : "text-[#FF5C68]"
             }`}
           >
             {trend === "up" ? (
@@ -618,7 +618,7 @@ function MiniStat({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 ${className}`}
+      className={`rounded-2xl border border-white/10 bg-[#071A38]/70 p-4 ${className}`}
     >
       <p className="text-xs text-zinc-400">{label}</p>
       <p className="mt-1 text-2xl font-bold text-white">
@@ -641,7 +641,7 @@ function ChartCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 sm:p-5 ${className}`}
+      className={`rounded-2xl border border-white/10 bg-[#071A38]/70 p-4 sm:p-5 ${className}`}
     >
       <div className="mb-2">
         <h2 className="text-sm font-semibold text-white">{title}</h2>
@@ -667,13 +667,13 @@ function DashboardSkeleton() {
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-[104px] rounded-2xl border border-white/10 bg-[#0A2A5C]/50"
+            className="h-[104px] rounded-2xl border border-white/10 bg-[#071A38]/50"
           />
         ))}
       </div>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#0A2A5C]/50 xl:col-span-2" />
-        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#0A2A5C]/50" />
+        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#071A38]/50 xl:col-span-2" />
+        <div className="h-[350px] rounded-2xl border border-white/10 bg-[#071A38]/50" />
       </div>
     </div>
   );

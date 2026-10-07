@@ -43,12 +43,12 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0A2A5C] text-white">
-        <section className="border-b border-[#D41F2D]/20 bg-[#061B3D]">
+      <main className="min-h-screen bg-[#071A38] text-white">
+        <section className="border-b border-[#D41F2D]/20 bg-[#040E21]">
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
             <Link
               href="/showroom"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#FF5C68] transition-colors hover:text-[#3D8FD9]"
             >
               <ArrowLeft size={16} />
               Continue browsing
@@ -56,7 +56,7 @@ export default function CartPage() {
 
             <div className="mt-5 flex items-center gap-3">
               <span className="h-px w-10 bg-[#D41F2D]" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                 Your Selection
               </span>
             </div>
@@ -83,16 +83,16 @@ export default function CartPage() {
                 {[0, 1].map((i) => (
                   <div
                     key={i}
-                    className="h-40 animate-pulse rounded-[26px] border border-white/10 bg-[#0A2A5C] sm:h-32"
+                    className="h-40 animate-pulse rounded-[26px] border border-white/10 bg-[#071A38] sm:h-32"
                   />
                 ))}
               </div>
-              <div className="h-56 animate-pulse rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C]" />
+              <div className="h-56 animate-pulse rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38]" />
             </div>
           ) : items.length === 0 ? (
-            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-20 text-center">
+            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#071A38] px-6 py-20 text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/10">
-                <ShoppingBag className="text-[#D41F2D]" size={26} />
+                <ShoppingBag className="text-[#FF5C68]" size={26} />
               </div>
               <p className="mt-6 text-xl font-semibold text-white">
                 Your cart is empty
@@ -115,11 +115,11 @@ export default function CartPage() {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col gap-4 rounded-[26px] border border-white/10 bg-[#0A2A5C] p-4 sm:flex-row sm:items-center sm:p-5"
+                    className="flex flex-col gap-4 rounded-[26px] border border-white/10 bg-[#071A38] p-4 sm:flex-row sm:items-center sm:p-5"
                   >
                     <Link
                       href={`/showroom/car/${item.id}`}
-                      className="relative h-32 w-full shrink-0 overflow-hidden rounded-2xl bg-[#061B3D] sm:h-24 sm:w-36"
+                      className="relative h-32 w-full shrink-0 overflow-hidden rounded-2xl bg-[#040E21] sm:h-24 sm:w-36"
                     >
                       {item.image ? (
                         // `unoptimized` — same as the showroom & details
@@ -152,14 +152,14 @@ export default function CartPage() {
                       >
                         {item.name}
                       </Link>
-                      <span className="mt-1 block text-base font-black text-[#D41F2D]">
+                      <span className="mt-1 block text-base font-black text-[#FF5C68]">
                         {item.price}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end sm:justify-center sm:gap-3">
                       {/* Quantity stepper */}
-                      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-[#061B3D]/20 p-1">
+                      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-[#040E21]/20 p-1">
                         <button
                           type="button"
                           onClick={() =>
@@ -188,7 +188,7 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.id)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 transition-colors hover:text-[#E8404B]"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 transition-colors hover:text-[#FF5C68]"
                       >
                         <Trash2 size={14} />
                         Remove
@@ -200,21 +200,21 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={clearCart}
-                  className="text-xs font-semibold text-zinc-500 transition-colors hover:text-[#E8404B]"
+                  className="text-xs font-semibold text-zinc-500 transition-colors hover:text-[#FF5C68]"
                 >
                   Clear entire cart
                 </button>
               </div>
 
               {/* Summary */}
-              <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
+              <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.35)] lg:sticky lg:top-24">
                 <h2 className="text-lg font-bold text-white">Order summary</h2>
 
                 <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-5">
                   <span className="text-base font-semibold text-white">
                     Total ({totalItems} item{totalItems === 1 ? "" : "s"})
                   </span>
-                  <span className="text-2xl font-black text-[#D41F2D]">
+                  <span className="text-2xl font-black text-[#FF5C68]">
                     {formatPrice(total)}
                   </span>
                 </div>

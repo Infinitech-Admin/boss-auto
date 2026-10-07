@@ -65,10 +65,10 @@ const vehicleName = (b: TestDriveBooking) =>
   b.vehicle_name || (b.vehicle_id ? `Vehicle #${b.vehicle_id}` : "—");
 
 const STATUS_STYLES: Record<string, string> = {
-  pending: "bg-[#D41F2D]/10 text-[#E8404B]",
-  confirmed: "bg-[#D41F2D]/10 text-[#E8404B]",
+  pending: "bg-[#D41F2D]/10 text-[#FF5C68]",
+  confirmed: "bg-[#D41F2D]/10 text-[#FF5C68]",
   completed: "bg-zinc-500/15 text-zinc-300",
-  cancelled: "bg-[#D41F2D]/10 text-[#E8404B]",
+  cancelled: "bg-[#D41F2D]/10 text-[#FF5C68]",
 };
 
 const FALLBACK_STATUS_STYLE = "bg-zinc-500/15 text-zinc-400";
@@ -112,10 +112,10 @@ function Dialog({
       aria-modal="true"
     >
       <div
-        className="absolute inset-0 bg-[#061B3D]/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#040E21]/70 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#061B3D] p-6 shadow-2xl">
+      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#040E21] p-6 shadow-2xl">
         {children}
       </div>
     </div>,
@@ -310,7 +310,7 @@ export default function TestDrivesClient() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email or phone..."
-            className="w-full rounded-xl border border-white/10 bg-[#0A2A5C]/70 py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
+            className="w-full rounded-xl border border-white/10 bg-[#071A38]/70 py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
           />
         </div>
 
@@ -328,7 +328,7 @@ export default function TestDrivesClient() {
               }}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                 statusFilter === status
-                  ? "bg-[#D41F2D]/15 text-[#D41F2D]"
+                  ? "bg-[#D41F2D]/15 text-[#FF5C68]"
                   : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white"
               }`}
             >
@@ -339,14 +339,14 @@ export default function TestDrivesClient() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
+        <div className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-[#0A2A5C]/70 py-16 text-sm text-zinc-400">
-          <Loader2 size={18} className="mr-2 animate-spin text-[#D41F2D]" />
+        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-[#071A38]/70 py-16 text-sm text-zinc-400">
+          <Loader2 size={18} className="mr-2 animate-spin text-[#FF5C68]" />
           Loading bookings...
         </div>
       ) : (
@@ -356,7 +356,7 @@ export default function TestDrivesClient() {
           </p>
 
           {/* Desktop table */}
-          <div className="hidden overflow-hidden rounded-2xl border border-white/10 bg-[#0A2A5C]/70 lg:block">
+          <div className="hidden overflow-hidden rounded-2xl border border-white/10 bg-[#071A38]/70 lg:block">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-500">
@@ -377,7 +377,7 @@ export default function TestDrivesClient() {
                   >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
                           <CalendarCheck size={16} />
                         </span>
                         <span className="font-medium text-white">
@@ -417,7 +417,7 @@ export default function TestDrivesClient() {
                           onClick={() => setSelected(b)}
                           title="View details"
                           aria-label={`View booking ${bookingLabel(b)}`}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#D41F2D]"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#FF5C68]"
                         >
                           <Eye size={14} />
                         </button>
@@ -446,11 +446,11 @@ export default function TestDrivesClient() {
                 key={b.id}
                 type="button"
                 onClick={() => setSelected(b)}
-                className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4 text-left transition-colors hover:border-[#D41F2D]/40"
+                className="rounded-2xl border border-white/10 bg-[#071A38]/70 p-4 text-left transition-colors hover:border-[#D41F2D]/40"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
                       <CalendarCheck size={18} />
                     </span>
                     <div>
@@ -485,7 +485,7 @@ export default function TestDrivesClient() {
               </button>
             ))}
             {bookings.length === 0 && (
-              <div className="col-span-full rounded-2xl border border-white/10 bg-[#0A2A5C]/70 py-10 text-center text-sm text-zinc-500">
+              <div className="col-span-full rounded-2xl border border-white/10 bg-[#071A38]/70 py-10 text-center text-sm text-zinc-500">
                 No bookings match your search.
               </div>
             )}
@@ -554,7 +554,7 @@ export default function TestDrivesClient() {
               </div>
 
               {/* Manage: status + admin notes */}
-              <section className="mt-5 rounded-xl border border-[#D41F2D]/20 bg-[#061B3D]/20 p-4">
+              <section className="mt-5 rounded-xl border border-[#D41F2D]/20 bg-[#040E21]/20 p-4">
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   Manage booking
                 </h3>
@@ -570,7 +570,7 @@ export default function TestDrivesClient() {
                     setSaveNotice("");
                   }}
                   disabled={saving || deleting}
-                  className="w-full rounded-xl border border-white/10 bg-[#061B3D] px-3 py-2.5 text-sm text-white outline-none focus:border-[#D41F2D]/60 disabled:opacity-60"
+                  className="w-full rounded-xl border border-white/10 bg-[#040E21] px-3 py-2.5 text-sm text-white outline-none focus:border-[#D41F2D]/60 disabled:opacity-60"
                 >
                   {TEST_DRIVE_STATUSES.map((status) => (
                     <option key={status} value={status}>
@@ -592,7 +592,7 @@ export default function TestDrivesClient() {
                   }}
                   disabled={saving || deleting}
                   placeholder="e.g. Called customer, confirmed for 2 PM"
-                  className="w-full resize-none rounded-xl border border-white/10 bg-[#061B3D] px-3 py-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60 disabled:opacity-60"
+                  className="w-full resize-none rounded-xl border border-white/10 bg-[#040E21] px-3 py-2.5 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60 disabled:opacity-60"
                 />
 
                 <div className="mt-3 flex justify-end">
@@ -608,12 +608,12 @@ export default function TestDrivesClient() {
                 </div>
 
                 {saveError && (
-                  <p className="mt-3 rounded-lg border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-3 py-2 text-xs text-[#E8404B]">
+                  <p className="mt-3 rounded-lg border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-3 py-2 text-xs text-[#FF5C68]">
                     {saveError}
                   </p>
                 )}
                 {saveNotice && (
-                  <p className="mt-3 rounded-lg border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-3 py-2 text-xs text-[#E8404B]">
+                  <p className="mt-3 rounded-lg border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-3 py-2 text-xs text-[#FF5C68]">
                     {saveNotice}
                   </p>
                 )}
@@ -621,7 +621,7 @@ export default function TestDrivesClient() {
 
               <div className="mt-5 grid gap-5 sm:grid-cols-2">
                 {/* Customer */}
-                <section className="rounded-xl border border-white/10 bg-[#061B3D]/20 p-4">
+                <section className="rounded-xl border border-white/10 bg-[#040E21]/20 p-4">
                   <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">
                     Customer
                   </h3>
@@ -629,7 +629,7 @@ export default function TestDrivesClient() {
                   <DetailRow label="Email">
                     <a
                       href={`mailto:${selected.email}`}
-                      className="hover:text-[#D41F2D]"
+                      className="hover:text-[#FF5C68]"
                     >
                       {selected.email}
                     </a>
@@ -637,7 +637,7 @@ export default function TestDrivesClient() {
                   <DetailRow label="Phone">
                     <a
                       href={`tel:${selected.phone}`}
-                      className="hover:text-[#D41F2D]"
+                      className="hover:text-[#FF5C68]"
                     >
                       {selected.phone}
                     </a>
@@ -645,7 +645,7 @@ export default function TestDrivesClient() {
                 </section>
 
                 {/* Booking */}
-                <section className="rounded-xl border border-white/10 bg-[#061B3D]/20 p-4">
+                <section className="rounded-xl border border-white/10 bg-[#040E21]/20 p-4">
                   <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">
                     Schedule
                   </h3>
@@ -654,7 +654,7 @@ export default function TestDrivesClient() {
                     {formatScheduleDate(selected.preferred_date)}
                   </DetailRow>
                   <DetailRow label="Time">
-                    <span className="text-[#D41F2D]">
+                    <span className="text-[#FF5C68]">
                       {formatTime(selected.preferred_time)}
                     </span>
                   </DetailRow>
@@ -662,7 +662,7 @@ export default function TestDrivesClient() {
               </div>
 
               {/* Customer notes */}
-              <section className="mt-5 rounded-xl border border-white/10 bg-[#061B3D]/20 p-4">
+              <section className="mt-5 rounded-xl border border-white/10 bg-[#040E21]/20 p-4">
                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   Customer notes
                 </h3>
@@ -681,7 +681,7 @@ export default function TestDrivesClient() {
                   type="button"
                   onClick={removeBooking}
                   disabled={deleting || saving}
-                  className="flex items-center gap-2 rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/5 px-4 py-2 text-xs font-medium text-[#E8404B] transition-colors hover:bg-[#D41F2D]/10 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/5 px-4 py-2 text-xs font-medium text-[#FF5C68] transition-colors hover:bg-[#D41F2D]/10 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {deleting ? (
                     <Loader2 size={13} className="animate-spin" />

@@ -67,19 +67,19 @@ const STATUS_META: Record<
 > = {
   pending_verification: {
     label: "Verifying payment",
-    badge: "border-[#E8404B]/40 bg-[#E8404B]/10 text-[#E8404B]",
+    badge: "border-[#E8404B]/40 bg-[#E8404B]/10 text-[#FF5C68]",
     message:
       "We received your order and are checking your payment screenshot. We'll contact you once it's verified.",
   },
   confirmed: {
     label: "Confirmed",
-    badge: "border-[#E8404B]/40 bg-[#E8404B]/10 text-[#E8404B]",
+    badge: "border-[#E8404B]/40 bg-[#E8404B]/10 text-[#FF5C68]",
     message:
       "Your payment is verified. A sales advisor will contact you about the next steps.",
   },
   rejected: {
     label: "Payment issue",
-    badge: "border-[#E8404B]/40 bg-[#E8404B]/10 text-[#E8404B]",
+    badge: "border-[#E8404B]/40 bg-[#E8404B]/10 text-[#FF5C68]",
     message:
       "We couldn't verify your payment. Please contact us and send a clearer screenshot.",
   },
@@ -121,8 +121,8 @@ function Tracker({ status }: { status: OrderStatus }) {
             : state === "current"
               ? "border-[#D41F2D] bg-[#D41F2D]/10 text-[#5FA8E8]"
               : state === "failed"
-                ? "border-[#E8404B] bg-[#E8404B]/10 text-[#E8404B]"
-                : "border-white/15 bg-[#061B3D]/30 text-zinc-600";
+                ? "border-[#E8404B] bg-[#E8404B]/10 text-[#FF5C68]"
+                : "border-white/15 bg-[#040E21]/30 text-zinc-600";
 
         return (
           <li key={label} className="relative flex flex-col items-center">
@@ -160,7 +160,7 @@ function OrderCard({ order }: { order: Order }) {
   const meta = STATUS_META[order.status] ?? STATUS_META.pending_verification;
 
   return (
-    <article className="rounded-[28px] border border-white/10 bg-[#0A2A5C] p-5 sm:p-7">
+    <article className="rounded-[28px] border border-white/10 bg-[#071A38] p-5 sm:p-7">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
@@ -215,7 +215,7 @@ function OrderCard({ order }: { order: Order }) {
               )}
               <span className="text-xs text-zinc-500">Qty {item.quantity}</span>
             </div>
-            <span className="shrink-0 font-bold text-[#D41F2D]">
+            <span className="shrink-0 font-bold text-[#FF5C68]">
               {formatPrice(item.unit_price * item.quantity)}
             </span>
           </div>
@@ -259,7 +259,7 @@ function OrderCard({ order }: { order: Order }) {
             href={order.payment_proof_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-semibold text-[#D41F2D] transition-colors hover:text-[#3D8FD9]"
+            className="inline-flex items-center gap-1.5 font-semibold text-[#FF5C68] transition-colors hover:text-[#3D8FD9]"
           >
             View screenshot
             <ExternalLink size={13} />
@@ -276,7 +276,7 @@ function Skeleton() {
       {[0, 1].map((i) => (
         <div
           key={i}
-          className="h-72 animate-pulse rounded-[28px] border border-white/10 bg-[#0A2A5C]"
+          className="h-72 animate-pulse rounded-[28px] border border-white/10 bg-[#071A38]"
         />
       ))}
     </div>
@@ -327,7 +327,7 @@ export default function OrdersPage() {
     content = <Skeleton />;
   } else if (!user) {
     content = (
-      <div className="rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-16 text-center">
+      <div className="rounded-[28px] border border-dashed border-white/15 bg-[#071A38] px-6 py-16 text-center">
         <p className="text-xl font-semibold text-white">
           Log in to see your orders
         </p>
@@ -346,7 +346,7 @@ export default function OrdersPage() {
   } else if (error && orders === null) {
     content = (
       <div className="rounded-[28px] border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-6 py-12 text-center">
-        <p className="text-sm text-[#E8404B]">{error}</p>
+        <p className="text-sm text-[#FF5C68]">{error}</p>
         <button
           type="button"
           onClick={handleRefresh}
@@ -360,9 +360,9 @@ export default function OrdersPage() {
     content = <Skeleton />;
   } else if (orders.length === 0) {
     content = (
-      <div className="rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-20 text-center">
+      <div className="rounded-[28px] border border-dashed border-white/15 bg-[#071A38] px-6 py-20 text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/10">
-          <ShoppingBag className="text-[#D41F2D]" size={26} />
+          <ShoppingBag className="text-[#FF5C68]" size={26} />
         </div>
         <p className="mt-6 text-xl font-semibold text-white">No orders yet</p>
         <p className="mt-2 text-sm text-zinc-400">
@@ -390,12 +390,12 @@ export default function OrdersPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0A2A5C] text-white">
-        <section className="border-b border-[#D41F2D]/20 bg-[#061B3D]">
+      <main className="min-h-screen bg-[#071A38] text-white">
+        <section className="border-b border-[#D41F2D]/20 bg-[#040E21]">
           <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
             <div className="flex items-center gap-3">
               <span className="h-px w-10 bg-[#D41F2D]" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                 Your Account
               </span>
             </div>

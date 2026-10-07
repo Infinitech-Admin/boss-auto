@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Auto-Prime Car Trading",
-  "short_name": "Auto-Prime",
-  "description": "Discover quality vehicles for sale at Auto-Prime Car Trading. Browse premium cars, explore detailed specifications, view photos and videos, and inquire about your next vehicle.",
+  "name": "Boss Auto Exchange",
+  "short_name": "Boss Auto",
+  "description": "Browse quality pre-owned cars for sale at Boss Auto Exchange in Muntinlupa City. See photos and videos, book a test drive, or sell and trade your car.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -10,8 +10,8 @@
   "orientation": "any",
   "lang": "en",
   "dir": "ltr",
-  "background_color": "#000000",
-  "theme_color": "#E11D2E",
+  "background_color": "#040E21",
+  "theme_color": "#D41F2D",
   "categories": ["shopping", "business", "autos"],
   "prefer_related_applications": false,
   "related_applications": [],
@@ -46,15 +46,9 @@
   "share_target": {
     "action": "/",
     "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
+    "params": { "title": "title", "text": "text", "url": "url" }
   },
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
+  "edge_side_panel": { "preferred_width": 400 },
   "icons": [
     {
       "src": "/icons/icon-48x48.png",
@@ -135,14 +129,14 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Auto-Prime Car Trading homepage on desktop"
+      "label": "Boss Auto Exchange homepage on desktop"
     },
     {
       "src": "/screenshots/mobile-home.png",
       "sizes": "720x1280",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Auto-Prime Car Trading homepage on mobile"
+      "label": "Boss Auto Exchange homepage on mobile"
     }
   ]
 }

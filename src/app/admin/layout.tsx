@@ -15,6 +15,8 @@ import {
   LogOut,
   Mail,
   Menu,
+  Megaphone,
+  Newspaper,
   Search,
   X,
 } from "lucide-react";
@@ -47,9 +49,19 @@ const NAV_ITEMS: NavItem[] = [
     icon: LayoutDashboard,
   },
   {
+    label: "Announcements",
+    href: "/admin/announcement",
+    icon: Megaphone,
+  },
+  {
     label: "Showroom",
     href: "/admin/showroom",
     icon: CarFront,
+  },
+  {
+    label: "Blog",
+    href: "/admin/blog",
+    icon: Newspaper,
   },
   {
     label: "Orders",
@@ -118,9 +130,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   if (authState === "checking") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#061B3D]">
+      <div className="flex min-h-screen items-center justify-center bg-[#040E21]">
         <div className="flex items-center gap-2 text-sm text-zinc-400">
-          <Loader2 size={18} className="animate-spin text-[#D41F2D]" />
+          <Loader2 size={18} className="animate-spin text-[#FF5C68]" />
           Checking session...
         </div>
       </div>
@@ -128,18 +140,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#061B3D] text-white">
+    <div className="min-h-screen bg-[#040E21] text-white">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-[#061B3D]/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-[#040E21]/60 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#061B3D] transition-transform duration-200 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#040E21] transition-transform duration-200 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -149,11 +161,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             href="/admin"
             className="flex items-center gap-2 text-lg font-black text-white"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
               <Car size={17} />
             </span>
             Auto
-            <span className="text-[#D41F2D]">Trade</span>
+            <span className="text-[#FF5C68]">Trade</span>
           </Link>
 
           <button
@@ -168,7 +180,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {/* Navigation */}
         <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
           {NAV_ITEMS.map((item) => {
-            const active = pathname === item.href;
+            const active =
+              item.href === "/admin"
+                ? pathname === "/admin"
+                : pathname === item.href ||
+                  pathname.startsWith(`${item.href}/`);
             const Icon = item.icon;
 
             if (item.soon) {
@@ -197,7 +213,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-[#D41F2D]/10 text-[#D41F2D]"
+                    ? "bg-[#D41F2D]/10 text-[#FF5C68]"
                     : "text-zinc-300 hover:bg-white/5 hover:text-white"
                 }`}
               >
@@ -223,7 +239,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       {/* Main column */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-white/10 bg-[#061B3D]/90 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-white/10 bg-[#040E21]/90 px-4 backdrop-blur sm:px-6">
           {/* Mobile menu */}
           <button
             onClick={() => setSidebarOpen(true)}
@@ -243,7 +259,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <input
               type="text"
               placeholder="Search vehicles, orders..."
-              className="w-full rounded-lg border border-white/10 bg-[#0A2A5C]/70 py-2 pl-9 pr-3 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
+              className="w-full rounded-lg border border-white/10 bg-[#071A38]/70 py-2 pl-9 pr-3 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
             />
           </div>
 
@@ -272,7 +288,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </div>
 
               <div
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15 text-xs font-bold text-[#D41F2D]"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/15 text-xs font-bold text-[#FF5C68]"
                 title={user?.email}
               >
                 {getInitials(user?.name)}

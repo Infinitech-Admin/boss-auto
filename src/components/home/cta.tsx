@@ -4,14 +4,14 @@ import Link from "next/link";
 
 export default function CTA() {
     return (
-        <section className="relative overflow-hidden bg-[#061B3D] border-t border-[#D41F2D]/30 backdrop-blur-2xl backdrop-[#D41F2D]/10 py-14 text-center">
+        <section className="relative overflow-hidden bg-[#040E21] border-t border-[#D41F2D]/30 backdrop-blur-2xl backdrop-[#D41F2D]/10 py-14 text-center">
             {/* Background glow */}
-            <div className="absolute left-1/2 top-1/2 h-[450px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0B5BA8]/25 blur-[130px]" />
+            <div className="absolute left-1/2 top-1/2 h-[450px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.06] blur-[130px]" />
 
             <div className="relative mx-auto max-w-4xl px-5 sm:px-6">
                 <div className="mb-5 flex items-center justify-center gap-3">
                     <span className="h-px w-10 bg-[#D41F2D]" />
-                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                         Your Next Drive
                     </span>
                     <span className="h-px w-10 bg-[#D41F2D]" />
@@ -19,7 +19,7 @@ export default function CTA() {
 
                 <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
                     Ready to find your
-                    <span className="block text-[#D41F2D]">
+                    <span className="block text-[#FF5C68]">
                         next car?
                     </span>
                 </h2>

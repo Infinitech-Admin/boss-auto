@@ -30,7 +30,7 @@ const STATUS_FILTERS: Array<"All" | Vehicle["status"]> = [
 ];
 
 const STATUS_STYLES: Record<Vehicle["status"], string> = {
-  available: "bg-[#D41F2D]/10 text-[#E8404B]",
+  available: "bg-[#D41F2D]/10 text-[#FF5C68]",
   reserved: "bg-zinc-500/15 text-zinc-300",
   sold: "bg-zinc-500/15 text-zinc-400",
 };
@@ -76,13 +76,13 @@ function Dialog({
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-[#061B3D]/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#040E21]/70 backdrop-blur-sm"
         onClick={() => {
           if (!busy) onClose();
         }}
       />
       {/* Panel */}
-      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#061B3D] p-6 shadow-2xl">
+      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#040E21] p-6 shadow-2xl">
         {children}
       </div>
     </div>,
@@ -110,7 +110,7 @@ function RowActions({
         onClick={() => onEdit(vehicle)}
         title="Edit"
         aria-label={`Edit ${vehicle.name}`}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#D41F2D]"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#FF5C68]"
       >
         <Pencil size={14} />
       </button>
@@ -119,7 +119,7 @@ function RowActions({
         onClick={() => onDelete(vehicle)}
         title="Delete"
         aria-label={`Delete ${vehicle.name}`}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#E8404B]"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 transition-colors hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#FF5C68]"
       >
         <Trash2 size={14} />
       </button>
@@ -238,7 +238,7 @@ export default function ShowroomClient({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by model or type..."
-            className="w-full rounded-xl border border-white/10 bg-[#0A2A5C]/70 py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
+            className="w-full rounded-xl border border-white/10 bg-[#071A38]/70 py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-500 outline-none focus:border-[#D41F2D]/60"
           />
         </div>
 
@@ -253,7 +253,7 @@ export default function ShowroomClient({
               onClick={() => setStatusFilter(status)}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium capitalize transition-colors ${
                 statusFilter === status
-                  ? "bg-[#D41F2D]/15 text-[#D41F2D]"
+                  ? "bg-[#D41F2D]/15 text-[#FF5C68]"
                   : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white"
               }`}
             >
@@ -264,14 +264,14 @@ export default function ShowroomClient({
       </div>
 
       {error && (
-        <div className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
+        <div className="rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-[#0A2A5C]/70 py-16 text-sm text-zinc-400">
-          <Loader2 size={18} className="mr-2 animate-spin text-[#D41F2D]" />
+        <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-[#071A38]/70 py-16 text-sm text-zinc-400">
+          <Loader2 size={18} className="mr-2 animate-spin text-[#FF5C68]" />
           Loading vehicles...
         </div>
       ) : (
@@ -281,7 +281,7 @@ export default function ShowroomClient({
           </p>
 
           {/* Desktop table */}
-          <div className="hidden overflow-hidden rounded-2xl border border-white/10 bg-[#0A2A5C]/70 lg:block">
+          <div className="hidden overflow-hidden rounded-2xl border border-white/10 bg-[#071A38]/70 lg:block">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-500">
@@ -302,7 +302,7 @@ export default function ShowroomClient({
                   >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
                           {v.image ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -359,11 +359,11 @@ export default function ShowroomClient({
             {filtered.map((v) => (
               <div
                 key={v.id}
-                className="rounded-2xl border border-white/10 bg-[#0A2A5C]/70 p-4"
+                className="rounded-2xl border border-white/10 bg-[#071A38]/70 p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#D41F2D]/15 text-[#D41F2D]">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
                       {v.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -407,7 +407,7 @@ export default function ShowroomClient({
               </div>
             ))}
             {filtered.length === 0 && (
-              <div className="col-span-full rounded-2xl border border-white/10 bg-[#0A2A5C]/70 py-10 text-center text-sm text-zinc-500">
+              <div className="col-span-full rounded-2xl border border-white/10 bg-[#071A38]/70 py-10 text-center text-sm text-zinc-500">
                 No vehicles match your search.
               </div>
             )}
@@ -423,7 +423,7 @@ export default function ShowroomClient({
           busy={deleting}
         >
           <div className="flex items-start gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/10 text-[#E8404B]">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#D41F2D]/10 text-[#FF5C68]">
               <AlertTriangle size={20} />
             </span>
             <div className="min-w-0">
@@ -439,7 +439,7 @@ export default function ShowroomClient({
           </div>
 
           {deleteError && (
-            <div className="mt-4 rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#E8404B]">
+            <div className="mt-4 rounded-xl border border-[#D41F2D]/30 bg-[#D41F2D]/10 px-4 py-3 text-sm text-[#FF5C68]">
               {deleteError}
             </div>
           )}

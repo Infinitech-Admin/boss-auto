@@ -24,7 +24,7 @@ const ticks = Array.from({ length: TICK_COUNT }, (_, i) => {
 
 export default function Loading() {
     return (
-        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#061B3D] text-[#DCEBFA]">
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#040E21] text-[#DCEBFA]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(191,152,13,0.14),transparent_58%)]" />
 
             <div className="relative z-10 flex flex-col items-center px-6 text-center">
@@ -64,7 +64,7 @@ export default function Loading() {
                         </g>
 
                         {/* Hub */}
-                        <circle cx={CENTER} cy={CENTER} r={9} fill="#0A2A5C" stroke="#D41F2D" strokeWidth={2} />
+                        <circle cx={CENTER} cy={CENTER} r={9} fill="#071A38" stroke="#D41F2D" strokeWidth={2} />
                         <circle cx={CENTER - 2.5} cy={CENTER - 2.5} r={2} fill="#5FA8E8" fillOpacity={0.8} />
                     </svg>
                 </div>

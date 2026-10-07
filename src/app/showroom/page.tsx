@@ -166,21 +166,21 @@ export default function ShowroomPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0A2A5C] text-white">
-        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#061B3D]">
+      <main className="min-h-screen bg-[#071A38] text-white">
+        <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#040E21]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(191,152,13,0.18),transparent_50%)]" />
           <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
               <div className="mb-5 flex items-center gap-3">
                 <span className="h-px w-10 bg-[#D41F2D]" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D41F2D]">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#FF5C68]">
                   Featured Collection
                 </span>
               </div>
 
               <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Discover the
-                <span className="block text-[#D41F2D]">
+                <span className="block text-[#FF5C68]">
                   showroom collection
                 </span>
               </h1>
@@ -195,8 +195,8 @@ export default function ShowroomPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <div className="mb-8 rounded-[28px] border border-white/10 bg-[#0A2A5C] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-5">
-            <div className="mb-4 flex items-center justify-between gap-3 text-[#D41F2D]">
+          <div className="mb-8 rounded-[28px] border border-white/10 bg-[#071A38] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.2)] sm:p-5">
+            <div className="mb-4 flex items-center justify-between gap-3 text-[#FF5C68]">
               <div className="flex gap-2 items-center">
                 <SlidersHorizontal size={18} />
                 <p className="text-xs font-semibold uppercase tracking-[0.25em]">
@@ -213,8 +213,8 @@ export default function ShowroomPage() {
             </div>
 
             <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">
-              <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-zinc-300">
-                <Search size={16} className="text-[#D41F2D]" />
+              <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#040E21]/20 px-4 py-3 text-sm text-zinc-300">
+                <Search size={16} className="text-[#FF5C68]" />
 
                 <input
                   value={search}
@@ -227,10 +227,10 @@ export default function ShowroomPage() {
               <select
                 value={selectedModel}
                 onChange={(event) => setSelectedModel(event.target.value)}
-                className="rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
+                className="rounded-2xl border border-white/10 bg-[#040E21]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
               >
                 {modelOptions.map((model) => (
-                  <option key={model} value={model} className="bg-[#0A2A5C]">
+                  <option key={model} value={model} className="bg-[#071A38]">
                     {model === "all" ? "All models" : model}
                   </option>
                 ))}
@@ -239,18 +239,18 @@ export default function ShowroomPage() {
               <select
                 value={sortOrder}
                 onChange={(event) => setSortOrder(event.target.value)}
-                className="rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
+                className="rounded-2xl border border-white/10 bg-[#040E21]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
               >
-                <option value="newest" className="bg-[#0A2A5C]">
+                <option value="newest" className="bg-[#071A38]">
                   Newest first
                 </option>
-                <option value="oldest" className="bg-[#0A2A5C]">
+                <option value="oldest" className="bg-[#071A38]">
                   Oldest first
                 </option>
-                <option value="price-low" className="bg-[#0A2A5C]">
+                <option value="price-low" className="bg-[#071A38]">
                   Price: low to high
                 </option>
-                <option value="price-high" className="bg-[#0A2A5C]">
+                <option value="price-high" className="bg-[#071A38]">
                   Price: high to low
                 </option>
               </select>
@@ -258,18 +258,18 @@ export default function ShowroomPage() {
               <select
                 value={priceRange}
                 onChange={(event) => setPriceRange(event.target.value)}
-                className="rounded-2xl border border-white/10 bg-[#061B3D]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
+                className="rounded-2xl border border-white/10 bg-[#040E21]/20 px-4 py-3 text-sm text-white outline-none focus:border-[#D41F2D]"
               >
-                <option value="all" className="bg-[#0A2A5C]">
+                <option value="all" className="bg-[#071A38]">
                   All price ranges
                 </option>
-                <option value="under-50k" className="bg-[#0A2A5C]">
+                <option value="under-50k" className="bg-[#071A38]">
                   Under ₱50k
                 </option>
-                <option value="50k-70k" className="bg-[#0A2A5C]">
+                <option value="50k-70k" className="bg-[#071A38]">
                   ₱50k - ₱70k
                 </option>
-                <option value="70k-plus" className="bg-[#0A2A5C]">
+                <option value="70k-plus" className="bg-[#071A38]">
                   ₱70k+
                 </option>
               </select>
@@ -282,7 +282,7 @@ export default function ShowroomPage() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-transparent px-4 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:border-[#D41F2D] hover:text-[#D41F2D]"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-transparent px-4 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:border-[#D41F2D] hover:text-[#FF5C68]"
                 >
                   <X size={15} />
                   Clear
@@ -292,7 +292,7 @@ export default function ShowroomPage() {
           </div>
 
           {isLoading ? (
-            <div className="rounded-[28px] border border-white/10 bg-[#0A2A5C] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+            <div className="rounded-[28px] border border-white/10 bg-[#071A38] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#D41F2D]/30 bg-[#D41F2D]/10">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#D41F2D]/40 border-t-[#D41F2D]" />
               </div>
@@ -304,7 +304,7 @@ export default function ShowroomPage() {
               </p>
             </div>
           ) : loadError ? (
-            <div className="rounded-[28px] border border-[#D41F2D]/30 bg-[#0A2A5C] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+            <div className="rounded-[28px] border border-[#D41F2D]/30 bg-[#071A38] px-6 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
               <p className="text-2xl font-bold text-white">
                 Something went wrong
               </p>
@@ -321,7 +321,7 @@ export default function ShowroomPage() {
               </button>
             </div>
           ) : filteredCars.length === 0 ? (
-            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#0A2A5C] px-6 py-16 text-center">
+            <div className="rounded-[28px] border border-dashed border-white/15 bg-[#071A38] px-6 py-16 text-center">
               <p className="text-xl font-semibold text-white">
                 {vehicles.length === 0
                   ? "No vehicles in the showroom yet"
@@ -359,19 +359,25 @@ export default function ShowroomPage() {
                     : recentlyAdded.includes(car.id)
                       ? "Added ✓"
                       : "Add to Cart";
+                  const badgeText =
+                    unavailable && car.status !== "available"
+                      ? car.status
+                      : car.badge;
 
                   return (
                     <Link
                       key={car.id}
                       href={`/showroom/car/${car.id}`}
-                      className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-white/10 bg-[#0A2A5C] transition-all duration-300 hover:-translate-y-1 hover:border-[#D41F2D]/50 hover:shadow-[0_25px_60px_rgba(191,152,13,0.12)]"
+                      className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-white/10 bg-[#071A38] transition-all duration-300 hover:-translate-y-1 hover:border-[#D41F2D]/50 hover:shadow-[0_25px_60px_rgba(191,152,13,0.12)]"
                     >
-                      <div className="relative overflow-hidden bg-[#061B3D] p-3">
+                      <div className="relative overflow-hidden bg-[#040E21] p-3">
                         {(car.badge || unavailable) && (
-                          <div className="absolute right-4 top-4 z-10 rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#5FA8E8]">
-                            {unavailable && car.status !== "available"
-                              ? car.status
-                              : car.badge}
+                          // max-w + truncate keeps long badges inside the card.
+                          <div
+                            title={badgeText ?? undefined}
+                            className="absolute right-4 top-4 z-10 max-w-[calc(100%-2rem)] truncate rounded-full border border-[#D41F2D]/40 bg-[#D41F2D]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#5FA8E8]"
+                          >
+                            {badgeText}
                           </div>
                         )}
 
@@ -394,57 +400,67 @@ export default function ShowroomPage() {
                       </div>
 
                       <div className="flex flex-1 flex-col p-5">
-                        <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">
-                              {car.year} • {car.type}
-                            </p>
-                            <h3 className="mt-1 text-2xl font-semibold text-white">
-                              {car.name}
-                            </h3>
-                          </div>
-                        </div>
-                        <span className="mt-2 text-base font-black text-[#D41F2D]">
-                          {car.price}
-                        </span>
-
-                        <div className="grid grid-cols-2 gap-3 text-sm text-zinc-300 my-5">
-                          <div className="rounded-xl border border-white/10 bg-white/3 p-3">
-                            <span className="block text-[10px] uppercase tracking-[0.18em] text-zinc-400">
-                              Mileage
-                            </span>
-                            <span className="mt-2 block font-semibold text-white">
-                              {car.mileage}
-                            </span>
-                          </div>
-                          <div className="rounded-xl border border-white/10 bg-white/3 p-3">
-                            <span className="block text-[10px] uppercase tracking-[0.18em] text-zinc-400">
-                              Engine
-                            </span>
-                            <span className="mt-2 block font-semibold text-white">
-                              {car.engine}
-                            </span>
-                          </div>
+                        {/* Top block: grows naturally (title can be 1 to 3 lines). */}
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">
+                            {car.year} • {car.type}
+                          </p>
+                          <h3 className="mt-1 text-2xl font-semibold text-white">
+                            {car.name}
+                          </h3>
+                          <span className="mt-2 block text-base font-black text-[#FF5C68]">
+                            {car.price}
+                          </span>
                         </div>
 
-                        {/* Spacer pushes the button + footer to the bottom of every card,
-                            regardless of how many lines the title/specs above take up. */}
-                        <div className="mt-auto">
+                        {/* Bottom block: pinned to the bottom of every card, with
+                            fixed-height pieces so specs, button and footer line up
+                            across cards in the same row. */}
+                        <div className="mt-auto pt-5">
+                          <div className="mb-5 grid grid-cols-2 gap-3 text-sm text-zinc-300">
+                            <div className="min-w-0 rounded-xl border border-white/10 bg-white/3 p-3">
+                              <span className="block text-[10px] uppercase tracking-[0.18em] text-zinc-400">
+                                Mileage
+                              </span>
+                              <span className="mt-2 block min-h-10 line-clamp-2 font-semibold leading-5 text-white">
+                                {car.mileage}
+                              </span>
+                            </div>
+                            <div className="min-w-0 rounded-xl border border-white/10 bg-white/3 p-3">
+                              <span className="block text-[10px] uppercase tracking-[0.18em] text-zinc-400">
+                                Engine
+                              </span>
+                              <span className="mt-2 block min-h-10 line-clamp-2 font-semibold leading-5 text-white">
+                                {car.engine}
+                              </span>
+                            </div>
+                          </div>
+
                           <button
                             type="button"
                             disabled={unavailable}
                             onClick={(event) => handleAddToCart(event, car)}
-                            className="mb-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[#D41F2D] px-4 py-2.5 text-sm font-bold text-white transition-all duration-300 hover:bg-[#E8404B] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#D41F2D]"
+                            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#D41F2D] px-4 py-2.5 text-sm font-bold text-white transition-all duration-300 hover:bg-[#E8404B] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#D41F2D]"
                           >
                             {buttonLabel}
                           </button>
 
-                          <div className="flex items-center justify-between border-t border-white/10 pt-4 text-sm text-zinc-300">
-                            <span className="inline-flex items-center gap-2">
-                              <MapPin size={14} className="text-[#D41F2D]" />
-                              {car.location}
+                          {/* Fixed minimum height + 2-line clamp: long addresses
+                              no longer push the button up. */}
+                          <div className="flex min-h-14 items-center justify-between gap-3 border-t border-white/10 pt-3 text-sm text-zinc-300">
+                            <span className="flex min-w-0 items-center gap-2">
+                              <MapPin
+                                size={14}
+                                className="shrink-0 text-[#FF5C68]"
+                              />
+                              <span
+                                title={car.location}
+                                className="line-clamp-2 leading-5"
+                              >
+                                {car.location}
+                              </span>
                             </span>
-                            <span className="inline-flex items-center gap-2 font-semibold text-[#D41F2D]">
+                            <span className="inline-flex shrink-0 items-center gap-2 font-semibold text-[#FF5C68]">
                               Details
                               <ArrowRight
                                 size={16}
@@ -509,7 +525,7 @@ export default function ShowroomPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-          <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#0A2A5C] p-6 sm:p-8">
+          <div className="rounded-[28px] border border-[#D41F2D]/20 bg-[#071A38] p-6 sm:p-8">
             <div className="flex items-center gap-3">
               <h3 className="text-2xl font-bold text-white">
                 Why drivers choose AutoTrade?
@@ -519,7 +535,7 @@ export default function ShowroomPage() {
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                 <div className="flex gap-2 items-center">
-                  <Gauge className="text-[#D41F2D]" size={22} />
+                  <Gauge className="text-[#FF5C68]" size={22} />
                   <h4 className="text-xl font-bold text-white">
                     Inspected quality
                   </h4>
@@ -531,7 +547,7 @@ export default function ShowroomPage() {
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                 <div className="flex gap-2 items-center">
-                  <Sparkles className="text-[#D41F2D]" size={22} />
+                  <Sparkles className="text-[#FF5C68]" size={22} />
                   <h4 className="text-xl font-bold text-white">
                     Transparent pricing
                   </h4>
@@ -543,7 +559,7 @@ export default function ShowroomPage() {
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                 <div className="flex gap-2 items-center">
-                  <MapPin className="text-[#D41F2D]" size={22} />
+                  <MapPin className="text-[#FF5C68]" size={22} />
                   <h4 className="text-xl font-bold text-white">
                     Local experts
                   </h4>

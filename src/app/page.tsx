@@ -6,18 +6,20 @@ import HeroSection from "../components/home/heroSection";
 import ShowcaseSection from "../components/home/showcaseSection";
 import StandardSection from "../components/home/standardSection";
 import CTA from "../components/home/cta";
+import NotificationPrompt from "../components/NotificationPrompt";
 
 export default function Home() {
-    return (
-        <div>
-            <Navbar />
-            <main className="bg-[#0A2A5C] min-h-screen">
-                <HeroSection />
-                <ShowcaseSection />
-                <StandardSection />
-                <CTA />
-            </main>
-            <Footer/>
-        </div>
-    );
+  return (
+    <div>
+      <Navbar />
+      <main className="bg-[#071A38] min-h-screen">
+        <HeroSection />
+        <ShowcaseSection />
+        <StandardSection />
+        <CTA />
+      </main>
+      <Footer />
+      <NotificationPrompt />
+    </div>
+  );
 }
