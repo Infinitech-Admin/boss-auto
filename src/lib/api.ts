@@ -300,7 +300,11 @@ export const updateVehicle = (id: number, payload: VehiclePayload) =>
     method: "PUT",
     body: payload,
   });
-
+export const updateVehicleStatus = (id: number, status: Vehicle["status"]) =>
+  apiRequest<{ data: Vehicle }>(`/admin/vehicles/${id}/status`, {
+    method: "PATCH",
+    body: { status },
+  });
 export const deleteVehicle = (id: number) =>
   apiRequest(`/admin/vehicles/${id}`, { method: "DELETE" });
 

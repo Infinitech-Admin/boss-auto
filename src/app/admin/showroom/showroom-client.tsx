@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import {
   AlertTriangle,
   Car,
+  ChevronDown,
   Loader2,
   Pencil,
   Plus,
@@ -17,6 +18,7 @@ import {
   deleteVehicle,
   fetchAdminVehicles,
   resolveMediaUrl,
+  updateVehicleStatus,
   type ApiError,
   type Vehicle,
 } from "@/lib/api";
@@ -128,6 +130,49 @@ function RowActions({
 }
 
 /* -------------------------------------------------------------------------- */
+/*  Inline status dropdown                                                    */
+/* -------------------------------------------------------------------------- */
+
+function StatusSelect({
+  vehicle,
+  updating,
+  onChange,
+}: {
+  vehicle: Vehicle;
+  updating: boolean;
+  onChange: (v: Vehicle, status: Vehicle["status"]) => void;
+}) {
+  return (
+    <div className="relative inline-flex items-center">
+      <select
+        value={vehicle.status}
+        disabled={updating}
+        onChange={(e) => onChange(vehicle, e.target.value as Vehicle["status"])}
+        aria-label={`Change status of ${vehicle.name}`}
+        className={`cursor-pointer appearance-none rounded-full border-0 py-1 pl-2.5 pr-7 text-xs font-medium outline-none transition-opacity focus:ring-1 focus:ring-[#D41F2D]/60 disabled:cursor-wait disabled:opacity-60 ${STATUS_STYLES[vehicle.status]}`}
+      >
+        {(Object.keys(STATUS_LABELS) as Vehicle["status"][]).map((s) => (
+          <option key={s} value={s} className="bg-[#040E21] text-white">
+            {STATUS_LABELS[s]}
+          </option>
+        ))}
+      </select>
+      {updating ? (
+        <Loader2
+          size={12}
+          className="pointer-events-none absolute right-2 animate-spin"
+        />
+      ) : (
+        <ChevronDown
+          size={12}
+          className="pointer-events-none absolute right-2 opacity-70"
+        />
+      )}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Page                                                                      */
 /* -------------------------------------------------------------------------- */
 
@@ -151,6 +196,9 @@ export default function ShowroomClient({
   const [deleteTarget, setDeleteTarget] = useState<Vehicle | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+
+  // Inline status update state
+  const [statusUpdatingId, setStatusUpdatingId] = useState<number | null>(null);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -206,6 +254,32 @@ export default function ShowroomClient({
       setDeleteError((err as ApiError).message || "Failed to delete vehicle.");
     } finally {
       setDeleting(false);
+    }
+  }
+
+  async function changeStatus(vehicle: Vehicle, status: Vehicle["status"]) {
+    if (vehicle.status === status) return;
+
+    const previous = vehicle.status;
+    setStatusUpdatingId(vehicle.id);
+    setError("");
+
+    // Optimistic update
+    setVehicles((prev) =>
+      prev.map((v) => (v.id === vehicle.id ? { ...v, status } : v)),
+    );
+
+    try {
+      const { data } = await updateVehicleStatus(vehicle.id, status);
+      setVehicles((prev) => prev.map((v) => (v.id === data.id ? data : v)));
+    } catch (err) {
+      // Roll back
+      setVehicles((prev) =>
+        prev.map((v) => (v.id === vehicle.id ? { ...v, status: previous } : v)),
+      );
+      setError((err as ApiError).message || "Failed to update status.");
+    } finally {
+      setStatusUpdatingId(null);
     }
   }
 
@@ -325,11 +399,11 @@ export default function ShowroomClient({
                     <td className="px-5 py-3 text-zinc-400">{v.mileage}</td>
                     <td className="px-5 py-3 text-zinc-400">{v.stock}</td>
                     <td className="px-5 py-3">
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[v.status]}`}
-                      >
-                        {STATUS_LABELS[v.status]}
-                      </span>
+                      <StatusSelect
+                        vehicle={v}
+                        updating={statusUpdatingId === v.id}
+                        onChange={changeStatus}
+                      />
                     </td>
                     <td className="px-5 py-3">
                       <RowActions
@@ -393,11 +467,11 @@ export default function ShowroomClient({
 
                 <div className="mt-4 flex items-center justify-between text-sm">
                   <span className="font-semibold text-white">{v.price}</span>
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[v.status]}`}
-                  >
-                    {STATUS_LABELS[v.status]}
-                  </span>
+                  <StatusSelect
+                    vehicle={v}
+                    updating={statusUpdatingId === v.id}
+                    onChange={changeStatus}
+                  />
                 </div>
 
                 <div className="mt-2 flex items-center justify-between text-xs text-zinc-500">
