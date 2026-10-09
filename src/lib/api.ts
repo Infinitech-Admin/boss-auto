@@ -764,3 +764,20 @@ export const fetchPushSubscriberCount = () =>
   apiRequest<{ data: { subscribers: number } }>(
     "/admin/announcements/subscribers",
   );
+export const PRICE_FALLBACK = "Inquire for price";
+
+/** True only when the vehicle has a real, usable price. */
+export const hasPrice = (car: {
+  price?: string | null;
+  price_value?: number | null;
+}) => {
+  const value = Number(car.price_value);
+  const label = (car.price ?? "").trim().toLowerCase();
+  return (
+    Number.isFinite(value) &&
+    value > 0 &&
+    label !== "" &&
+    label !== "n/a" &&
+    label !== "na"
+  );
+};
