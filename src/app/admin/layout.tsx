@@ -156,21 +156,24 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         }`}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-5">
+
+        <div className="flex h-16 items-center justify-between px-4">
           <Link
             href="/admin"
-            className="flex items-center gap-2 text-lg font-black text-white"
+            className="flex min-w-0 items-center gap-2 whitespace-nowrap text-white"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
               <Car size={17} />
             </span>
-            Boss
-            <span className="text-[#FF5C68]">Auto Exchange</span>
+
+            <span className="text-base font-black tracking-tight">
+              Boss <span className="text-[#FF5C68]">Auto Exchange</span>
+            </span>
           </Link>
 
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-zinc-400 hover:text-white lg:hidden"
+            className="ml-2 shrink-0 text-zinc-400 hover:text-white lg:hidden"
             aria-label="Close menu"
           >
             <X size={20} />
@@ -223,7 +226,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
-
         {/* Logout */}
         <div className="border-t border-white/10 p-3">
           <button
