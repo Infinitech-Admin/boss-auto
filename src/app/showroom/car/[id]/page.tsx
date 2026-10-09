@@ -36,9 +36,10 @@ import {
 } from "@/lib/api";
 
 /*
-  Prime Auto Display palette
-  dark #1C0606 | page #150404 | panel #2A0A0A | maroon #9B1111 (hover #B91C1C)
-  gold #F9A602 | cream #FDF5DC
+  Boss Auto Exchange palette (matches the contact page)
+  page #030B1C | section #061532 | card #08193B | input #020A18
+  border #1A2A52 | coral #FF4D5A | coral hover #FF6B75 | text white
+  image backdrop #E6ECF7
 */
 
 type Slide = { src: string; alt: string; isCover?: boolean };
@@ -51,12 +52,12 @@ type VideoItem = {
 };
 
 const ring =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9A602]";
-const panel = "border-t-4 border-[#F9A602] bg-[#2A0A0A]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF4D5A]";
+const panel = "rounded-2xl border border-[#1A2A52] bg-[#08193B]";
 const thumbClass = (active: boolean) =>
-  `relative h-14 w-20 shrink-0 overflow-hidden border-2 bg-[#1C0606] transition-all sm:h-20 sm:w-28 ${
+  `relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border-2 bg-[#030B1C] transition-all sm:h-20 sm:w-28 ${
     active
-      ? "border-[#F9A602]"
+      ? "border-[#FF4D5A]"
       : "border-transparent opacity-50 hover:opacity-100"
   } ${ring}`;
 const strip =
@@ -93,7 +94,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
     });
   }, [i]);
 
-  const arrow = `absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center bg-[#1C0606]/80 text-[#F9A602] transition-colors hover:bg-[#F9A602] hover:text-[#1C0606] ${ring}`;
+  const arrow = `absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#030B1C]/85 text-white transition-colors hover:bg-[#FF4D5A] ${ring}`;
 
   return (
     <div className={`${panel} p-3 sm:p-5`}>
@@ -112,7 +113,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
             prev();
           }
         }}
-        className={`relative overflow-hidden bg-[#F5E9C8] ${ring}`}
+        className={`relative overflow-hidden rounded-xl bg-[#E6ECF7] ${ring}`}
       >
         <div
           onPointerDown={(e) => {
@@ -178,7 +179,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
             </button>
           </>
         )}
-        <div className="pointer-events-none absolute bottom-0 right-0 z-20 bg-[#F9A602] px-3 py-1.5 text-xs font-bold text-[#1C0606]">
+        <div className="pointer-events-none absolute bottom-0 right-0 z-20 rounded-tl-xl bg-[#FF4D5A] px-3 py-1.5 text-xs font-bold text-white">
           {i + 1} / {slides.length}
         </div>
       </div>
@@ -232,16 +233,16 @@ function VideoSection({
   return (
     <section aria-label={`${carName} videos`} className={`${panel} p-3 sm:p-5`}>
       <div className="mb-4 flex items-center justify-between gap-3 px-1">
-        <h2 className="flex items-center gap-3 text-xl font-black uppercase">
-          <Video className="text-[#F9A602]" size={20} />
+        <h2 className="flex items-center gap-3 text-xl font-bold">
+          <Video className="text-[#FF4D5A]" size={20} />
           Videos
         </h2>
-        <span className="bg-[#1C0606] px-3 py-1.5 text-xs font-bold">
+        <span className="rounded-full bg-[#030B1C] px-3 py-1.5 text-xs font-semibold">
           {videos.length} {videos.length === 1 ? "video" : "videos"}
         </span>
       </div>
 
-      <div className="relative aspect-video w-full overflow-hidden bg-[#1C0606]">
+      <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#030B1C]">
         <video
           key={active.src}
           src={active.src}
@@ -256,7 +257,7 @@ function VideoSection({
           className="h-full w-full object-cover"
         />
         {active.duration && (
-          <span className="pointer-events-none absolute left-0 top-0 bg-[#F9A602] px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#1C0606]">
+          <span className="pointer-events-none absolute left-0 top-0 rounded-br-xl bg-[#FF4D5A] px-3 py-1.5 text-xs font-bold text-white">
             {isLong ? "Full walkthrough" : "Clip"} | {active.duration}
           </span>
         )}
@@ -293,8 +294,8 @@ function VideoSection({
                   className="pointer-events-none absolute inset-0 h-full w-full object-cover"
                 />
               )}
-              <span className="absolute inset-0 flex items-center justify-center bg-[#1C0606]/40">
-                <Play size={16} className="fill-[#F9A602] text-[#F9A602]" />
+              <span className="absolute inset-0 flex items-center justify-center bg-[#030B1C]/45">
+                <Play size={16} className="fill-[#FF4D5A] text-[#FF4D5A]" />
               </span>
             </button>
           ))}
@@ -320,12 +321,10 @@ function Message({
   return (
     <>
       <Navbar />
-      <main className="flex min-h-screen items-center justify-center bg-[#1C0606] px-4 text-[#FDF5DC]">
+      <main className="flex min-h-screen items-center justify-center bg-[#030B1C] px-4 text-white">
         <div className={`${panel} w-full max-w-lg px-6 py-12 text-center`}>
-          <h1 className="text-3xl font-black uppercase leading-tight">
-            {title}
-          </h1>
-          <p className="mt-4 text-sm leading-7 text-[#FDF5DC]/70">{text}</p>
+          <h1 className="text-3xl font-black leading-tight">{title}</h1>
+          <p className="mt-4 text-sm leading-7 text-white/70">{text}</p>
           {children}
         </div>
       </main>
@@ -433,7 +432,7 @@ export default function CarDetailsPage() {
   if (isLoading) {
     return (
       <Message title="Loading car" text="Getting the latest details.">
-        <div className="mx-auto mt-6 h-10 w-10 animate-spin rounded-full border-2 border-[#FDF5DC]/15 border-t-[#F9A602]" />
+        <div className="mx-auto mt-6 h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-[#FF4D5A]" />
       </Message>
     );
   }
@@ -447,14 +446,14 @@ export default function CarDetailsPage() {
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             href="/showroom"
-            className={`chamfer inline-flex items-center justify-center bg-[#F9A602] px-7 py-4 text-sm font-bold uppercase tracking-wider text-[#1C0606] transition-colors hover:bg-[#FDF5DC] ${ring}`}
+            className={`inline-flex items-center justify-center rounded-xl bg-[#FF4D5A] px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`}
           >
             Browse showroom
           </Link>
           <button
             type="button"
             onClick={() => setReloadKey((k) => k + 1)}
-            className={`chamfer inline-flex items-center justify-center gap-2 bg-[#9B1111] px-7 py-4 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#B91C1C] ${ring}`}
+            className={`inline-flex items-center justify-center gap-2 rounded-xl border border-[#1A2A52] px-7 py-3.5 text-sm font-bold text-white transition-colors hover:border-[#FF4D5A] hover:text-[#FF4D5A] ${ring}`}
           >
             <RotateCcw size={16} />
             Try again
@@ -497,56 +496,52 @@ export default function CarDetailsPage() {
     },
   ];
 
-  const cartBtn = `chamfer flex w-full items-center justify-center gap-2 bg-[#F9A602] px-5 py-4 text-sm font-bold uppercase tracking-wider text-[#1C0606] transition-colors hover:bg-[#FDF5DC] disabled:cursor-not-allowed disabled:bg-[#FDF5DC]/10 disabled:text-[#FDF5DC]/40 disabled:hover:bg-[#FDF5DC]/10 disabled:hover:text-[#FDF5DC]/40 ${ring}`;
+  const cartBtn = `flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF4D5A] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/40 disabled:hover:bg-white/10 ${ring}`;
+  const outlineBtn = `inline-flex items-center justify-center rounded-xl border border-[#1A2A52] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:border-[#FF4D5A] hover:text-[#FF4D5A] ${ring}`;
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#1C0606] pb-24 text-[#FDF5DC] lg:pb-0">
+      <main className="min-h-screen bg-[#030B1C] pb-24 text-white lg:pb-0">
         {/* HEADER */}
-        <section className="relative overflow-hidden bg-[#1C0606]">
+        <section className="relative overflow-hidden border-b border-[#FF4D5A]/15 bg-[#030B1C]">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-24 top-0 hidden h-full w-72 -skew-x-12 bg-[#9B1111] lg:block"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-4 top-0 hidden h-full w-6 -skew-x-12 bg-[#F9A602] lg:block"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_90%_at_65%_0%,rgba(255,77,90,0.16),transparent_70%)]"
           />
           <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
             <Link
               href="/showroom"
-              className={`inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider transition-colors hover:text-[#F9A602] ${ring}`}
+              className={`inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:text-[#FF4D5A] ${ring}`}
             >
-              <ArrowLeft size={16} className="text-[#F9A602]" />
+              <ArrowLeft size={16} className="text-[#FF4D5A]" />
               Back to showroom
             </Link>
 
-            <div className="mt-6 border-l-8 border-[#F9A602] pl-5 sm:pl-8">
+            <div className="mt-6">
               <div className="flex flex-wrap items-center gap-3">
-                <p className="text-sm font-semibold text-[#F9A602]">
+                <p className="text-sm font-semibold text-[#FF4D5A]">
                   {car.year} | {car.type}
                 </p>
                 {car.badge && (
-                  <span className="bg-[#9B1111] px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                  <span className="rounded-full bg-[#FF4D5A] px-3 py-1 text-xs font-bold text-white">
                     {car.badge}
                   </span>
                 )}
                 {unavailable && (
-                  <span className="bg-[#FDF5DC] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#1C0606]">
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#030B1C]">
                     {statusLabel}
                   </span>
                 )}
               </div>
-              <h1 className="mt-2 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-5xl lg:text-6xl">
+              <h1 className="mt-2 max-w-4xl text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
                 {car.name}
               </h1>
             </div>
           </div>
-          <div aria-hidden="true" className="tread" />
         </section>
 
-        <div className="bg-[#150404]">
+        <div className="bg-[#061532]">
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
             <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start lg:gap-8">
               {/* LEFT: photos, videos, quick facts, description */}
@@ -555,7 +550,7 @@ export default function CarDetailsPage() {
                   <CarGallery key={car.id} carName={car.name} slides={slides} />
                 ) : (
                   <div
-                    className={`${panel} flex h-[280px] items-center justify-center text-sm text-[#FDF5DC]/50 sm:h-[420px]`}
+                    className={`${panel} flex h-[280px] items-center justify-center text-sm text-white/50 sm:h-[420px]`}
                   >
                     No photos available yet
                   </div>
@@ -571,16 +566,13 @@ export default function CarDetailsPage() {
 
                 <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {quickFacts.map(({ icon: Icon, label, value }) => (
-                    <div
-                      key={label}
-                      className="min-w-0 border-l-4 border-[#F9A602] bg-[#2A0A0A] p-4"
-                    >
+                    <div key={label} className={`${panel} min-w-0 p-4`}>
                       <Icon
                         size={18}
-                        className="text-[#F9A602]"
+                        className="text-[#FF4D5A]"
                         aria-hidden="true"
                       />
-                      <dt className="mt-3 text-xs font-semibold text-[#FDF5DC]/55">
+                      <dt className="mt-3 text-xs font-medium text-white/55">
                         {label}
                       </dt>
                       <dd className="mt-1 break-words font-bold">{value}</dd>
@@ -590,11 +582,11 @@ export default function CarDetailsPage() {
 
                 {car.description && (
                   <section className={`${panel} p-5 sm:p-8`}>
-                    <h2 className="flex items-center gap-3 text-2xl font-black uppercase">
-                      <Sparkles className="text-[#F9A602]" size={22} />
+                    <h2 className="flex items-center gap-3 text-2xl font-bold">
+                      <Sparkles className="text-[#FF4D5A]" size={22} />
                       About this car
                     </h2>
-                    <p className="mt-5 max-w-3xl whitespace-pre-line text-sm leading-7 text-[#FDF5DC]/80 sm:text-base">
+                    <p className="mt-5 max-w-3xl whitespace-pre-line text-sm leading-7 text-white/80 sm:text-base">
                       {car.description}
                     </p>
                   </section>
@@ -604,32 +596,30 @@ export default function CarDetailsPage() {
               {/* RIGHT: price, specs, actions, financing */}
               <div className="min-w-0 space-y-6 lg:sticky lg:top-24 lg:space-y-8">
                 <aside className={`${panel} p-5 sm:p-6`}>
-                  <p className="text-sm text-[#FDF5DC]/55">
+                  <p className="text-sm text-white/55">
                     {priced ? "Starting price" : "Pricing"}
                   </p>
                   <p
-                    className={`mt-1 font-black text-[#F9A602] ${
+                    className={`mt-1 font-black text-[#FF4D5A] ${
                       priced ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl"
                     }`}
                   >
                     {priced ? car.price : PRICE_FALLBACK}
                   </p>
 
-                  <dl className="mt-6 space-y-3 border-y border-[#FDF5DC]/10 py-5 text-sm sm:text-base">
+                  <dl className="mt-6 space-y-3 border-y border-[#1A2A52] py-5 text-sm sm:text-base">
                     {specs.map((s) => (
                       <div
                         key={s.label}
                         className="flex items-start justify-between gap-4"
                       >
-                        <dt className="shrink-0 text-[#FDF5DC]/55">
-                          {s.label}
-                        </dt>
+                        <dt className="shrink-0 text-white/55">{s.label}</dt>
                         <dd className="text-right font-semibold">{s.value}</dd>
                       </div>
                     ))}
                   </dl>
 
-                  <p className="mt-4 text-xs leading-5 text-[#FDF5DC]/55">
+                  <p className="mt-4 text-xs leading-5 text-white/55">
                     {priced
                       ? "Reserve this car with a 20% downpayment at checkout."
                       : "The price for this car isn’t listed yet. Send us a message and we’ll get back to you with the details."}
@@ -649,7 +639,7 @@ export default function CarDetailsPage() {
                       type="button"
                       disabled={car.status === "sold"}
                       onClick={() => setTestDriveOpen(true)}
-                      className={`chamfer inline-flex items-center justify-center bg-[#9B1111] px-5 py-4 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#B91C1C] disabled:cursor-not-allowed disabled:opacity-50 ${ring}`}
+                      className={`${outlineBtn} disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-[#1A2A52] disabled:hover:text-white`}
                     >
                       Book a test drive
                     </button>
@@ -657,8 +647,8 @@ export default function CarDetailsPage() {
                       href="/contact"
                       className={
                         priced
-                          ? `inline-flex items-center justify-center border-2 border-[#FDF5DC]/25 px-5 py-4 text-sm font-bold uppercase tracking-wider transition-colors hover:border-[#F9A602] hover:text-[#F9A602] ${ring}`
-                          : `chamfer inline-flex items-center justify-center bg-[#F9A602] px-5 py-4 text-sm font-bold uppercase tracking-wider text-[#1C0606] transition-colors hover:bg-[#FDF5DC] ${ring}`
+                          ? outlineBtn
+                          : `inline-flex items-center justify-center rounded-xl bg-[#FF4D5A] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`
                       }
                     >
                       {priced ? "Ask a question" : PRICE_FALLBACK}
@@ -681,11 +671,11 @@ export default function CarDetailsPage() {
       </main>
 
       {/* Mobile sticky bar: price and main action always in reach */}
-      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-4 border-[#F9A602] bg-[#1C0606] px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-[#FF4D5A]/40 bg-[#030B1C] px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
         <div className="min-w-0">
-          <p className="text-xs text-[#FDF5DC]/55">Price</p>
+          <p className="text-xs text-white/55">Price</p>
           <p
-            className={`truncate font-black text-[#F9A602] ${
+            className={`truncate font-black text-[#FF4D5A] ${
               priced ? "text-xl" : "text-base"
             }`}
           >
@@ -704,7 +694,7 @@ export default function CarDetailsPage() {
         ) : (
           <Link
             href="/contact"
-            className={`chamfer flex flex-1 items-center justify-center bg-[#F9A602] px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#1C0606] transition-colors hover:bg-[#FDF5DC] ${ring}`}
+            className={`flex flex-1 items-center justify-center rounded-xl bg-[#FF4D5A] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`}
           >
             Inquire
           </Link>
