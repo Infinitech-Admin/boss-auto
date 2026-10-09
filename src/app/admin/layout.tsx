@@ -164,8 +164,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
               <Car size={17} />
             </span>
-            Auto
-            <span className="text-[#FF5C68]">Trade</span>
+            Boss
+            <span className="text-[#FF5C68]">Auto Exchange</span>
           </Link>
 
           <button
