@@ -1,6 +1,7 @@
-// lib/api.ts
+// Path: lib/api.ts  (REPLACE your existing lib/api.ts; if you use src/, put it in src/lib/api.ts)
+// Changes are marked with "SEO:" comments (isServer, serverApiBase, apiRequest).
 
-// All requests go to our own Next.js origin, through the Route Handler at
+// All BROWSER requests go to our own Next.js origin, through the Route Handler at
 // app/api/proxy/[...path]/route.ts. That handler forwards them to Laravel
 // (using the server-only LARAVEL_API_URL env var), so the browser only ever
 // talks to one origin and CORS never comes into play.
@@ -8,6 +9,17 @@
 //   /api/proxy/login                -> {LARAVEL_API_URL}/api/login
 //   /api/proxy/sanctum/csrf-cookie  -> {LARAVEL_API_URL}/sanctum/csrf-cookie
 const API_BASE = "/api/proxy";
+
+// SEO: Server-side code (Server Components, generateMetadata, sitemap) has no
+// browser origin, so it calls Laravel directly instead of going through the
+// proxy. LARAVEL_API_URL is the same server-only env var the proxy route uses.
+const isServer = typeof window === "undefined";
+
+function serverApiBase(): string {
+  const url = process.env.LARAVEL_API_URL;
+  if (!url) throw new Error("LARAVEL_API_URL is not set.");
+  return `${url.replace(/\/$/, "")}/api`;
+}
 
 /**
  * Origin that vehicle media paths (e.g. "/storage/vehicles/images/x.jpg")
@@ -96,14 +108,22 @@ export async function apiRequest<T = unknown>(
   const isUnsafeMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
 
   if (isUnsafeMethod) {
+    // SEO: writes need the browser's cookies + CSRF, so they never run on the server.
+    if (isServer) throw new Error("Write requests must run in the browser.");
     await ensureCsrfCookie();
   }
 
   const xsrfToken = getCookie("XSRF-TOKEN");
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  // SEO: server -> Laravel directly (absolute URL); browser -> /api/proxy
+  const base = isServer ? serverApiBase() : API_BASE;
+
+  const response = await fetch(`${base}${path}`, {
     method,
-    credentials: "include",
+    // SEO: browser sends the session cookie; server does a public GET cached for 60s
+    ...(isServer
+      ? { next: { revalidate: 60 } }
+      : { credentials: "include" as const }),
     signal,
     headers: {
       Accept: "application/json",
@@ -490,9 +510,8 @@ export const updateAdminOrderStatus = (id: number, status: string) =>
     method: "PATCH",
     body: { status },
   });
-// ---------------------------------------------------------------------------
-// ADD THIS TO THE BOTTOM OF  lib/api.ts
-// ---------------------------------------------------------------------------
+
+// ---- Dashboard (admin) ----
 
 export interface DashboardStat {
   value: number;
@@ -540,10 +559,6 @@ export const fetchAdminDashboard = (
   apiRequest<{ data: DashboardData }>(`/admin/dashboard?months=${months}`, {
     signal: options?.signal,
   }).then((res) => res.data);
-
-// ---------------------------------------------------------------------------
-// ADD THIS TO THE BOTTOM OF  lib/api.ts
-// ---------------------------------------------------------------------------
 
 // ---- Test drives ----
 
@@ -648,6 +663,7 @@ export const updateAdminTestDrive = (
 
 export const deleteAdminTestDrive = (id: number) =>
   apiRequest(`/admin/test-drives/${id}`, { method: "DELETE" });
+
 // ---- Blog ----
 
 export interface BlogPost {
@@ -700,9 +716,6 @@ export const updateBlogPost = (id: number, payload: BlogPayload) =>
 
 export const deleteAdminBlogPost = (id: number) =>
   apiRequest(`/admin/blog/${id}`, { method: "DELETE" });
-// ---------------------------------------------------------------------------
-// ADD THIS TO THE BOTTOM OF  lib/api.ts
-// ---------------------------------------------------------------------------
 
 // ---- Announcements ----
 
@@ -749,6 +762,7 @@ export const updateAnnouncement = (id: number, payload: AnnouncementPayload) =>
 
 export const deleteAdminAnnouncement = (id: number) =>
   apiRequest(`/admin/announcements/${id}`, { method: "DELETE" });
+
 export interface PushSubscriptionInput {
   endpoint: string;
   keys: { p256dh: string; auth: string };
@@ -768,6 +782,7 @@ export const fetchPushSubscriberCount = () =>
   apiRequest<{ data: { subscribers: number } }>(
     "/admin/announcements/subscribers",
   );
+
 export const PRICE_FALLBACK = "Inquire for price";
 
 /** True only when the vehicle has a real, usable price. */
@@ -781,7 +796,7 @@ export const hasPrice = (car: {
     Number.isFinite(value) &&
     value > 0 &&
     label !== "" &&
-    label !== "n/a" &&
-    label !== "na"
+    label !== "na" &&
+    label !== "n/a"
   );
 };
