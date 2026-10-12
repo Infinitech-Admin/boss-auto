@@ -1,4 +1,6 @@
-
+// Path: app/showroom/page.tsx  (NEW server page)
+// STEP 1: rename your OLD app/showroom/page.tsx to app/showroom/showroom-client.tsx
+// STEP 2: put this file in its place (SERVER component, no "use client")
 import type { Metadata } from "next";
 
 import { fetchVehicles, type Vehicle } from "@/lib/api";
@@ -28,6 +30,13 @@ export const metadata: Metadata = {
     title: `Used Cars for Sale in Muntinlupa | ${SITE_NAME}`,
     description:
       "Browse quality used cars with full specs, photos and videos. Reserve with a 20% downpayment.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Used Cars for Sale in Muntinlupa | Boss Auto Exchange",
+    description:
+      "Browse our showroom of quality used cars in Muntinlupa City. Filter by body type and budget, view photos and videos, and reserve with a 20% downpayment.",
+    images: [DEFAULT_OG_IMAGE.url],
   },
 };
 

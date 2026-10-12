@@ -1,3 +1,4 @@
+// Path: app/about/layout.tsx  (NEW file, next to app/about/page.tsx)
 import type { Metadata } from "next";
 
 import { DEFAULT_OG_IMAGE } from "@/lib/site";
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
     title: "About Us | Boss Auto Exchange",
     description:
       "Boss Auto Exchange is a car dealership in Poblacion, Muntinlupa City. We buy, sell and trade cars with clear details and a straightforward path to ownership.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us | Boss Auto Exchange",
+    description:
+      "Boss Auto Exchange is a car dealership in Poblacion, Muntinlupa City. We buy, sell and trade cars with clear details and a straightforward path to ownership.",
+    images: [DEFAULT_OG_IMAGE.url],
   },
 };
 

@@ -1,3 +1,4 @@
+// Path: app/sold-cars/layout.tsx  (NEW file, next to app/sold-cars/page.tsx)
 import type { Metadata } from "next";
 
 import { DEFAULT_OG_IMAGE } from "@/lib/site";
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
     title: "Sold Cars | Boss Auto Exchange",
     description:
       "See the cars Boss Auto Exchange has recently sold to happy drivers. Browse our showroom to find your next ride.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sold Cars | Boss Auto Exchange",
+    description:
+      "See the cars Boss Auto Exchange has recently sold to happy drivers. Browse our showroom to find your next ride.",
+    images: [DEFAULT_OG_IMAGE.url],
   },
 };
 

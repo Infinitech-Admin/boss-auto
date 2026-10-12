@@ -1,3 +1,4 @@
+// Path: app/layout.tsx  (REPLACE your existing layout.tsx)
 import type { Metadata, Viewport } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
@@ -116,7 +117,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Boss Auto Exchange | Used Cars for Sale in Muntinlupa",
     description:
-      "Find your next vehicle. Browse our latest inventory and explore every car in detail.",
+      "Quality used cars for sale in Muntinlupa City. View specs, photos and videos, book a test drive, or sell and trade in your car.",
     // site: "@yourhandle",
     // creator: "@yourhandle",
     images: [DEFAULT_OG_IMAGE.url],

@@ -1,3 +1,4 @@
+// Path: app/sell-trade/layout.tsx  (NEW file, next to app/sell-trade/page.tsx)
 import type { Metadata } from "next";
 
 import { DEFAULT_OG_IMAGE } from "@/lib/site";
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
     title: "Sell or Trade In Your Car in Muntinlupa | Boss Auto Exchange",
     description:
       "Get an instant value estimate for your car and sell or trade it in at Boss Auto Exchange, Muntinlupa City. Fair offers and no dealership pressure.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sell or Trade In Your Car in Muntinlupa | Boss Auto Exchange",
+    description:
+      "Get an instant value estimate for your car and sell or trade it in at Boss Auto Exchange, Muntinlupa City. Fair offers and no dealership pressure.",
+    images: [DEFAULT_OG_IMAGE.url],
   },
 };
 

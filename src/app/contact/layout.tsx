@@ -1,3 +1,4 @@
+// Path: app/contact/layout.tsx  (NEW file, next to app/contact/page.tsx)
 import type { Metadata } from "next";
 
 import { DEFAULT_OG_IMAGE } from "@/lib/site";
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
     title: "Contact Us | Boss Auto Exchange",
     description:
       "Contact Boss Auto Exchange in Poblacion, Muntinlupa City. Ask about a car, book a test drive or send an enquiry. Call 0906 021 8568 or message us on Facebook.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Us | Boss Auto Exchange",
+    description:
+      "Contact Boss Auto Exchange in Poblacion, Muntinlupa City. Ask about a car, book a test drive or send an enquiry. Call 0906 021 8568 or message us on Facebook.",
+    images: [DEFAULT_OG_IMAGE.url],
   },
 };
 
