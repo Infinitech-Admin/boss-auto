@@ -224,8 +224,10 @@ export default function OrdersClient({
     }
   }
 
-  const proofUrl = selected?.payment_proof_url
-    ? resolveMediaUrl(selected.payment_proof_url, imageBaseUrl)
+  const proofUrl = selected?.payment_proof
+    ? /^https?:\/\//i.test(selected.payment_proof)
+      ? selected.payment_proof
+      : resolveMediaUrl(selected.payment_proof, imageBaseUrl)
     : "";
 
   return (
