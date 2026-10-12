@@ -20,7 +20,11 @@ import {
 } from "recharts";
 import {
   Car,
+  Clock,
   DollarSign,
+  Eye,
+  Globe,
+  MousePointerClick,
   RotateCcw,
   ShoppingCart,
   TrendingDown,
@@ -86,6 +90,16 @@ function formatDate(iso: string | null): string {
   });
 }
 
+function formatDuration(totalSeconds: number): string {
+  const s = Math.round(totalSeconds);
+  if (s < 60) return `${s}s`;
+  return `${Math.floor(s / 60)}m ${s % 60}s`;
+}
+
+function capitalize(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Page                                                                      */
 /* -------------------------------------------------------------------------- */
@@ -130,7 +144,7 @@ export default function AdminDashboardPage() {
             Dashboard
           </h1>
           <p className="mt-1 text-sm text-zinc-400">
-            Overview of sales, inventory, and activity.
+            Overview of sales, inventory, traffic, and activity.
           </p>
         </div>
 
@@ -187,6 +201,314 @@ export default function AdminDashboardPage() {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  Website traffic (Google Analytics)                                        */
+/*  Comes from the same /admin/dashboard response (data.traffic). If Google   */
+/*  is down or not connected, only this section is affected.                  */
+/* -------------------------------------------------------------------------- */
+
+type TrafficMetric = { value: number; change: number | null };
+
+type TrafficData = {
+  totals: {
+    visitors: TrafficMetric;
+    sessions: TrafficMetric;
+    pageViews: TrafficMetric;
+    avgSessionSeconds: TrafficMetric;
+  };
+  daily: { date: string; visitors: number; sessions: number }[];
+  topPages: { path: string; views: number }[];
+  sources: { name: string; sessions: number }[];
+  devices: { name: string; value: number }[];
+  liveUsers: number;
+};
+
+type TrafficPayload = TrafficData | { error: string } | null | undefined;
+type DashboardWithTraffic = DashboardData & { traffic?: TrafficPayload };
+
+function TrafficSection({
+  payload,
+  label,
+}: {
+  payload: TrafficPayload;
+  label: string;
+}) {
+  const traffic = payload && !("error" in payload) ? payload : null;
+  const error = payload && "error" in payload ? payload.error : null;
+
+  // Not connected yet (backend has no Google credentials)
+  if (!payload) {
+    return (
+      <section
+        aria-label="Website traffic"
+        className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#071A38]/70 p-4 text-sm text-zinc-400"
+      >
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#D41F2D]/10 text-[#FF5C68]">
+          <Globe size={16} />
+        </span>
+        Website traffic isn’t connected yet. Add your Google Analytics
+        credentials to the backend to see visitors here.
+      </section>
+    );
+  }
+
+  return (
+    <section aria-label="Website traffic" className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D41F2D]/10 text-[#FF5C68]">
+            <Globe size={16} />
+          </span>
+          <div>
+            <h2 className="text-sm font-semibold text-white">
+              Website traffic
+            </h2>
+            <p className="text-xs text-zinc-400">{label} · Google Analytics</p>
+          </div>
+        </div>
+
+        {traffic && (
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#071A38]/70 px-3 py-1.5 text-xs text-zinc-300">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D41F2D] opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#D41F2D]" />
+            </span>
+            <span className="font-semibold text-white">
+              {traffic.liveUsers}
+            </span>{" "}
+            on the site now
+          </span>
+        )}
+      </div>
+
+      {error && (
+        <div className="rounded-2xl border border-[#D41F2D]/30 bg-[#D41F2D]/5 p-4 text-sm text-[#FF5C68]">
+          {error}
+        </div>
+      )}
+
+      {traffic && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <StatCard
+              label="Visitors"
+              value={traffic.totals.visitors.value.toLocaleString()}
+              change={traffic.totals.visitors.change}
+              icon={<Users size={18} />}
+            />
+            <StatCard
+              label="Sessions"
+              value={traffic.totals.sessions.value.toLocaleString()}
+              change={traffic.totals.sessions.change}
+              icon={<MousePointerClick size={18} />}
+            />
+            <StatCard
+              label="Page views"
+              value={traffic.totals.pageViews.value.toLocaleString()}
+              change={traffic.totals.pageViews.change}
+              icon={<Eye size={18} />}
+            />
+            <StatCard
+              label="Avg. time on site"
+              value={formatDuration(traffic.totals.avgSessionSeconds.value)}
+              change={traffic.totals.avgSessionSeconds.change}
+              icon={<Clock size={18} />}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+            <ChartCard
+              title="Visitors over time"
+              subtitle={label}
+              className="xl:col-span-2"
+            >
+              {traffic.daily.every((p) => p.visitors === 0) ? (
+                <EmptyState message="No traffic recorded in this period yet." />
+              ) : (
+                <ResponsiveContainer width="100%" height={260}>
+                  <AreaChart
+                    data={traffic.daily}
+                    margin={{ top: 4, right: 8, left: -24, bottom: 0 }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="visitorsFill"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#D41F2D"
+                          stopOpacity={0.35}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#D41F2D"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke="#ffffff14" vertical={false} />
+                    <XAxis
+                      dataKey="date"
+                      stroke="#71717a"
+                      fontSize={11}
+                      tickLine={false}
+                      axisLine={false}
+                      interval="preserveStartEnd"
+                      minTickGap={24}
+                    />
+                    <YAxis
+                      stroke="#71717a"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      allowDecimals={false}
+                    />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} />
+                    <Legend
+                      verticalAlign="bottom"
+                      height={28}
+                      iconType="circle"
+                      wrapperStyle={{ fontSize: 12, color: "#a1a1aa" }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="visitors"
+                      name="Visitors"
+                      stroke="#D41F2D"
+                      strokeWidth={2}
+                      fill="url(#visitorsFill)"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="sessions"
+                      name="Sessions"
+                      stroke="#FFFFFF"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              )}
+            </ChartCard>
+
+            <ChartCard title="Devices" subtitle="Share of sessions">
+              {traffic.devices.length === 0 ? (
+                <EmptyState message="No device data yet." />
+              ) : (
+                <ResponsiveContainer width="100%" height={260}>
+                  <PieChart>
+                    <Pie
+                      data={traffic.devices.map((d) => ({
+                        ...d,
+                        name: capitalize(d.name),
+                      }))}
+                      dataKey="value"
+                      nameKey="name"
+                      innerRadius={55}
+                      outerRadius={90}
+                      paddingAngle={3}
+                    >
+                      {traffic.devices.map((entry, index) => (
+                        <Cell
+                          key={entry.name}
+                          fill={CATEGORY_COLORS[index % CATEGORY_COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={TOOLTIP_STYLE} />
+                    <Legend
+                      verticalAlign="bottom"
+                      height={36}
+                      iconType="circle"
+                      wrapperStyle={{ fontSize: 12, color: "#a1a1aa" }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
+            </ChartCard>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+            <ChartCard
+              title="Top pages"
+              subtitle="Most viewed"
+              className="xl:col-span-2"
+            >
+              {traffic.topPages.length === 0 ? (
+                <EmptyState message="No page views recorded yet." />
+              ) : (
+                <ul className="divide-y divide-white/5">
+                  {traffic.topPages.map((row) => (
+                    <li
+                      key={row.path}
+                      className="flex items-center justify-between gap-3 py-2.5 text-sm"
+                    >
+                      <span className="min-w-0 truncate text-white">
+                        {row.path}
+                      </span>
+                      <span className="shrink-0 text-xs text-zinc-400">
+                        <span className="font-semibold text-[#FF5C68]">
+                          {row.views.toLocaleString()}
+                        </span>{" "}
+                        views
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </ChartCard>
+
+            <ChartCard title="Where visitors come from" subtitle="Sessions">
+              {traffic.sources.length === 0 ? (
+                <EmptyState message="No source data yet." />
+              ) : (
+                <ResponsiveContainer width="100%" height={260}>
+                  <BarChart
+                    data={traffic.sources}
+                    layout="vertical"
+                    margin={{ top: 4, right: 12, left: 0, bottom: 0 }}
+                  >
+                    <CartesianGrid stroke="#ffffff14" horizontal={false} />
+                    <XAxis
+                      type="number"
+                      stroke="#71717a"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      allowDecimals={false}
+                    />
+                    <YAxis
+                      type="category"
+                      dataKey="name"
+                      stroke="#a1a1aa"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      width={100}
+                    />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} />
+                    <Bar
+                      dataKey="sessions"
+                      name="Sessions"
+                      fill="#D41F2D"
+                      radius={[0, 6, 6, 0]}
+                      barSize={16}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </ChartCard>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Content                                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -229,6 +551,12 @@ function DashboardContent({
           icon={<Users size={18} />}
         />
       </div>
+
+      {/* Website traffic (Google Analytics) */}
+      <TrafficSection
+        payload={(data as DashboardWithTraffic).traffic}
+        label={periodLabel}
+      />
 
       {/* Charts row */}
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">

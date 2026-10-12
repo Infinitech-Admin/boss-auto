@@ -1,7 +1,8 @@
-// Path: app/layout.tsx  (REPLACE your existing layout.tsx)
+// Path: app/layout.tsx
 import type { Metadata, Viewport } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "./globals.css";
 
@@ -32,6 +33,11 @@ const SITE_URL = (
 const SITE_NAME = "Boss Auto Exchange";
 const SITE_DESCRIPTION =
   "Browse quality used and pre-owned cars for sale at Boss Auto Exchange. View detailed specs, photos and videos, then inquire about your next vehicle.";
+
+// Google Analytics 4 Measurement ID (e.g. G-WRRW2R7YEQ).
+// Set NEXT_PUBLIC_GA_ID in .env.local AND in your Vercel environment variables.
+// If it's not set, analytics simply doesn't load.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   // REQUIRED: makes canonical, OG and Twitter URLs absolute
@@ -218,6 +224,8 @@ export default function RootLayout({
           </CartProvider>
         </AuthProvider>
       </body>
+      {/* Google Analytics 4: only loads when NEXT_PUBLIC_GA_ID is set */}
+      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }
