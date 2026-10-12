@@ -40,6 +40,11 @@ const glowBlue =
 const loginGlow =
   "[&>a]:border-[#3D8FD9]/80 [&>a]:shadow-[0_0_22px_rgba(61,143,217,0.7)] [&>a:hover]:border-[#FF5C68] [&>a:hover]:shadow-[0_0_28px_rgba(212,31,45,0.85)] [&>button]:border-[#3D8FD9]/80 [&>button]:shadow-[0_0_22px_rgba(61,143,217,0.7)] [&>button:hover]:border-[#FF5C68] [&>button:hover]:shadow-[0_0_28px_rgba(212,31,45,0.85)]";
 
+// FIX: round header buttons are 40px on phones narrower than 400px, then
+// 44px / 48px as before. This saves 8px in the header row.
+const roundBtnSize =
+  "h-10 w-10 min-[400px]:h-11 min-[400px]:w-11 sm:h-12 sm:w-12";
+
 // Minimal shape of the event we care about — not in the standard lib.dom types yet.
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -239,18 +244,23 @@ export default function Navbar() {
       <header
         className={`sticky top-0 z-50 border-b transition-all duration-300 motion-reduce:transition-none ${isHome ? HEADER_OFFSET : ""} ${isSolid ? "border-[#D41F2D]/20 bg-[#040E21]/90 backdrop-blur-xl" : "border-transparent bg-transparent"}`}
       >
+        {/* FIX: px-3 on very small phones (was px-4) */}
         <nav
           aria-label="Main"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+          className="mx-auto max-w-7xl px-3 min-[400px]:px-4 sm:px-6 lg:px-8"
         >
-          <div className="flex h-[72px] items-center justify-between gap-4 sm:h-[76px] lg:h-20 lg:grid lg:grid-cols-[1fr_auto_1fr]">
-            {/* LOGO (text wordmark) */}
+          {/* FIX: gap-2 on very small phones (was gap-4) */}
+          <div className="flex h-[72px] items-center justify-between gap-2 min-[400px]:gap-4 sm:h-[76px] lg:h-20 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+            {/* LOGO (text wordmark)
+                FIX: text-2xl below 400px. At text-3xl the whole header row
+                needed about 366px, which is wider than a 320-360px phone,
+                so the page became scrollable sideways. */}
             <Link
               href="/"
               aria-label="Boss Auto Exchange home"
-              className={`group flex w-fit items-center justify-self-start ${focusRing}`}
+              className={`group flex w-fit shrink-0 items-center justify-self-start ${focusRing}`}
             >
-              <Wordmark className="text-3xl sm:text-4xl lg:text-5xl" />
+              <Wordmark className="text-2xl min-[400px]:text-3xl sm:text-4xl lg:text-5xl" />
             </Link>
 
             {/* DESKTOP NAVIGATION */}
@@ -271,8 +281,9 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* RIGHT SIDE: INSTALL + LANGUAGE + BELL + CART + ACCOUNT + MOBILE MENU */}
-            <div className="ml-auto flex items-center gap-2">
+            {/* RIGHT SIDE: INSTALL + LANGUAGE + BELL + CART + ACCOUNT + MOBILE MENU
+                FIX: gap-1 on very small phones (was gap-2) */}
+            <div className="ml-auto flex items-center gap-1 min-[400px]:gap-2">
               {/* Install App */}
               {canInstall && (
                 <button
@@ -295,7 +306,7 @@ export default function Navbar() {
               <Link
                 href="/cart"
                 aria-label={`View cart${totalItems > 0 ? `, ${totalItems} item${totalItems === 1 ? "" : "s"}` : ""}`}
-                className={`relative flex h-11 w-11 items-center justify-center rounded-full border bg-[#040E21]/30 text-white backdrop-blur-md transition-all duration-300 hover:text-[#FF5C68] sm:h-12 sm:w-12 ${glowBlue} ${focusRing}`}
+                className={`relative flex ${roundBtnSize} items-center justify-center rounded-full border bg-[#040E21]/30 text-white backdrop-blur-md transition-all duration-300 hover:text-[#FF5C68] ${glowBlue} ${focusRing}`}
               >
                 <ShoppingCart size={20} strokeWidth={2} />
                 {totalItems > 0 && (
@@ -317,7 +328,7 @@ export default function Navbar() {
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
                 onClick={() => setIsMenuOpen((open) => !open)}
-                className={`flex h-11 w-11 items-center justify-center rounded-full border text-white backdrop-blur-md transition-all duration-300 sm:h-12 sm:w-12 lg:hidden ${isMenuOpen ? `bg-[#D41F2D]/10 ${glowRed}` : `bg-[#040E21]/30 ${glowBlue}`} ${focusRing}`}
+                className={`flex ${roundBtnSize} items-center justify-center rounded-full border text-white backdrop-blur-md transition-all duration-300 lg:hidden ${isMenuOpen ? `bg-[#D41F2D]/10 ${glowRed}` : `bg-[#040E21]/30 ${glowBlue}`} ${focusRing}`}
               >
                 {isMenuOpen ? (
                   <X size={21} strokeWidth={2} />
@@ -330,11 +341,13 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* MOBILE / TABLET MENU */}
+      {/* MOBILE / TABLET MENU
+          FIX: overflow-hidden so the closed drawer (parked off-screen to the
+          right) can never add width to the page. */}
       <div
         id="mobile-menu"
         aria-hidden={!isMenuOpen}
-        className={`fixed inset-0 z-40 lg:hidden transition-all duration-500 ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-0 z-40 overflow-hidden lg:hidden transition-all duration-500 ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}
       >
         {/* Backdrop */}
         <button
