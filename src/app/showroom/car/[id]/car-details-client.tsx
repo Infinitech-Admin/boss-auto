@@ -1,5 +1,6 @@
 // Path: app/showroom/car/[id]/car-details-client.tsx
-// This is your OLD page.tsx (renamed). Edits are marked with "SEO:" comments.
+// Fixes: page-level horizontal drag, gallery swipe bugs, mobile overflow.
+// Changes are marked with "FIX:" comments.
 
 "use client";
 
@@ -61,8 +62,10 @@ const thumbClass = (active: boolean) =>
       ? "border-[#FF4D5A]"
       : "border-transparent opacity-50 hover:opacity-100"
   } ${ring}`;
+// FIX: "relative" so thumb.offsetLeft is measured from the strip,
+// "overscroll-x-contain" so scrolling the strip never drags the page.
 const strip =
-  "mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3";
+  "relative mt-3 flex gap-2 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-3";
 
 /* -------------------------------------------------------------------------- */
 /*  PHOTO GALLERY (swipe, arrows, keyboard, thumbnails)                       */
@@ -71,7 +74,9 @@ const strip =
 function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
   const [index, setIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
   const startX = useRef<number | null>(null);
+  const stripRef = useRef<HTMLDivElement | null>(null);
   const thumbs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const last = slides.length - 1;
@@ -79,26 +84,33 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
   const next = () => setIndex((c) => (c >= last ? 0 : c + 1));
   const prev = () => setIndex((c) => (c <= 0 ? last : c - 1));
 
-  const endDrag = (x?: number) => {
-    if (startX.current === null) return;
-    const delta = x === undefined ? dragX : x - startX.current;
-    if (Math.abs(delta) >= 60) (delta < 0 ? next : prev)();
+  // FIX: one place that ends a drag. Pass null to cancel WITHOUT changing slide.
+  // (Before, pointercancel called endDrag(0), which computed a huge negative
+  // delta and jumped to the next slide whenever the user scrolled the page.)
+  const finishDrag = (x: number | null) => {
+    const start = startX.current;
     startX.current = null;
+    setDragging(false);
     setDragX(0);
+    if (x === null || start === null) return;
+    const delta = x - start;
+    if (Math.abs(delta) >= 60) (delta < 0 ? next : prev)();
   };
 
+  // FIX: center the active thumbnail by scrolling ONLY the thumbnail strip.
+  // scrollIntoView() also scrolled the whole page (sideways and down) on load.
   useEffect(() => {
-    thumbs.current[i]?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
+    const el = stripRef.current;
+    const thumb = thumbs.current[i];
+    if (!el || !thumb) return;
+    const left = thumb.offsetLeft - (el.clientWidth - thumb.clientWidth) / 2;
+    el.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
   }, [i]);
 
   const arrow = `absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#030B1C]/85 text-white transition-colors hover:bg-[#FF4D5A] ${ring}`;
 
   return (
-    <div className={`${panel} p-3 sm:p-5`}>
+    <div className={`${panel} min-w-0 p-3 sm:p-5`}>
       <div
         role="region"
         aria-roledescription="carousel"
@@ -118,30 +130,37 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
       >
         <div
           onPointerDown={(e) => {
+            if (e.pointerType === "mouse" && e.button !== 0) return;
             startX.current = e.clientX;
+            setDragging(true);
+            // FIX: keep receiving move/up events even if the pointer leaves
+            // the carousel, so a swipe can never get "stuck".
+            e.currentTarget.setPointerCapture(e.pointerId);
           }}
           onPointerMove={(e) => {
             if (startX.current !== null) setDragX(e.clientX - startX.current);
           }}
-          onPointerUp={(e) => endDrag(e.clientX)}
-          onPointerCancel={() => endDrag(0)}
+          onPointerUp={(e) => finishDrag(e.clientX)}
+          onPointerCancel={() => finishDrag(null)}
           className="touch-pan-y select-none"
         >
           <div
-            className="flex will-change-transform"
+            className="flex w-full will-change-transform"
             style={{
               transform: `translate3d(calc(${-i * 100}% + ${dragX}px), 0, 0)`,
-              transition:
-                startX.current !== null
-                  ? "none"
-                  : "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
+              transition: dragging
+                ? "none"
+                : "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           >
             {slides.map((s, n) => (
               <div
                 key={`${n}-${s.src}`}
                 aria-hidden={n !== i}
-                className="relative h-[280px] w-full shrink-0 sm:h-[420px] lg:h-[540px]"
+                // FIX: aspect ratio on mobile so the photo scales with the
+                // screen instead of a fixed 280px height; min-w-full keeps
+                // each slide exactly one viewport wide.
+                className="relative aspect-[4/3] w-full min-w-full shrink-0 sm:aspect-auto sm:h-[420px] lg:h-[540px]"
               >
                 <Image
                   src={s.src}
@@ -186,7 +205,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
       </div>
 
       {slides.length > 1 && (
-        <div className={strip}>
+        <div ref={stripRef} className={strip}>
           {slides.map((s, n) => (
             <button
               key={`${n}-${s.src}`}
@@ -196,7 +215,7 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
               type="button"
               onClick={() => setIndex(n)}
               aria-label={`Show photo ${n + 1}`}
-              aria-current={n === i}
+              aria-current={n === i ? "true" : undefined}
               className={thumbClass(n === i)}
             >
               <Image
@@ -232,7 +251,10 @@ function VideoSection({
   const isLong = active.length === "long";
 
   return (
-    <section aria-label={`${carName} videos`} className={`${panel} p-3 sm:p-5`}>
+    <section
+      aria-label={`${carName} videos`}
+      className={`${panel} min-w-0 p-3 sm:p-5`}
+    >
       <div className="mb-4 flex items-center justify-between gap-3 px-1">
         <h2 className="flex items-center gap-3 text-xl font-bold">
           <Video className="text-[#FF4D5A]" size={20} />
@@ -272,7 +294,7 @@ function VideoSection({
               type="button"
               onClick={() => setIndex(n)}
               aria-label={`Play video ${n + 1}`}
-              aria-current={n === i}
+              aria-current={n === i ? "true" : undefined}
               className={thumbClass(n === i)}
             >
               {v.poster ? (
@@ -322,7 +344,7 @@ function Message({
   return (
     <>
       <Navbar />
-      <main className="flex min-h-screen items-center justify-center bg-[#030B1C] px-4 text-white">
+      <main className="flex min-h-screen items-center justify-center overflow-x-clip bg-[#030B1C] px-4 text-white">
         <div className={`${panel} w-full max-w-lg px-6 py-12 text-center`}>
           <h1 className="text-3xl font-black leading-tight">{title}</h1>
           <p className="mt-4 text-sm leading-7 text-white/70">{text}</p>
@@ -334,7 +356,6 @@ function Message({
   );
 }
 
-// SEO: now receives the car from the server page (page.tsx)
 export default function CarDetailsPage({
   initialCar,
 }: {
@@ -342,7 +363,6 @@ export default function CarDetailsPage({
 }) {
   const id = useParams<{ id: string }>()?.id;
 
-  // SEO: start with the server data so the HTML already contains the car
   const [car, setCar] = useState<Vehicle | null>(initialCar);
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -353,7 +373,7 @@ export default function CarDetailsPage({
   const { addToCart } = useCart();
 
   useEffect(() => {
-    // SEO: first load uses server data, only "Try again" refetches
+    // first load uses server data, only "Try again" refetches
     if (reloadKey === 0 && initialCar) return;
 
     if (!id) {
@@ -512,14 +532,16 @@ export default function CarDetailsPage({
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#030B1C] pb-24 text-white lg:pb-0">
+      {/* FIX: overflow-x-clip stops anything inside the page from creating a
+          sideways scroll. (clip, not hidden, so lg:sticky keeps working.) */}
+      <main className="min-h-screen overflow-x-clip bg-[#030B1C] pb-24 text-white lg:pb-0">
         {/* HEADER */}
         <section className="relative overflow-hidden border-b border-[#FF4D5A]/15 bg-[#030B1C]">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_90%_at_65%_0%,rgba(255,77,90,0.16),transparent_70%)]"
           />
-          <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
+          <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8 lg:px-8">
             <Link
               href="/showroom"
               className={`inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:text-[#FF4D5A] ${ring}`}
@@ -528,8 +550,8 @@ export default function CarDetailsPage({
               Back to showroom
             </Link>
 
-            <div className="mt-6">
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="mt-5 min-w-0 sm:mt-6">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 <p className="text-sm font-semibold text-[#FF4D5A]">
                   {car.year} | {car.type}
                 </p>
@@ -544,7 +566,8 @@ export default function CarDetailsPage({
                   </span>
                 )}
               </div>
-              <h1 className="mt-2 max-w-4xl text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+              {/* FIX: smaller on phones + break-words so long names wrap */}
+              <h1 className="mt-2 max-w-4xl break-words text-3xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
                 {car.name}
               </h1>
             </div>
@@ -552,15 +575,17 @@ export default function CarDetailsPage({
         </section>
 
         <div className="bg-[#061532]">
-          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-            <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start lg:gap-8">
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+            {/* FIX: grid-cols-1 + min-w-0 children so a wide child can't
+                stretch the column past the screen. */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start lg:gap-8">
               {/* LEFT: photos, videos, quick facts, description */}
               <div className="min-w-0 space-y-6 lg:space-y-8">
                 {slides.length > 0 ? (
                   <CarGallery key={car.id} carName={car.name} slides={slides} />
                 ) : (
                   <div
-                    className={`${panel} flex h-[280px] items-center justify-center text-sm text-white/50 sm:h-[420px]`}
+                    className={`${panel} flex h-[240px] items-center justify-center text-sm text-white/50 sm:h-[420px]`}
                   >
                     No photos available yet
                   </div>
@@ -591,12 +616,14 @@ export default function CarDetailsPage({
                 </dl>
 
                 {car.description && (
-                  <section className={`${panel} p-5 sm:p-8`}>
-                    <h2 className="flex items-center gap-3 text-2xl font-bold">
+                  <section className={`${panel} min-w-0 p-5 sm:p-8`}>
+                    <h2 className="flex items-center gap-3 text-xl font-bold sm:text-2xl">
                       <Sparkles className="text-[#FF4D5A]" size={22} />
                       About this car
                     </h2>
-                    <p className="mt-5 max-w-3xl whitespace-pre-line text-sm leading-7 text-white/80 sm:text-base">
+                    {/* FIX: break-words so long links/numbers in the CMS
+                        description can't push the page wider than the screen */}
+                    <p className="mt-5 max-w-3xl whitespace-pre-line break-words text-sm leading-7 text-white/80 sm:text-base">
                       {car.description}
                     </p>
                   </section>
@@ -605,13 +632,13 @@ export default function CarDetailsPage({
 
               {/* RIGHT: price, specs, actions, financing */}
               <div className="min-w-0 space-y-6 lg:sticky lg:top-24 lg:space-y-8">
-                <aside className={`${panel} p-5 sm:p-6`}>
+                <aside className={`${panel} min-w-0 p-5 sm:p-6`}>
                   <p className="text-sm text-white/55">
                     {priced ? "Starting price" : "Pricing"}
                   </p>
                   <p
-                    className={`mt-1 font-black text-[#FF4D5A] ${
-                      priced ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl"
+                    className={`mt-1 break-words font-black text-[#FF4D5A] ${
+                      priced ? "text-3xl sm:text-5xl" : "text-2xl sm:text-4xl"
                     }`}
                   >
                     {priced ? car.price : PRICE_FALLBACK}
@@ -624,7 +651,9 @@ export default function CarDetailsPage({
                         className="flex items-start justify-between gap-4"
                       >
                         <dt className="shrink-0 text-white/55">{s.label}</dt>
-                        <dd className="text-right font-semibold">{s.value}</dd>
+                        <dd className="min-w-0 break-words text-right font-semibold">
+                          {s.value}
+                        </dd>
                       </div>
                     ))}
                   </dl>
@@ -667,12 +696,14 @@ export default function CarDetailsPage({
                 </aside>
 
                 {priced && (
-                  <FinancingCalculator
-                    key={`financing-${car.id}`}
-                    carName={car.name}
-                    price={car.price}
-                    year={car.year}
-                  />
+                  <div className="min-w-0">
+                    <FinancingCalculator
+                      key={`financing-${car.id}`}
+                      carName={car.name}
+                      price={car.price}
+                      year={car.year}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -697,14 +728,14 @@ export default function CarDetailsPage({
             type="button"
             disabled={cartBlocked}
             onClick={handleAddToCart}
-            className={`${cartBtn} !w-auto flex-1 !py-3`}
+            className={`${cartBtn} !w-auto min-w-0 flex-1 !py-3`}
           >
             {cartLabel}
           </button>
         ) : (
           <Link
             href="/contact"
-            className={`flex flex-1 items-center justify-center rounded-xl bg-[#FF4D5A] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`}
+            className={`flex min-w-0 flex-1 items-center justify-center rounded-xl bg-[#FF4D5A] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`}
           >
             Inquire
           </Link>

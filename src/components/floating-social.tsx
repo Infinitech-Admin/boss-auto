@@ -129,14 +129,18 @@ export default function FloatingSocial({
   ];
 
   return (
+    // FIX: on phones it sits at the bottom-right, above the sticky price bar
+    // (and the iPhone home indicator). From sm: up it is vertically centered
+    // like before.
     <div
       aria-label="Contact us"
-      className="fixed right-3 top-1/2 z-40 -translate-y-1/2"
+      className="fixed bottom-[calc(7.5rem+env(safe-area-inset-bottom))] right-3 z-40 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2"
     >
       {/* Connecting line */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#D41F2D]/40 to-transparent" />
 
-      <div className="flex flex-col items-center gap-3 rounded-full border border-white/10 bg-[#040E21]/40 p-2 backdrop-blur-md">
+      {/* FIX: tighter padding and gaps on phones so it covers less */}
+      <div className="flex flex-col items-center gap-2 rounded-full border border-white/10 bg-[#040E21]/40 p-1.5 backdrop-blur-md sm:gap-3 sm:p-2">
         {links.map((link) => {
           const Icon = link.icon;
 
@@ -149,7 +153,8 @@ export default function FloatingSocial({
                 link.href.startsWith("http") ? "noopener noreferrer" : undefined
               }
               aria-label={link.name}
-              className={`group relative flex h-10 w-10 items-center justify-center rounded-full text-white transition-transform duration-300 hover:scale-110 sm:h-11 sm:w-11 ${link.bg} ${link.glow} ${focusRing}`}
+              // FIX: h-9 w-9 on phones (was h-10 w-10)
+              className={`group relative flex h-9 w-9 items-center justify-center rounded-full text-white transition-transform duration-300 hover:scale-110 sm:h-11 sm:w-11 ${link.bg} ${link.glow} ${focusRing}`}
             >
               <Icon size={18} strokeWidth={2.25} className="sm:h-5 sm:w-5" />
 
