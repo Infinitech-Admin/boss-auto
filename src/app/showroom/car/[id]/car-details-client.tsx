@@ -1,5 +1,6 @@
 // Path: app/showroom/car/[id]/car-details-client.tsx
-// Fixes: page-level horizontal drag, gallery swipe bugs, mobile overflow.
+// Fixes: page-level horizontal drag, gallery swipe bugs, mobile overflow,
+// and (new) oversized mobile arrows + sticky bar overlapping the chat bubble.
 // Changes are marked with "FIX:" comments.
 
 "use client";
@@ -85,8 +86,6 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
   const prev = () => setIndex((c) => (c <= 0 ? last : c - 1));
 
   // FIX: one place that ends a drag. Pass null to cancel WITHOUT changing slide.
-  // (Before, pointercancel called endDrag(0), which computed a huge negative
-  // delta and jumped to the next slide whenever the user scrolled the page.)
   const finishDrag = (x: number | null) => {
     const start = startX.current;
     startX.current = null;
@@ -98,7 +97,6 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
   };
 
   // FIX: center the active thumbnail by scrolling ONLY the thumbnail strip.
-  // scrollIntoView() also scrolled the whole page (sideways and down) on load.
   useEffect(() => {
     const el = stripRef.current;
     const thumb = thumbs.current[i];
@@ -107,7 +105,10 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
     el.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
   }, [i]);
 
-  const arrow = `absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#030B1C]/85 text-white transition-colors hover:bg-[#FF4D5A] ${ring}`;
+  // FIX (mobile): smaller, see-through arrows on phones so they don't cover
+  // the car or crowd the floating social buttons. Full size from sm: up.
+  const arrow = `absolute top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#030B1C]/60 text-white transition-colors hover:bg-[#FF4D5A] sm:h-11 sm:w-11 sm:bg-[#030B1C]/85 ${ring}`;
+  const arrowIcon = "h-4 w-4 sm:h-[18px] sm:w-[18px]";
 
   return (
     <div className={`${panel} min-w-0 p-3 sm:p-5`}>
@@ -133,8 +134,6 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
             if (e.pointerType === "mouse" && e.button !== 0) return;
             startX.current = e.clientX;
             setDragging(true);
-            // FIX: keep receiving move/up events even if the pointer leaves
-            // the carousel, so a swipe can never get "stuck".
             e.currentTarget.setPointerCapture(e.pointerId);
           }}
           onPointerMove={(e) => {
@@ -157,9 +156,6 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
               <div
                 key={`${n}-${s.src}`}
                 aria-hidden={n !== i}
-                // FIX: aspect ratio on mobile so the photo scales with the
-                // screen instead of a fixed 280px height; min-w-full keeps
-                // each slide exactly one viewport wide.
                 className="relative aspect-[4/3] w-full min-w-full shrink-0 sm:aspect-auto sm:h-[420px] lg:h-[540px]"
               >
                 <Image
@@ -185,17 +181,17 @@ function CarGallery({ carName, slides }: { carName: string; slides: Slide[] }) {
               type="button"
               onClick={prev}
               aria-label="Previous photo"
-              className={`${arrow} left-2 sm:left-4`}
+              className={`${arrow} left-1.5 sm:left-4`}
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft className={arrowIcon} />
             </button>
             <button
               type="button"
               onClick={next}
               aria-label="Next photo"
-              className={`${arrow} right-2 sm:right-4`}
+              className={`${arrow} right-1.5 sm:right-4`}
             >
-              <ArrowRight size={18} />
+              <ArrowRight className={arrowIcon} />
             </button>
           </>
         )}
@@ -532,7 +528,7 @@ export default function CarDetailsPage({
   return (
     <>
       <Navbar />
-      {/* FIX: overflow-x-clip stops anything inside the page from creating a
+      {/* overflow-x-clip stops anything inside the page from creating a
           sideways scroll. (clip, not hidden, so lg:sticky keeps working.) */}
       <main className="min-h-screen overflow-x-clip bg-[#030B1C] pb-24 text-white lg:pb-0">
         {/* HEADER */}
@@ -566,7 +562,6 @@ export default function CarDetailsPage({
                   </span>
                 )}
               </div>
-              {/* FIX: smaller on phones + break-words so long names wrap */}
               <h1 className="mt-2 max-w-4xl break-words text-3xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
                 {car.name}
               </h1>
@@ -576,8 +571,6 @@ export default function CarDetailsPage({
 
         <div className="bg-[#061532]">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
-            {/* FIX: grid-cols-1 + min-w-0 children so a wide child can't
-                stretch the column past the screen. */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start lg:gap-8">
               {/* LEFT: photos, videos, quick facts, description */}
               <div className="min-w-0 space-y-6 lg:space-y-8">
@@ -621,8 +614,6 @@ export default function CarDetailsPage({
                       <Sparkles className="text-[#FF4D5A]" size={22} />
                       About this car
                     </h2>
-                    {/* FIX: break-words so long links/numbers in the CMS
-                        description can't push the page wider than the screen */}
                     <p className="mt-5 max-w-3xl whitespace-pre-line break-words text-sm leading-7 text-white/80 sm:text-base">
                       {car.description}
                     </p>
@@ -711,8 +702,10 @@ export default function CarDetailsPage({
         </div>
       </main>
 
-      {/* Mobile sticky bar: price and main action always in reach */}
-      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-[#FF4D5A]/40 bg-[#030B1C] px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
+      {/* Mobile sticky bar: price and main action always in reach.
+          FIX: pr-20 leaves room on the right so the floating chat bubble
+          no longer sits on top of the button. */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-[#FF4D5A]/40 bg-[#030B1C] py-3 pl-4 pr-20 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
         <div className="min-w-0">
           <p className="text-xs text-white/55">Price</p>
           <p
