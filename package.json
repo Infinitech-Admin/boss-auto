@@ -12,6 +12,7 @@
     "@google-analytics/data": "^7.2.1",
     "@marsidev/react-turnstile": "^1.6.2",
     "@next/third-parties": "^16.4.0",
+    "@vercel/analytics": "^2.0.1",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.47.0",
     "next": "16.3.5",

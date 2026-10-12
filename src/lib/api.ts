@@ -482,6 +482,7 @@ export interface Order {
   address: string;
   notes: string | null;
   payment_method: string;
+  payment_proof_url?: string | null;
   payment_reference: string | null;
   payment_proof: string | null; // path relative to the API origin
   subtotal: number;
