@@ -1,5 +1,6 @@
+// components/layout/footer.tsx
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Business details
@@ -17,6 +18,9 @@ const ADDRESS_LINE_2 = "Muntinlupa City, Philippines";
 const PHONE_DISPLAY = ""; // e.g. "0917 123 4567"
 const PHONE_TEL = ""; // e.g. "+639171234567"
 const EMAIL = ""; // e.g. "hello@yourdomain.com"
+const HOURS_DAYS = "Monday to Saturday";
+const HOURS_TIME = "9:00 AM to 6:00 PM";
+const YEAR_ESTABLISHED = 2019;
 
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
   `${BUSINESS_NAME}, ${ADDRESS_LINE_1}, ${ADDRESS_LINE_2}`,
@@ -167,6 +171,10 @@ export default function Footer() {
                 better way to find your next drive.
               </p>
 
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C68]">
+                Established {YEAR_ESTABLISHED}
+              </p>
+
               {/* Socials */}
               <div className="mt-6 flex items-center gap-3">
                 <a
@@ -306,6 +314,15 @@ export default function Footer() {
                     {ADDRESS_LINE_2}
                   </address>
                 </a>
+
+                <div className="flex gap-3 text-zinc-400">
+                  <Clock className="mt-0.5 size-4 shrink-0 text-[#FF5C68]" />
+                  <p>
+                    {HOURS_DAYS}
+                    <br />
+                    {HOURS_TIME}
+                  </p>
+                </div>
 
                 {PHONE_DISPLAY && PHONE_TEL ? (
                   <a

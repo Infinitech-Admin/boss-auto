@@ -1,4 +1,4 @@
-// Path: app/about/page.tsx
+// app/about/page.tsx
 "use client";
 
 import Link from "next/link";
@@ -9,6 +9,8 @@ import {
   BadgeCheck,
   CalendarCheck,
   CarFront,
+  Clock,
+  History,
   Images,
   MapPin,
   Phone,
@@ -31,6 +33,8 @@ const BUSINESS = {
   facebook: "https://www.facebook.com/bossautoexchange",
   instagram: "https://www.instagram.com/boss.autoexchange",
   tiktok: "https://www.tiktok.com/@boss.autoexchange",
+  hours: "Monday to Saturday, 9:00 AM to 6:00 PM",
+  yearEstablished: 2019,
 };
 
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -38,6 +42,7 @@ const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURICom
 )}`;
 
 const facts = [
+  { icon: History, text: `Established ${BUSINESS.yearEstablished}` },
   { icon: MapPin, text: "Poblacion, Muntinlupa City" },
   { icon: Repeat, text: "Buy, sell, and trade in one place" },
   { icon: Images, text: "Photos and videos on every listing" },
@@ -184,8 +189,9 @@ export default function About() {
 
                 <p className="mt-6 max-w-xl text-base leading-7 text-zinc-300 sm:text-lg">
                   Boss Auto Exchange is a car dealership in Poblacion,
-                  Muntinlupa City. We buy, sell, and trade cars, with clear
-                  details and a straightforward path to ownership.
+                  Muntinlupa City, serving drivers since{" "}
+                  {BUSINESS.yearEstablished}. We buy, sell, and trade cars, with
+                  clear details and a straightforward path to ownership.
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -221,6 +227,14 @@ export default function About() {
                     <p className="text-sm leading-7 text-zinc-300">
                       {BUSINESS.address}
                     </p>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Clock size={18} className="mt-1 shrink-0 text-[#FF5C68]" />
+                    <div className="text-sm leading-7 text-zinc-300">
+                      <p className="font-semibold text-white">Open hours</p>
+                      <p>{BUSINESS.hours}</p>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -264,7 +278,7 @@ export default function About() {
 
           {/* Facts bar */}
           <div className="relative border-t border-white/10 bg-[#040E21]/80">
-            <ul className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-4 px-4 py-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+            <ul className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-4 px-4 py-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-5 lg:px-8">
               {facts.map(({ icon: Icon, text }) => (
                 <li
                   key={text}
