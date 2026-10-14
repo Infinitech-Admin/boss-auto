@@ -20,7 +20,7 @@ import Footer from "../../components/layout/footer";
 // Business details
 // Address is from public dealer listings (Zigwheels / Carmudi). Please
 // double-check it before going live.
-// TODO: fill in PHONE, EMAIL and HOURS. Anything left empty is hidden
+// TODO: fill in EMAIL. Anything left empty is hidden
 // automatically instead of showing placeholder text.
 // ---------------------------------------------------------------------------
 const BUSINESS_NAME = "Boss Auto Exchange";
@@ -28,10 +28,10 @@ const FACEBOOK_URL = "https://www.facebook.com/bossautoexchange";
 const ADDRESS_LINE_1 = "L7, B132, Arellano cor. Diokno St.";
 const ADDRESS_LINE_2 = "Muntinlupa City, Philippines";
 const PHONE_DISPLAY = "0906 021 8568"; // e.g. "0917 123 4567"
-const PHONE_TEL = ""; // e.g. "+639171234567"
+const PHONE_TEL = "+639060218568"; // e.g. "+639171234567"
 const EMAIL = ""; // e.g. "hello@yourdomain.com"
 const HOURS: { day: string; time: string }[] = [
-  // { day: "Monday - Saturday", time: "9:00 AM - 6:00 PM" },
+  { day: "Monday - Saturday", time: "9:00 AM - 6:00 PM" },
 ];
 
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
