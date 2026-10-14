@@ -3,6 +3,7 @@
 "use client";
 
 import {
+  useEffect,
   useMemo,
   useState,
   type ChangeEvent,
@@ -13,6 +14,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Check, Eye, EyeOff, Loader2, X } from "lucide-react";
 import { register, type ApiError } from "@/lib/api";
+import { markHasAccount, safeRedirect } from "@/lib/auth-hint";
 import {
   AuthShell,
   authButtonClass,
@@ -86,6 +88,18 @@ export default function RegisterPage() {
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Where to go once the account is ready (e.g. back to /sell-trade).
+  const [redirect, setRedirect] = useState<string | null>(null);
+  useEffect(() => {
+    setRedirect(
+      safeRedirect(new URLSearchParams(window.location.search).get("redirect")),
+    );
+  }, []);
+
+  const loginHref = redirect
+    ? `/login?redirect=${encodeURIComponent(redirect)}`
+    : "/login";
+
   const rules = useMemo(() => checkRules(form.password), [form.password]);
   const passwordsMatch =
     form.password_confirmation.length > 0 &&
@@ -142,9 +156,16 @@ export default function RegisterPage() {
 
     try {
       const data = await register(form);
-      router.push(
-        `/verify-email?email=${encodeURIComponent(data.verification_email)}`,
-      );
+
+      // They have an account now: next time, send them straight to login.
+      markHasAccount();
+
+      // Carry the return path through email verification so they can be
+      // sent back to where they started after they sign in.
+      const params = new URLSearchParams({ email: data.verification_email });
+      if (redirect) params.set("redirect", redirect);
+
+      router.push(`/verify-email?${params.toString()}`);
     } catch (err) {
       const apiErr = err as ApiError;
       if (apiErr.errors) {
@@ -345,7 +366,7 @@ export default function RegisterPage() {
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           Already have an account?{" "}
-          <Link href="/login" className={authLinkClass}>
+          <Link href={loginHref} className={authLinkClass}>
             Sign in
           </Link>
         </p>

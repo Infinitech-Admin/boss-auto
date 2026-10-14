@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Car, Loader2, MailCheck } from "lucide-react";
 import { resendVerification, verifyEmail, type ApiError } from "@/lib/api";
+import { markHasAccount, safeRedirect } from "@/lib/auth-hint";
 
 const RESEND_COOLDOWN_SECONDS = 30;
 
@@ -22,6 +23,9 @@ function VerifyEmailForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
+
+  // Where to go after they sign in (e.g. back to /sell-trade).
+  const redirect = safeRedirect(searchParams.get("redirect"));
 
   const [digits, setDigits] = useState<string[]>(Array(6).fill(""));
   const [error, setError] = useState("");
@@ -84,7 +88,16 @@ function VerifyEmailForm() {
     setLoading(true);
     try {
       await verifyEmail({ email, code });
-      router.push("/login?verified=1");
+
+      // Make sure this browser is remembered as having an account.
+      markHasAccount();
+
+      // Send them to login, and keep the return path so they land back
+      // where they started once they sign in.
+      const params = new URLSearchParams({ verified: "1" });
+      if (redirect) params.set("redirect", redirect);
+
+      router.push(`/login?${params.toString()}`);
     } catch (err) {
       const apiErr = err as ApiError;
       setError(apiErr.message || "Invalid or expired verification code.");
@@ -131,7 +144,7 @@ function VerifyEmailForm() {
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#D41F2D]/15 text-[#FF5C68]">
               <Car size={20} />
             </span>
-            Auto<span className="text-[#FF5C68]">Trade</span>
+            Boss <span className="text-[#FF5C68]">Auto Exchange</span>
           </Link>
         </div>
 

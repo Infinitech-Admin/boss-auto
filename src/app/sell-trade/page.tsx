@@ -1,21 +1,39 @@
+// app/sell-trade/page.tsx
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
   CarFront,
-  Users,
+  Film,
   Gauge,
+  ImagePlus,
   ShieldCheck,
   Sparkles,
   UserRound,
+  Users,
+  X,
 } from "lucide-react";
 
 import Navbar from "../../components/layout/navbar";
 import Footer from "../../components/layout/footer";
 import CTA from "../../components/home/cta";
+import {
+  AuthError,
+  apiFetch,
+  uploadFileChunked,
+  type UploadedMedia,
+} from "@/lib/chunk-upload";
+import {
+  clearStoredFiles,
+  deleteStoredFile,
+  loadStoredFiles,
+  storeFile,
+} from "@/lib/draft-files";
+import { hasAccount } from "@/lib/auth-hint";
 
 const steps = [
   {
@@ -112,6 +130,19 @@ const inputClass =
 const selectClass =
   "h-13 w-full appearance-none rounded-2xl border border-white/10 bg-[#071A38] px-4 text-sm text-white outline-none transition-all duration-300 hover:border-white/20 focus:border-[#D41F2D]/70 focus:bg-[#071A38] focus:ring-4 focus:ring-[#D41F2D]/10";
 
+// Upload limits. Keep in sync with UploadController::FOLDERS.
+const MAX_FILES = 12;
+const MAX_IMAGE = 15 * 1024 * 1024;
+const MAX_VIDEO = 500 * 1024 * 1024;
+const ACCEPTED = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+];
+
 type FormState = {
   brand: string;
   model: string;
@@ -126,6 +157,18 @@ type FormState = {
 
 type SubmitStatus = "idle" | "submitting" | "error" | "success";
 
+type Upload = {
+  id: string;
+  name: string;
+  kind: "image" | "video";
+  progress: number;
+  error?: string;
+  media?: UploadedMedia; // set once the file is on the server
+  file?: File; // still in the browser (waiting for sign in / upload)
+  previewUrl?: string;
+  queued?: boolean; // waiting for the visitor to be signed in
+};
+
 const initialForm: FormState = {
   brand: "BMW",
   model: "5 Series",
@@ -138,10 +181,115 @@ const initialForm: FormState = {
   email: "",
 };
 
+// ---- Draft: keeps what a guest typed while they go sign in / register -----
+const DRAFT_KEY = "sell-trade-draft";
+const DRAFT_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+const RETURN_TO = encodeURIComponent("/sell-trade");
+
+function saveDraft(form: FormState) {
+  try {
+    localStorage.setItem(
+      DRAFT_KEY,
+      JSON.stringify({ form, savedAt: Date.now() }),
+    );
+  } catch {
+    /* storage unavailable: nothing to do */
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+function loadDraft(): FormState | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    if (!parsed?.form || Date.now() - Number(parsed.savedAt) > DRAFT_TTL_MS) {
+      localStorage.removeItem(DRAFT_KEY);
+      return null;
+    }
+
+    // Only accept known string fields.
+    const next: FormState = { ...initialForm };
+    for (const key of Object.keys(initialForm) as (keyof FormState)[]) {
+      if (typeof parsed.form[key] === "string") next[key] = parsed.form[key];
+    }
+    return next;
+  } catch {
+    return null;
+  }
+}
+
 export default function SellTradePage() {
+  const router = useRouter();
   const [form, setForm] = useState<FormState>(initialForm);
+  const [draftReady, setDraftReady] = useState(false);
+  const [restored, setRestored] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // null = still checking, true = logged in, false = guest
+  const [authed, setAuthed] = useState<boolean | null>(null);
+  const [uploads, setUploads] = useState<Upload[]>([]);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  // Ids of files whose upload has already been kicked off (guards against
+  // React strict-mode double effects).
+  const startedRef = useRef<Set<string>>(new Set());
+
+  // Files waiting for a login are not "uploading"; once logged in, they are.
+  const uploading = uploads.some(
+    (u) => !u.media && !u.error && (!u.queued || authed === true),
+  );
+
+  const checkAuth = async () => {
+    try {
+      const r = await apiFetch("/me");
+      setAuthed(r.ok);
+      return r.ok;
+    } catch {
+      setAuthed(false);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    void checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Restore what the visitor had typed before they were sent to sign in.
+  useEffect(() => {
+    const draft = loadDraft();
+    if (draft && JSON.stringify(draft) !== JSON.stringify(initialForm)) {
+      setForm(draft);
+      setRestored(true);
+    }
+    setDraftReady(true);
+  }, []);
+
+  // Keep the draft up to date while the visitor types.
+  useEffect(() => {
+    if (!draftReady) return;
+    if (JSON.stringify(form) === JSON.stringify(initialForm)) clearDraft();
+    else saveDraft(form);
+  }, [form, draftReady]);
+
+  // New visitors go to register; returning ones (this browser has signed in
+  // or registered before) go straight to login.
+  const redirectToAuth = () => {
+    saveDraft(form);
+    setStatus("idle");
+    const page = hasAccount() ? "/login" : "/register";
+    router.push(`${page}?redirect=${RETURN_TO}`);
+  };
 
   const estimate = useMemo(() => {
     const currentYear = new Date().getFullYear();
@@ -170,9 +318,172 @@ export default function SellTradePage() {
     if (status !== "submitting") setStatus("idle");
   };
 
+  const patchUpload = (id: string, patch: Partial<Upload>) =>
+    setUploads((cur) => cur.map((u) => (u.id === id ? { ...u, ...patch } : u)));
+
+  const removeUpload = (id: string) => {
+    setUploads((cur) => {
+      const target = cur.find((u) => u.id === id);
+      if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
+      if (target?.media) URL.revokeObjectURL(target.media.previewUrl);
+      return cur.filter((u) => u.id !== id);
+    });
+    void deleteStoredFile(id);
+  };
+
+  const startUpload = (id: string, file: File) => {
+    patchUpload(id, { queued: false, progress: 0, error: undefined });
+
+    uploadFileChunked(file, (p) => patchUpload(id, { progress: p }))
+      .then((media) => {
+        patchUpload(id, { media, progress: 100, file: undefined });
+        void deleteStoredFile(id);
+      })
+      .catch((e: unknown) => {
+        if (e instanceof AuthError) {
+          // Session ended mid-upload: keep the file and retry after sign in.
+          setAuthed(false);
+          startedRef.current.delete(id);
+          void storeFile(id, file);
+          patchUpload(id, { queued: true, progress: 0 });
+          return;
+        }
+
+        patchUpload(id, {
+          error: e instanceof Error ? e.message : "Upload failed.",
+        });
+      });
+  };
+
+  // Bring back the files the visitor picked before they were sent to sign in.
+  useEffect(() => {
+    let cancelled = false;
+
+    loadStoredFiles().then((items) => {
+      if (cancelled || items.length === 0) return;
+
+      setUploads((cur) => {
+        const known = new Set(cur.map((u) => u.id));
+        const room = Math.max(0, MAX_FILES - cur.length);
+        const added: Upload[] = [];
+
+        for (const { id, file } of items) {
+          if (known.has(id) || added.length >= room) continue;
+
+          const isVideo = file.type.startsWith("video/");
+          added.push({
+            id,
+            name: file.name,
+            kind: isVideo ? "video" : "image",
+            progress: 0,
+            file,
+            queued: true,
+            previewUrl: isVideo ? undefined : URL.createObjectURL(file),
+          });
+        }
+
+        return added.length ? [...cur, ...added] : cur;
+      });
+
+      setRestored(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // As soon as the visitor is signed in, upload everything that was waiting.
+  useEffect(() => {
+    if (authed !== true) return;
+
+    for (const u of uploads) {
+      if (u.queued && u.file && !startedRef.current.has(u.id)) {
+        startedRef.current.add(u.id);
+        startUpload(u.id, u.file);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed, uploads]);
+
+  const handleFiles = (list: FileList | null) => {
+    if (!list) return;
+
+    let count = uploads.length;
+
+    for (const file of Array.from(list)) {
+      if (count >= MAX_FILES) break;
+      count++;
+
+      const id = crypto.randomUUID();
+      const isVideo = file.type.startsWith("video/");
+      const kind: Upload["kind"] = isVideo ? "video" : "image";
+      const tooBig = file.size > (isVideo ? MAX_VIDEO : MAX_IMAGE);
+
+      if (!ACCEPTED.includes(file.type) || tooBig) {
+        setUploads((c) => [
+          ...c,
+          {
+            id,
+            name: file.name,
+            kind,
+            progress: 0,
+            error: tooBig ? "File is too large." : "Unsupported file type.",
+          },
+        ]);
+        continue;
+      }
+
+      const previewUrl = isVideo ? undefined : URL.createObjectURL(file);
+
+      // Everything starts "queued". The effect above uploads it as soon as the
+      // visitor is signed in (immediately, if they already are).
+      setUploads((c) => [
+        ...c,
+        {
+          id,
+          name: file.name,
+          kind,
+          progress: 0,
+          file,
+          previewUrl,
+          queued: true,
+        },
+      ]);
+
+      // Guests: keep the file in the browser so it survives the trip to the
+      // sign in / register page.
+      if (authed !== true) {
+        void storeFile(id, file).then((ok) => {
+          if (ok) return;
+          setUploads((cur) =>
+            cur.map((u) =>
+              u.id === id && u.queued
+                ? {
+                    ...u,
+                    queued: false,
+                    error:
+                      "Your browser couldn't keep this file while you sign in. Sign in first, then add it again.",
+                  }
+                : u,
+            ),
+          );
+        });
+      }
+    }
+
+    if (fileInput.current) fileInput.current.value = "";
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (status === "submitting") return;
+
+    if (uploading) {
+      setErrorMessage("Please wait for your uploads to finish.");
+      setStatus("error");
+      return;
+    }
 
     if (
       !form.brand.trim() ||
@@ -192,11 +503,19 @@ export default function SellTradePage() {
       return;
     }
 
+    // Guests can fill in the whole form, but must have an account before
+    // submitting. Their answers are in the draft and come back afterwards.
+    const isAuthed = authed ?? (await checkAuth());
+    if (!isAuthed) {
+      redirectToAuth();
+      return;
+    }
+
     setStatus("submitting");
     setErrorMessage("");
 
     try {
-      const res = await fetch("/api/sell-trade", {
+      const res = await apiFetch("/sell-trade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -210,10 +529,20 @@ export default function SellTradePage() {
           type: form.type,
           condition: form.condition,
           estimate,
+          media: uploads
+            .filter((u) => u.media)
+            .map((u) => ({ type: u.media!.type, path: u.media!.path })),
         }),
       });
 
       const data = await res.json().catch(() => ({}));
+
+      if (res.status === 401) {
+        // Session expired: keep the draft and send them back to sign in.
+        setAuthed(false);
+        redirectToAuth();
+        return;
+      }
 
       if (!res.ok) {
         const firstError = data?.errors
@@ -228,13 +557,24 @@ export default function SellTradePage() {
         return;
       }
 
+      uploads.forEach((u) => {
+        if (u.media) URL.revokeObjectURL(u.media.previewUrl);
+        if (u.previewUrl) URL.revokeObjectURL(u.previewUrl);
+      });
+      void clearStoredFiles();
       setStatus("success");
-      setForm(initialForm);
+      setForm(initialForm); // the draft effect clears the saved draft
+      setRestored(false);
+      setUploads([]);
     } catch {
       setErrorMessage("Unable to reach the server. Please try again.");
       setStatus("error");
     }
   };
+
+  // Always clickable for guests (they get sent to sign in / register); only
+  // blocked while submitting or while files are still uploading.
+  const submitDisabled = status === "submitting" || uploading;
 
   return (
     <>
@@ -445,6 +785,88 @@ export default function SellTradePage() {
                   </label>
                 </div>
 
+                {/* Photos & videos */}
+                <div className="mt-7 border-t border-white/10 pt-6">
+                  <p className={labelClass}>Photos &amp; videos (optional)</p>
+
+                  <button
+                    type="button"
+                    onClick={() => fileInput.current?.click()}
+                    disabled={uploads.length >= MAX_FILES}
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 p-6 text-sm text-zinc-300 transition hover:border-[#D41F2D]/50 disabled:opacity-50"
+                  >
+                    <ImagePlus size={18} />
+                    Add photos or videos (max {MAX_FILES})
+                  </button>
+                  <input
+                    ref={fileInput}
+                    type="file"
+                    multiple
+                    accept={ACCEPTED.join(",")}
+                    className="hidden"
+                    onChange={(e) => handleFiles(e.target.files)}
+                  />
+
+                  {authed === false && (
+                    <p className="mt-2 text-[11px] leading-5 text-zinc-500">
+                      You can add files now. They&apos;ll upload automatically
+                      after you sign in.
+                    </p>
+                  )}
+
+                  {uploads.length > 0 && (
+                    <ul className="mt-4 space-y-2">
+                      {uploads.map((u) => (
+                        <li
+                          key={u.id}
+                          className="flex items-center gap-3 rounded-xl border border-white/10 p-3 text-xs"
+                        >
+                          {u.kind === "image" &&
+                          (u.media?.previewUrl ?? u.previewUrl) ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={u.media?.previewUrl ?? u.previewUrl}
+                              alt=""
+                              className="h-10 w-10 rounded-lg object-cover"
+                            />
+                          ) : (
+                            <Film size={18} className="text-[#FF5C68]" />
+                          )}
+
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-white">{u.name}</p>
+                            {u.error ? (
+                              <p className="text-[#FF5C68]">{u.error}</p>
+                            ) : u.queued && authed !== true ? (
+                              <p className="mt-1 text-zinc-500">
+                                Will upload after you sign in
+                              </p>
+                            ) : (
+                              <div className="mt-1.5 h-1 rounded-full bg-white/10">
+                                <div
+                                  className="h-1 rounded-full bg-[#D41F2D] transition-all"
+                                  style={{ width: `${u.progress}%` }}
+                                />
+                              </div>
+                            )}
+                          </div>
+
+                          <button
+                            type="button"
+                            aria-label="Remove file"
+                            onClick={() => removeUpload(u.id)}
+                          >
+                            <X
+                              size={16}
+                              className="text-zinc-500 hover:text-white"
+                            />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
                 {/* Contact details */}
                 <div className="mt-7 border-t border-white/10 pt-6">
                   <div className="mb-5 flex items-center gap-3">
@@ -612,7 +1034,7 @@ export default function SellTradePage() {
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <button
                         type="submit"
-                        disabled={status === "submitting"}
+                        disabled={submitDisabled}
                         className="group inline-flex flex-1 items-center justify-center gap-2.5 rounded-2xl bg-[#D41F2D] px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#D41F2D]/10 transition-all duration-300 hover:bg-[#E8404B] hover:shadow-[#D41F2D]/25 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         <BadgeCheck
@@ -623,7 +1045,9 @@ export default function SellTradePage() {
                         <span>
                           {status === "submitting"
                             ? "Submitting..."
-                            : "Submit for Review"}
+                            : uploading
+                              ? "Uploading files..."
+                              : "Submit for Review"}
                         </span>
 
                         <ArrowRight
@@ -650,6 +1074,24 @@ export default function SellTradePage() {
                       </Link>
                     </div>
 
+                    {authed === false && (
+                      <p className="mt-3 text-center text-[11px] leading-5 text-zinc-400">
+                        You&apos;ll be asked to sign in or create an account
+                        when you submit. Your details and files will be saved.
+                      </p>
+                    )}
+
+                    {restored && authed === true && status !== "success" && (
+                      <p
+                        role="status"
+                        className="mt-3 text-center text-[11px] leading-5 text-[#5FA8E8]"
+                      >
+                        Welcome back! Your details were restored and any photos
+                        or videos you added are uploading. Review everything,
+                        then submit.
+                      </p>
+                    )}
+
                     {status === "error" && (
                       <p
                         role="alert"
@@ -669,12 +1111,13 @@ export default function SellTradePage() {
                       </p>
                     )}
 
-                    {(status === "idle" || status === "submitting") && (
-                      <p className="mt-3 text-center text-[11px] leading-5 text-zinc-600">
-                        Submit your vehicle details for our team to review your
-                        estimate.
-                      </p>
-                    )}
+                    {(status === "idle" || status === "submitting") &&
+                      authed !== false && (
+                        <p className="mt-3 text-center text-[11px] leading-5 text-zinc-600">
+                          Submit your vehicle details for our team to review
+                          your estimate.
+                        </p>
+                      )}
                   </div>
                 </div>
               </div>

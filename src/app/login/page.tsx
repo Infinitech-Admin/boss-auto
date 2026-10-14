@@ -2,11 +2,12 @@
 
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { login, fetchMe, type ApiError } from "@/lib/api";
+import { markHasAccount, pendingReturnTo, safeRedirect } from "@/lib/auth-hint";
 import {
   AuthShell,
   authButtonClass,
@@ -43,6 +44,19 @@ export default function LoginPage() {
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // If we were sent here from a protected page (e.g. sell-trade), go back
+  // there after signing in. Only same-site paths are allowed.
+  const [redirect, setRedirect] = useState<string | null>(null);
+  useEffect(() => {
+    setRedirect(
+      safeRedirect(new URLSearchParams(window.location.search).get("redirect")),
+    );
+  }, []);
+
+  const registerHref = redirect
+    ? `/register?redirect=${encodeURIComponent(redirect)}`
+    : "/register";
+
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -60,26 +74,25 @@ export default function LoginPage() {
     try {
       const data = await login(form);
 
+      // Remember this browser has an account, so guests who come back are
+      // sent to login instead of register.
+      markHasAccount();
+
       // Use the role from the login response; if the API doesn't return
       // the user there, fall back to /me (the session cookie is already set).
       // The redirect is only for UX — /admin must still be protected on the
       // server (middleware / layout) and in the API.
       const role = data?.user?.role ?? (await fetchMe()).user.role;
 
-      // If we were sent here from a protected page (e.g. checkout), go back
-      // there. Only same-site paths are allowed, to avoid open redirects.
-      const redirectParam = new URLSearchParams(window.location.search).get(
-        "redirect",
+      // Read the param again at submit time, then fall back to an unfinished
+      // sell-trade draft (never for admins).
+      const fromUrl = safeRedirect(
+        new URLSearchParams(window.location.search).get("redirect"),
       );
-      const safeRedirect =
-        redirectParam &&
-        redirectParam.startsWith("/") &&
-        !redirectParam.startsWith("//")
-          ? redirectParam
-          : null;
+      const returnTo =
+        redirect ?? fromUrl ?? (role === "admin" ? null : pendingReturnTo());
 
-      const destination =
-        safeRedirect ?? ROLE_REDIRECTS[role] ?? DEFAULT_REDIRECT;
+      const destination = returnTo ?? ROLE_REDIRECTS[role] ?? DEFAULT_REDIRECT;
 
       router.push(destination);
       router.refresh();
@@ -200,7 +213,7 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           New to Boss Auto Exchange?{" "}
-          <Link href="/register" className={authLinkClass}>
+          <Link href={registerHref} className={authLinkClass}>
             Create an account
           </Link>
         </p>
