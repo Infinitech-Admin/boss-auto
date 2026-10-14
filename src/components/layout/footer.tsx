@@ -70,64 +70,85 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 
+// Wheel graphic. Fills its parent, so size the parent.
+// Spins when an ancestor `group` is hovered (disabled for reduced motion).
+function Wheel({ glow }: { glow: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      className={`h-full w-full ${glow} group-hover:animate-spin motion-reduce:animate-none [animation-duration:1.2s]`}
+    >
+      {/* Tire */}
+      <circle
+        cx="50"
+        cy="50"
+        r="47"
+        fill="#0A0F1C"
+        stroke="#FFFFFF"
+        strokeWidth="5"
+      />
+      {/* Rim */}
+      <circle
+        cx="50"
+        cy="50"
+        r="30"
+        fill="#1B2436"
+        stroke="#FF5C68"
+        strokeWidth="5"
+      />
+      {/* Spokes */}
+      <g stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round">
+        {[0, 72, 144, 216, 288].map((angle) => (
+          <line
+            key={angle}
+            x1="50"
+            y1="50"
+            x2="50"
+            y2="25"
+            transform={`rotate(${angle} 50 50)`}
+          />
+        ))}
+      </g>
+      {/* Hub */}
+      <circle cx="50" cy="50" r="9" fill="#FFFFFF" />
+      <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
+    </svg>
+  );
+}
+
 // Wheel used as the "O" in BOSS. Sized in em so it scales with the wordmark.
-// Spins when the parent `group` is hovered (disabled for reduced motion).
 function WheelO() {
   return (
     <span
       aria-hidden="true"
       className="ml-[0.11em] mr-[-0.03em] flex h-[0.9em] w-[0.9em] shrink-0 -translate-y-[0.035em] items-center justify-center"
     >
-      <svg
-        viewBox="0 0 100 100"
-        className="h-full w-full drop-shadow-[0_0_8px_rgba(212,31,45,0.95)] group-hover:animate-spin motion-reduce:animate-none [animation-duration:1.2s]"
-      >
-        {/* Tire */}
-        <circle
-          cx="50"
-          cy="50"
-          r="47"
-          fill="#0A0F1C"
-          stroke="#FFFFFF"
-          strokeWidth="5"
-        />
-        {/* Rim */}
-        <circle
-          cx="50"
-          cy="50"
-          r="30"
-          fill="#1B2436"
-          stroke="#FF5C68"
-          strokeWidth="5"
-        />
-        {/* Spokes */}
-        <g stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round">
-          {[0, 72, 144, 216, 288].map((angle) => (
-            <line
-              key={angle}
-              x1="50"
-              y1="50"
-              x2="50"
-              y2="25"
-              transform={`rotate(${angle} 50 50)`}
-            />
-          ))}
-        </g>
-        {/* Hub */}
-        <circle cx="50" cy="50" r="9" fill="#FFFFFF" />
-        <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
-      </svg>
+      <Wheel glow="drop-shadow-[0_0_8px_rgba(212,31,45,0.95)]" />
     </span>
   );
 }
 
-// Text logo: big white "BOSS" (the O is a wheel) with a red "AUTO EXCHANGE" tag.
+// Small wheel used as the "O" in AUTO. Sized in em of the tag text.
+function TagWheelO() {
+  return (
+    <span
+      aria-hidden="true"
+      className="mx-[0.1em] inline-flex h-[0.95em] w-[0.95em] shrink-0 items-center justify-center"
+    >
+      <Wheel glow="" />
+    </span>
+  );
+}
+
+// Text logo: big white "BOSS" (the O is a wheel) with a red "AUTO EXCHANGE"
+// tag (the O in AUTO is a wheel too).
 // Place inside an element with the `group` class for hover effects.
 // Size is controlled with a text-size class (everything scales with em).
 function Wordmark({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`flex flex-col items-center whitespace-nowrap leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] ${className}`}
+      translate="no"
+      className={`notranslate flex flex-col items-center whitespace-nowrap leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] ${className}`}
     >
       <span
         role="img"
@@ -138,8 +159,16 @@ function Wordmark({ className = "" }: { className?: string }) {
         <WheelO />
         <span aria-hidden="true">SS</span>
       </span>
-      <span className="mt-1.5 rounded-[3px] bg-[#D41F2D] px-2 py-[3px] text-[0.34em] font-extrabold uppercase italic tracking-[0.24em] text-white shadow-[0_0_16px_rgba(212,31,45,0.85)] transition-colors duration-300 group-hover:bg-[#E8404B]">
-        Auto Exchange
+      <span
+        role="img"
+        aria-label="Auto Exchange"
+        className="mt-1.5 inline-flex items-center rounded-[3px] bg-[#D41F2D] px-2 py-[3px] text-[0.34em] font-extrabold uppercase italic tracking-[0.24em] text-white shadow-[0_0_16px_rgba(212,31,45,0.85)] transition-colors duration-300 group-hover:bg-[#E8404B]"
+      >
+        <span aria-hidden="true">AUT</span>
+        <TagWheelO />
+        <span aria-hidden="true" className="ml-[0.5em]">
+          Exchange
+        </span>
       </span>
     </span>
   );

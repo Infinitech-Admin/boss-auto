@@ -1,3 +1,4 @@
+// components/animated-splash.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,7 +9,8 @@ import { useEffect, useState } from "react";
  * The wordmark BOSS AUTO EXCHANGE starts dark. Under it, a tachometer
  * sweeps from 0 to redline: the red arc fills, the needle climbs, and the
  * % counter runs. As the needle passes, each letter ignites in order:
- * B → gulong (O) → S → S, and the AUTO EXCHANGE bar is revealed.
+ * B → gulong (O) → S → S, and the AUTO EXCHANGE bar is revealed
+ * (the O in AUTO is a small spinning gulong too).
  * At redline the wordmark flares, then everything fades into the homepage.
  *
  * - Shows only when running as an installed PWA (standalone).
@@ -164,9 +166,39 @@ export default function AnimatedSplash({
           </span>
         </h1>
 
-        {/* AUTO EXCHANGE — revealed in step with the needle */}
-        <div className="bax-tag">
-          <span>Auto Exchange</span>
+        {/* AUTO EXCHANGE (the O in AUTO is a gulong) — revealed in step with the needle */}
+        <div className="bax-tag" role="img" aria-label="Auto Exchange">
+          <span className="bax-tagtext" aria-hidden="true">
+            <span>Aut</span>
+            <svg className="bax-tagwheel" viewBox="0 0 100 100">
+              <circle
+                cx="50"
+                cy="50"
+                r="47"
+                fill="#0b1020"
+                stroke="#fff"
+                strokeWidth="6"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="30"
+                fill="#1B2436"
+                stroke="#FF5C68"
+                strokeWidth="6"
+              />
+              <g stroke="#fff" strokeWidth="7" strokeLinecap="round">
+                <line x1="50" y1="50" x2="50" y2="24" />
+                <line x1="50" y1="50" x2="74.7" y2="42" />
+                <line x1="50" y1="50" x2="64.5" y2="74" />
+                <line x1="50" y1="50" x2="35.5" y2="74" />
+                <line x1="50" y1="50" x2="25.3" y2="42" />
+              </g>
+              <circle cx="50" cy="50" r="9" fill="#fff" />
+              <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
+            </svg>
+            <span className="bax-tagword">Exchange</span>
+          </span>
         </div>
 
         {/* Tachometer = the loading bar */}
@@ -403,6 +435,21 @@ export default function AnimatedSplash({
           clip-path: inset(0 100% 0 0);
           animation: bax-reveal var(--drive) linear var(--t0) forwards;
         }
+        .bax-tagtext {
+          display: inline-flex;
+          align-items: center;
+          line-height: 1;
+        }
+        /* gulong = the O in AUTO; spins while the tag is revealed */
+        .bax-tagwheel {
+          display: block;
+          width: 0.95em;
+          height: 0.95em;
+          flex-shrink: 0;
+          margin: 0 0.1em;
+          animation: bax-spin 700ms linear var(--t0) infinite;
+        }
+        .bax-tagword { margin-left: 0.5em; }
 
         /* ---------- Gauge ---------- */
         .bax-gauge {

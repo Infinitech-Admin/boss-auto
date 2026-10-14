@@ -1,14 +1,16 @@
+// components/layout/user-menu.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, LogIn, LogOut } from "lucide-react";
+import { CarFront, ClipboardList, LogIn, LogOut } from "lucide-react";
 
 import { useAuth } from "@/context/auth-context";
 
 const LOGIN_HREF = "/login"; // ADJUST if your login page lives elsewhere
 const ORDERS_HREF = "/orders";
+const REQUESTS_HREF = "/my-requests";
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
@@ -125,6 +127,15 @@ export default function UserMenu() {
             >
               <ClipboardList size={16} />
               My orders
+            </Link>
+
+            <Link
+              href={REQUESTS_HREF}
+              role="menuitem"
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-[#D41F2D]/10 hover:text-[#5FA8E8] ${focusRing}`}
+            >
+              <CarFront size={16} />
+              My sell / trade requests
             </Link>
 
             <button

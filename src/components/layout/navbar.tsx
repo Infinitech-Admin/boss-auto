@@ -1,3 +1,4 @@
+// components/layout/navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -21,8 +22,11 @@ const navigation = [
   { name: "Contact", href: "/contact" },
 ];
 
-// Matches header height (72/76/80px) + 1px border
-const HEADER_OFFSET = "-mb-[73px] sm:-mb-[77px] lg:-mb-[81px]";
+// Full desktop nav starts at xl (1280px). Below that: hamburger drawer.
+const DESKTOP_MIN_WIDTH = 1280;
+
+// Matches header height (72 / 76 / 80px) + 1px border
+const HEADER_OFFSET = "-mb-[73px] sm:-mb-[77px] xl:-mb-[81px]";
 
 // Boss Auto Exchange palette
 // red #D41F2D | red hover #E8404B | red text #FF5C68 | blue glow #0B5BA8
@@ -40,8 +44,7 @@ const glowBlue =
 const loginGlow =
   "[&>a]:border-[#3D8FD9]/80 [&>a]:shadow-[0_0_22px_rgba(61,143,217,0.7)] [&>a:hover]:border-[#FF5C68] [&>a:hover]:shadow-[0_0_28px_rgba(212,31,45,0.85)] [&>button]:border-[#3D8FD9]/80 [&>button]:shadow-[0_0_22px_rgba(61,143,217,0.7)] [&>button:hover]:border-[#FF5C68] [&>button:hover]:shadow-[0_0_28px_rgba(212,31,45,0.85)]";
 
-// FIX: round header buttons are 40px on phones narrower than 400px, then
-// 44px / 48px as before. This saves 8px in the header row.
+// Round header buttons: 40px on very small phones, 44px, then 48px.
 const roundBtnSize =
   "h-10 w-10 min-[400px]:h-11 min-[400px]:w-11 sm:h-12 sm:w-12";
 
@@ -51,58 +54,78 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+// Wheel graphic. Fills its parent, so size the parent.
+// Spins when an ancestor `group` is hovered (disabled for reduced motion).
+function Wheel({ glow }: { glow: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      className={`h-full w-full ${glow} group-hover:animate-spin motion-reduce:animate-none [animation-duration:1.2s]`}
+    >
+      {/* Tire */}
+      <circle
+        cx="50"
+        cy="50"
+        r="47"
+        fill="#0A0F1C"
+        stroke="#FFFFFF"
+        strokeWidth="5"
+      />
+      {/* Rim */}
+      <circle
+        cx="50"
+        cy="50"
+        r="30"
+        fill="#1B2436"
+        stroke="#FF5C68"
+        strokeWidth="5"
+      />
+      {/* Spokes */}
+      <g stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round">
+        {[0, 72, 144, 216, 288].map((angle) => (
+          <line
+            key={angle}
+            x1="50"
+            y1="50"
+            x2="50"
+            y2="25"
+            transform={`rotate(${angle} 50 50)`}
+          />
+        ))}
+      </g>
+      {/* Hub */}
+      <circle cx="50" cy="50" r="9" fill="#FFFFFF" />
+      <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
+    </svg>
+  );
+}
+
 // Wheel used as the "O" in BOSS. Sized in em so it scales with the wordmark.
-// Spins when the parent `group` is hovered (disabled for reduced motion).
 function WheelO() {
   return (
     <span
       aria-hidden="true"
       className="ml-[0.11em] mr-[-0.03em] flex h-[0.9em] w-[0.9em] shrink-0 -translate-y-[0.035em] items-center justify-center"
     >
-      <svg
-        viewBox="0 0 100 100"
-        className="h-full w-full drop-shadow-[0_0_8px_rgba(212,31,45,0.95)] group-hover:animate-spin motion-reduce:animate-none [animation-duration:1.2s]"
-      >
-        {/* Tire */}
-        <circle
-          cx="50"
-          cy="50"
-          r="47"
-          fill="#0A0F1C"
-          stroke="#FFFFFF"
-          strokeWidth="5"
-        />
-        {/* Rim */}
-        <circle
-          cx="50"
-          cy="50"
-          r="30"
-          fill="#1B2436"
-          stroke="#FF5C68"
-          strokeWidth="5"
-        />
-        {/* Spokes */}
-        <g stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round">
-          {[0, 72, 144, 216, 288].map((angle) => (
-            <line
-              key={angle}
-              x1="50"
-              y1="50"
-              x2="50"
-              y2="25"
-              transform={`rotate(${angle} 50 50)`}
-            />
-          ))}
-        </g>
-        {/* Hub */}
-        <circle cx="50" cy="50" r="9" fill="#FFFFFF" />
-        <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
-      </svg>
+      <Wheel glow="drop-shadow-[0_0_8px_rgba(212,31,45,0.95)]" />
     </span>
   );
 }
 
-// Text logo: big white "BOSS" (the O is a wheel) with a red "AUTO EXCHANGE" tag.
+// Small wheel used as the "O" in AUTO. Sized in em of the tag text.
+function TagWheelO() {
+  return (
+    <span
+      aria-hidden="true"
+      className="mx-[0.1em] inline-flex h-[0.95em] w-[0.95em] shrink-0 items-center justify-center"
+    >
+      <Wheel glow="" />
+    </span>
+  );
+}
+
+// Text logo: big white "BOSS" (the O is a wheel) with a red "AUTO EXCHANGE"
+// tag (the O in AUTO is a wheel too).
 // Place inside an element with the `group` class for hover effects.
 // Size is controlled with a text-size class (everything scales with em).
 // `translate="no"` keeps Google Translate from touching the brand name.
@@ -121,8 +144,16 @@ function Wordmark({ className = "" }: { className?: string }) {
         <WheelO />
         <span aria-hidden="true">SS</span>
       </span>
-      <span className="mt-1.5 rounded-[3px] bg-[#D41F2D] px-2 py-[3px] text-[0.34em] font-extrabold uppercase italic tracking-[0.24em] text-white shadow-[0_0_16px_rgba(212,31,45,0.85)] transition-colors duration-300 group-hover:bg-[#E8404B]">
-        Auto Exchange
+      <span
+        role="img"
+        aria-label="Auto Exchange"
+        className="mt-1.5 inline-flex items-center rounded-[3px] bg-[#D41F2D] px-2 py-[3px] text-[0.34em] font-extrabold uppercase italic tracking-[0.24em] text-white shadow-[0_0_16px_rgba(212,31,45,0.85)] transition-colors duration-300 group-hover:bg-[#E8404B]"
+      >
+        <span aria-hidden="true">AUT</span>
+        <TagWheelO />
+        <span aria-hidden="true" className="ml-[0.5em]">
+          Exchange
+        </span>
       </span>
     </span>
   );
@@ -223,7 +254,7 @@ export default function Navbar() {
     };
 
     const handleResize = () => {
-      if (window.innerWidth >= 1024) setIsMenuOpen(false);
+      if (window.innerWidth >= DESKTOP_MIN_WIDTH) setIsMenuOpen(false);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -244,60 +275,65 @@ export default function Navbar() {
       <header
         className={`sticky top-0 z-50 border-b transition-all duration-300 motion-reduce:transition-none ${isHome ? HEADER_OFFSET : ""} ${isSolid ? "border-[#D41F2D]/20 bg-[#040E21]/90 backdrop-blur-xl" : "border-transparent bg-transparent"}`}
       >
-        {/* FIX: px-3 on very small phones (was px-4) */}
         <nav
           aria-label="Main"
-          className="mx-auto max-w-7xl px-3 min-[400px]:px-4 sm:px-6 lg:px-8"
+          className="mx-auto max-w-7xl px-3 min-[400px]:px-4 sm:px-6 xl:px-8"
         >
-          {/* FIX: gap-2 on very small phones (was gap-4) */}
-          <div className="flex h-[72px] items-center justify-between gap-2 min-[400px]:gap-4 sm:h-[76px] lg:h-20 lg:grid lg:grid-cols-[1fr_auto_1fr]">
-            {/* LOGO (text wordmark)
-                FIX: text-2xl below 400px. At text-3xl the whole header row
-                needed about 366px, which is wider than a 320-360px phone,
-                so the page became scrollable sideways. */}
+          {/* Flex row: logo | nav (centered, desktop only) | actions */}
+          <div className="flex h-[72px] items-center gap-2 min-[400px]:gap-4 sm:h-[76px] xl:h-20 xl:gap-6">
+            {/* LOGO */}
             <Link
               href="/"
               aria-label="Boss Auto Exchange home"
-              className={`group flex w-fit shrink-0 items-center justify-self-start ${focusRing}`}
+              className={`group flex w-fit shrink-0 items-center ${focusRing}`}
             >
-              <Wordmark className="text-2xl min-[400px]:text-3xl sm:text-4xl lg:text-5xl" />
+              <Wordmark className="text-2xl min-[400px]:text-3xl sm:text-4xl 2xl:text-5xl" />
             </Link>
 
-            {/* DESKTOP NAVIGATION */}
-            <div className="hidden items-center gap-1 rounded-full border border-white/15 bg-[#040E21]/75 p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl lg:flex">
-              {navigation.map((item) => {
-                const active = isActive(item.href);
+            {/* DESKTOP NAVIGATION (xl and up) */}
+            <div className="hidden min-w-0 flex-1 justify-center xl:flex">
+              <div className="flex items-center gap-1 rounded-full border border-white/15 bg-[#040E21]/75 p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+                {navigation.map((item) => {
+                  const active = isActive(item.href);
 
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    className={`relative flex items-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${focusRing} ${active ? "bg-[#D41F2D] text-white shadow-[0_0_18px_rgba(212,31,45,0.7)]" : "text-white/85 hover:bg-white/10 hover:text-white"}`}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={`relative flex items-center whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition-all duration-300 2xl:px-4 ${focusRing} ${active ? "bg-[#D41F2D] text-white shadow-[0_0_18px_rgba(212,31,45,0.7)]" : "text-white/85 hover:bg-white/10 hover:text-white"}`}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* RIGHT SIDE: INSTALL + LANGUAGE + BELL + CART + ACCOUNT + MOBILE MENU
-                FIX: gap-1 on very small phones (was gap-2) */}
-            <div className="ml-auto flex items-center gap-1 min-[400px]:gap-2">
-              {/* Install App */}
+            {/* ACTIONS
+                Phones and tablets: bell, cart, account, menu.
+                Desktop (xl+): also language and install. */}
+            <div className="ml-auto flex shrink-0 items-center gap-1 min-[400px]:gap-2 xl:ml-0">
+              {/* Install App: icon only on xl, with text on 2xl */}
               {canInstall && (
                 <button
                   type="button"
                   onClick={handleInstallClick}
-                  className={`hidden items-center gap-2 rounded-full border bg-[#D41F2D]/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-[#D41F2D]/20 sm:flex ${glowRed} ${focusRing}`}
+                  aria-label="Install app"
+                  title="Install app"
+                  className={`hidden h-12 w-12 items-center justify-center gap-2 rounded-full border bg-[#D41F2D]/10 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-[#D41F2D]/20 xl:flex 2xl:w-auto 2xl:px-4 ${glowRed} ${focusRing}`}
                 >
-                  <Download size={16} strokeWidth={2.25} />
-                  Install App
+                  <Download size={18} strokeWidth={2.25} />
+                  <span className="hidden whitespace-nowrap 2xl:inline">
+                    Install App
+                  </span>
                 </button>
               )}
 
-              {/* Language (Google Translate) */}
-              <LanguageSwitcher focusRing={focusRing} />
+              {/* Language (Google Translate): desktop only, drawer elsewhere */}
+              <div className="hidden xl:flex">
+                <LanguageSwitcher focusRing={focusRing} />
+              </div>
 
               {/* Announcement notifications */}
               <NotificationBell className={`${glowBlue} ${focusRing}`} />
@@ -321,14 +357,14 @@ export default function Navbar() {
                 <UserMenu />
               </div>
 
-              {/* Mobile / Tablet Menu */}
+              {/* Phone / tablet menu button (hidden on xl+) */}
               <button
                 type="button"
                 aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
                 onClick={() => setIsMenuOpen((open) => !open)}
-                className={`flex ${roundBtnSize} items-center justify-center rounded-full border text-white backdrop-blur-md transition-all duration-300 lg:hidden ${isMenuOpen ? `bg-[#D41F2D]/10 ${glowRed}` : `bg-[#040E21]/30 ${glowBlue}`} ${focusRing}`}
+                className={`flex ${roundBtnSize} items-center justify-center rounded-full border text-white backdrop-blur-md transition-all duration-300 xl:hidden ${isMenuOpen ? `bg-[#D41F2D]/10 ${glowRed}` : `bg-[#040E21]/30 ${glowBlue}`} ${focusRing}`}
               >
                 {isMenuOpen ? (
                   <X size={21} strokeWidth={2} />
@@ -341,13 +377,13 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* MOBILE / TABLET MENU
-          FIX: overflow-hidden so the closed drawer (parked off-screen to the
+      {/* PHONE / TABLET MENU (below xl)
+          overflow-hidden so the closed drawer (parked off-screen to the
           right) can never add width to the page. */}
       <div
         id="mobile-menu"
         aria-hidden={!isMenuOpen}
-        className={`fixed inset-0 z-40 overflow-hidden lg:hidden transition-all duration-500 ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-0 z-40 overflow-hidden transition-all duration-500 xl:hidden ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}
       >
         {/* Backdrop */}
         <button
@@ -384,7 +420,7 @@ export default function Navbar() {
 
           {/* Drawer Content */}
           <div className="flex h-[calc(100%-72px)] flex-col overflow-y-auto px-5 py-7 sm:h-[calc(100%-76px)] sm:px-6">
-            {/* Install App (mobile) */}
+            {/* Install App (drawer) */}
             {canInstall && (
               <button
                 type="button"
@@ -396,7 +432,7 @@ export default function Navbar() {
               </button>
             )}
 
-            {/* Language (mobile) */}
+            {/* Language (drawer) */}
             <LanguageSwitcher
               variant="drawer"
               focusRing={focusRing}
@@ -430,7 +466,7 @@ export default function Navbar() {
                         href={item.href}
                         aria-current={active ? "page" : undefined}
                         onClick={() => setIsMenuOpen(false)}
-                        className={`group relative flex min-h-[62px] items-center justify-between border-b border-white/[0.07] rounded-lg px-3 text-xl font-semibold tracking-tight transition-all duration-300 sm:min-h-[68px] sm:text-2xl ${focusRing} ${active ? "border-l-2 border-l-[#D41F2D] bg-gradient-to-r from-[#D41F2D]/25 to-transparent text-white" : "text-white/85 hover:bg-white/5 hover:text-white"}`}
+                        className={`group relative flex min-h-[62px] items-center justify-between rounded-lg border-b border-white/[0.07] px-3 text-xl font-semibold tracking-tight transition-all duration-300 sm:min-h-[68px] sm:text-2xl ${focusRing} ${active ? "border-l-2 border-l-[#D41F2D] bg-gradient-to-r from-[#D41F2D]/25 to-transparent text-white" : "text-white/85 hover:bg-white/5 hover:text-white"}`}
                       >
                         <span className="flex items-center gap-4">
                           {/* Active indicator */}
