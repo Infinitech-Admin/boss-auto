@@ -9,6 +9,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
+  Film,
+  Image as ImageIcon,
   Loader2,
   Search,
   SlidersHorizontal,
@@ -54,6 +56,33 @@ const formatDate = (iso: string) =>
   });
 
 /* -------------------------------------------------------------------------- */
+/*  Media count badge (list rows / cards)                                     */
+/* -------------------------------------------------------------------------- */
+
+function MediaCount({ item }: { item: SellTradeRequest }) {
+  const media = item.media ?? [];
+  if (media.length === 0) return null;
+
+  const images = media.filter((m) => m.type === "image").length;
+  const videos = media.length - images;
+
+  return (
+    <span className="mt-1 flex items-center gap-2 text-[11px] text-zinc-500">
+      {images > 0 && (
+        <span className="flex items-center gap-1">
+          <ImageIcon size={11} /> {images}
+        </span>
+      )}
+      {videos > 0 && (
+        <span className="flex items-center gap-1">
+          <Film size={11} /> {videos}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Reusable dialog                                                           */
 /* -------------------------------------------------------------------------- */
 
@@ -96,7 +125,7 @@ function Dialog({
       />
       <div
         className={`relative max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-white/10 bg-[#040E21] p-6 shadow-2xl ${
-          wide ? "max-w-lg" : "max-w-md"
+          wide ? "max-w-2xl" : "max-w-md"
         }`}
       >
         {children}
@@ -281,6 +310,8 @@ export default function SellTradeClient() {
     }
   }
 
+  const selectedMedia = selected?.media ?? [];
+
   return (
     <div className="space-y-6">
       <div>
@@ -386,6 +417,7 @@ export default function SellTradeClient() {
                           <p className="text-xs text-zinc-500">
                             {i.year} · {i.type} · {i.condition}
                           </p>
+                          <MediaCount item={i} />
                         </div>
                       </div>
                     </td>
@@ -447,6 +479,7 @@ export default function SellTradeClient() {
                       <p className="text-xs text-zinc-500">
                         {i.type} · {i.year}
                       </p>
+                      <MediaCount item={i} />
                     </div>
                   </div>
                   <RowActions
@@ -552,6 +585,20 @@ export default function SellTradeClient() {
                   <dt className="text-xs text-zinc-500">Condition</dt>
                   <dd className="mt-1 text-white">{selected.condition}</dd>
                 </div>
+                <div>
+                  <dt className="text-xs text-zinc-500">Submitted</dt>
+                  <dd className="mt-1 text-white">
+                    {formatDate(selected.created_at)}
+                  </dd>
+                </div>
+                {selected.updated_at && (
+                  <div>
+                    <dt className="text-xs text-zinc-500">Last updated</dt>
+                    <dd className="mt-1 text-white">
+                      {formatDate(selected.updated_at)}
+                    </dd>
+                  </div>
+                )}
                 <div className="col-span-2">
                   <dt className="text-xs text-zinc-500">Customer estimate</dt>
                   <dd className="mt-1 text-2xl font-bold text-[#FF5C68]">
@@ -559,6 +606,50 @@ export default function SellTradeClient() {
                   </dd>
                 </div>
               </dl>
+
+              {/* Photos & videos */}
+              <div className="mt-5">
+                <p className="text-xs text-zinc-500">
+                  Photos &amp; videos ({selectedMedia.length})
+                </p>
+
+                {selectedMedia.length === 0 ? (
+                  <p className="mt-2 rounded-xl border border-dashed border-white/10 px-4 py-5 text-center text-sm text-zinc-500">
+                    No files attached.
+                  </p>
+                ) : (
+                  <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {selectedMedia.map((m) =>
+                      m.type === "video" ? (
+                        <video
+                          key={m.id ?? m.path}
+                          src={m.url}
+                          controls
+                          preload="metadata"
+                          className="aspect-video w-full rounded-xl border border-white/10 bg-black object-cover"
+                        />
+                      ) : (
+                        <a
+                          key={m.id ?? m.path}
+                          href={m.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          title="Open full size"
+                          className="block overflow-hidden rounded-xl border border-white/10 bg-black"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={m.url}
+                            alt=""
+                            loading="lazy"
+                            className="aspect-video w-full object-cover transition-transform hover:scale-105"
+                          />
+                        </a>
+                      ),
+                    )}
+                  </div>
+                )}
+              </div>
 
               <div className="mt-5">
                 <label
@@ -668,7 +759,8 @@ export default function SellTradeClient() {
                 <span className="font-semibold text-white">
                   {deleteTarget?.full_name}
                 </span>
-                . This action can’t be undone.
+                . Any uploaded photos and videos will be removed too. This
+                action can’t be undone.
               </p>
             </div>
           </div>

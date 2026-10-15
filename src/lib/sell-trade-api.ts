@@ -2,6 +2,13 @@ import { apiRequest } from "@/lib/api";
 
 export type SellTradeStatus = "new" | "contacted" | "closed";
 
+export type SellTradeMedia = {
+  id?: number;
+  type: "image" | "video";
+  path: string;
+  url: string;
+};
+
 export type SellTradeRequest = {
   id: number;
   full_name: string;
@@ -17,6 +24,8 @@ export type SellTradeRequest = {
   status: SellTradeStatus;
   notes: string | null;
   created_at: string;
+  updated_at?: string;
+  media?: SellTradeMedia[];
 };
 
 export type SellTradePage = {
