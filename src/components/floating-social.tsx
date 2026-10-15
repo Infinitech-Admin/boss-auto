@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Phone, Share2, X } from "lucide-react";
+import { Phone } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const FACEBOOK_URL = "https://www.facebook.com/share/18AHtg3PMf/";
+const MESSENGER_URL = "https://m.me/bossautoexchange";
 const INSTAGRAM_URL = "https://www.instagram.com/boss.autoexchange";
 const TIKTOK_URL = "https://www.tiktok.com/@boss.autoexchange";
 const PHONE_NUMBER = "+639060218568"; // 0906 021 8568
@@ -30,6 +30,21 @@ function FacebookIcon({ size = 18, className }: BrandIconProps) {
       className={className}
     >
       <path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.58v1.89h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z" />
+    </svg>
+  );
+}
+
+function MessengerIcon({ size = 18, className }: BrandIconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.652V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.974 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z" />
     </svg>
   );
 }
@@ -72,6 +87,7 @@ function TikTokIcon({ size = 18, className }: BrandIconProps) {
 
 export interface FloatingSocialProps {
   facebookHref?: string;
+  messengerHref?: string;
   instagramHref?: string;
   tiktokHref?: string;
   phone?: string;
@@ -87,41 +103,12 @@ interface SocialLink {
 
 export default function FloatingSocial({
   facebookHref = FACEBOOK_URL,
+  messengerHref = MESSENGER_URL,
   instagramHref = INSTAGRAM_URL,
   tiktokHref = TIKTOK_URL,
   phone = PHONE_NUMBER,
 }: FloatingSocialProps) {
   const pathname = usePathname() ?? "";
-
-  // Phones only: collapsed to a single share button until tapped.
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  // Collapse when navigating to another page.
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  // Collapse on outside tap or Escape while open.
-  useEffect(() => {
-    if (!open) return;
-
-    const onPointerDown = (e: PointerEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
 
   // Hide floating social buttons on all admin pages
   if (pathname.startsWith("/admin")) {
@@ -135,6 +122,13 @@ export default function FloatingSocial({
       icon: FacebookIcon,
       bg: "bg-[#1877F2]",
       glow: "shadow-[0_0_18px_rgba(24,119,242,0.55)]",
+    },
+    {
+      name: "Messenger",
+      href: messengerHref,
+      icon: MessengerIcon,
+      bg: "bg-gradient-to-tr from-[#00B2FF] to-[#006AFF]",
+      glow: "shadow-[0_0_18px_rgba(0,132,255,0.55)]",
     },
     {
       name: "Instagram",
@@ -160,71 +154,42 @@ export default function FloatingSocial({
   ];
 
   return (
-    // On phones it sits at the bottom-right, above the sticky price bar
-    // (and the iPhone home indicator). From sm: up it is vertically centered.
+    // FIX: on phones it sits at the bottom-right, above the sticky price bar
+    // (and the iPhone home indicator). From sm: up it is vertically centered
+    // like before.
     <div
-      ref={rootRef}
       aria-label="Contact us"
       className="fixed bottom-[calc(7.5rem+env(safe-area-inset-bottom))] right-3 z-40 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2"
     >
-      {/* Connecting line (only when the icons are showing) */}
-      <div
-        className={`pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#D41F2D]/40 to-transparent sm:block ${
-          open ? "block" : "hidden"
-        }`}
-      />
+      {/* Connecting line */}
+      <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#D41F2D]/40 to-transparent" />
 
+      {/* FIX: tighter padding and gaps on phones so it covers less */}
       <div className="flex flex-col items-center gap-2 rounded-full border border-white/10 bg-[#040E21]/40 p-1.5 backdrop-blur-md sm:gap-3 sm:p-2">
-        {/* Social links: toggled on phones, always visible from sm: up */}
-        <div
-          id="floating-social-links"
-          className={`flex-col items-center gap-2 sm:flex sm:gap-3 ${
-            open ? "flex" : "hidden"
-          }`}
-        >
-          {links.map((link) => {
-            const Icon = link.icon;
+        {links.map((link) => {
+          const Icon = link.icon;
 
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={
-                  link.href.startsWith("http")
-                    ? "noopener noreferrer"
-                    : undefined
-                }
-                aria-label={link.name}
-                onClick={() => setOpen(false)}
-                className={`group relative flex h-9 w-9 items-center justify-center rounded-full text-white transition-transform duration-300 hover:scale-110 sm:h-11 sm:w-11 ${link.bg} ${link.glow} ${focusRing}`}
-              >
-                <Icon size={18} strokeWidth={2.25} className="sm:h-5 sm:w-5" />
+          return (
+            <Link
+              key={link.name}
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={
+                link.href.startsWith("http") ? "noopener noreferrer" : undefined
+              }
+              aria-label={link.name}
+              // FIX: h-9 w-9 on phones (was h-10 w-10)
+              className={`group relative flex h-9 w-9 items-center justify-center rounded-full text-white transition-transform duration-300 hover:scale-110 sm:h-11 sm:w-11 ${link.bg} ${link.glow} ${focusRing}`}
+            >
+              <Icon size={18} strokeWidth={2.25} className="sm:h-5 sm:w-5" />
 
-                {/* Tooltip (desktop only, touch screens don't hover) */}
-                <span className="pointer-events-none absolute right-full mr-3 hidden translate-x-1 whitespace-nowrap rounded-md border border-white/10 bg-[#040E21] px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:block">
-                  {link.name}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Share toggle: phones only */}
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="floating-social-links"
-          aria-label={open ? "Close contact options" : "Open contact options"}
-          className={`flex h-10 w-10 items-center justify-center rounded-full bg-[#D41F2D] text-white shadow-[0_0_18px_rgba(212,31,45,0.55)] transition-transform duration-300 active:scale-95 sm:hidden ${focusRing}`}
-        >
-          {open ? (
-            <X size={18} strokeWidth={2.25} />
-          ) : (
-            <Share2 size={18} strokeWidth={2.25} />
-          )}
-        </button>
+              {/* Tooltip */}
+              <span className="pointer-events-none absolute right-full mr-3 translate-x-1 whitespace-nowrap rounded-md border border-white/10 bg-[#040E21] px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                {link.name}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
