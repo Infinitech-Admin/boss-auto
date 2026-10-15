@@ -1,5 +1,3 @@
-// app/admin/page.tsx
-
 "use client";
 
 import {
@@ -224,6 +222,13 @@ type TrafficData = {
 
 type TrafficPayload = TrafficData | { error: string } | null | undefined;
 type DashboardWithTraffic = DashboardData & { traffic?: TrafficPayload };
+
+/* Pending revenue comes from data.stats.pendingRevenue (confirmed and
+   ready-for-pick-up orders that are not completed yet). */
+type PendingRevenue = { value: number; count: number };
+type StatsWithPending = DashboardData["stats"] & {
+  pendingRevenue?: PendingRevenue;
+};
 
 function TrafficSection({
   payload,
@@ -520,23 +525,41 @@ function DashboardContent({
   months: number;
 }) {
   const { stats, cart } = data;
+  const pending = (stats as StatsWithPending).pendingRevenue;
   const periodLabel = `Last ${months} months`;
 
   return (
     <>
       {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div
+        className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${
+          pending ? "xl:grid-cols-5" : "xl:grid-cols-4"
+        }`}
+      >
         <StatCard
-          label="Total revenue"
+          label="Total sales"
           value={formatPeso(stats.revenue.value)}
           change={stats.revenue.change}
           icon={<DollarSign size={18} />}
+          hint="Completed orders only"
         />
+        {pending && (
+          <StatCard
+            label="Pending revenue"
+            value={formatPeso(pending.value)}
+            change={null}
+            icon={<Clock size={18} />}
+            hint={`${pending.count} ${
+              pending.count === 1 ? "order" : "orders"
+            } not completed yet`}
+          />
+        )}
         <StatCard
           label="Vehicles sold"
           value={stats.vehiclesSold.value.toLocaleString()}
           change={stats.vehiclesSold.change}
           icon={<Car size={18} />}
+          hint="Completed orders only"
         />
         <StatCard
           label="Active listings"
@@ -562,11 +585,11 @@ function DashboardContent({
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <ChartCard
           title="Revenue & units sold"
-          subtitle={periodLabel}
+          subtitle={`${periodLabel} · completed orders`}
           className="xl:col-span-2"
         >
           {data.revenue.every((p) => p.revenue === 0) ? (
-            <EmptyState message="No confirmed sales in this period yet." />
+            <EmptyState message="No completed sales in this period yet." />
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <AreaChart
@@ -774,10 +797,10 @@ function DashboardContent({
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <ChartCard
           title="Top-selling models"
-          subtitle="Units sold, last 30 days"
+          subtitle="Units sold, last 30 days · completed orders"
         >
           {data.topModels.length === 0 ? (
-            <EmptyState message="No sales in the last 30 days." />
+            <EmptyState message="No completed sales in the last 30 days." />
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart
@@ -895,11 +918,13 @@ function StatCard({
   value,
   change,
   icon,
+  hint,
 }: {
   label: string;
   value: string;
   change: number | null;
   icon: ReactNode;
+  hint?: string;
 }) {
   const trend = change !== null && change < 0 ? "down" : "up";
 
@@ -931,6 +956,7 @@ function StatCard({
           </span>
         )}
       </div>
+      {hint && <p className="mt-1.5 text-xs text-zinc-500">{hint}</p>}
     </div>
   );
 }
