@@ -6,6 +6,7 @@ import { apiRequest } from "@/lib/api";
 import { enableAdminChatPush } from "@/lib/chatPush";
 
 const SOUND_KEY = "bae_admin_chat_sound";
+const SOUND_SRC = "/sounds/notify.mp3";
 
 interface Conversation {
   id: number;
@@ -24,6 +25,14 @@ interface Msg {
   body: string;
   created_at: string;
 }
+
+type PushState =
+  | "idle"
+  | "working"
+  | "enabled"
+  | "denied"
+  | "unsupported"
+  | "error";
 
 /**
  * All chat admin requests go through your existing apiRequest (lib/api.ts),
@@ -58,24 +67,40 @@ export default function AdminChatsPage() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
+  const [soundError, setSoundError] = useState(false);
   const [pushDetail, setPushDetail] = useState("");
-  const [pushState, setPushState] = useState<
-    "idle" | "working" | "enabled" | "denied" | "unsupported" | "error"
-  >("idle");
+  const [pushState, setPushState] = useState<PushState>("idle");
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const soundOnRef = useRef(false);
-  const prevTotalRef = useRef<number | null>(null);
+  const selectedIdRef = useRef<number | null>(null);
+  const snapshotRef = useRef<Map<number, string> | null>(null);
   const lastMsgIdRef = useRef(0);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const selected = conversations.find((c) => c.id === selectedId) ?? null;
   const isClosed = selected?.status === "closed";
 
-  // Sound setup. Browsers block audio until the page gets a click, so the
-  // first click anywhere "unlocks" it silently.
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/notify.mp3");
+    selectedIdRef.current = selectedId;
+  }, [selectedId]);
+
+  const playSound = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || !soundOnRef.current) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {
+      // blocked until the page gets a click/tap; the unlock below handles it
+    });
+  }, []);
+
+  // Sound setup. Browsers block audio until the user interacts with the
+  // page, so the first click/tap/key press "unlocks" it silently.
+  useEffect(() => {
+    const audio = new Audio(SOUND_SRC);
+    audio.preload = "auto";
+    audio.addEventListener("error", () => setSoundError(true));
+    audioRef.current = audio;
 
     try {
       const saved = localStorage.getItem(SOUND_KEY) === "1";
@@ -85,9 +110,12 @@ export default function AdminChatsPage() {
       // storage blocked: sound stays off until toggled
     }
 
-    const unlock = () => {
-      const audio = audioRef.current;
-      if (!audio) return;
+    const events = ["pointerdown", "keydown", "touchstart"] as const;
+
+    const removeListeners = () =>
+      events.forEach((e) => document.removeEventListener(e, unlock));
+
+    function unlock() {
       audio.muted = true;
       audio
         .play()
@@ -95,14 +123,49 @@ export default function AdminChatsPage() {
           audio.pause();
           audio.currentTime = 0;
           audio.muted = false;
+          removeListeners();
         })
         .catch(() => {
+          // keep listening, try again on the next interaction
           audio.muted = false;
         });
-    };
+    }
 
-    document.addEventListener("click", unlock, { once: true });
-    return () => document.removeEventListener("click", unlock);
+    events.forEach((e) => document.addEventListener(e, unlock));
+    return removeListeners;
+  }, []);
+
+  // Remember that this device already has push notifications on.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      if (
+        !("serviceWorker" in navigator) ||
+        !("PushManager" in window) ||
+        !("Notification" in window)
+      ) {
+        return;
+      }
+
+      if (Notification.permission === "denied") {
+        if (!cancelled) setPushState("denied");
+        return;
+      }
+      if (Notification.permission !== "granted") return;
+
+      try {
+        const reg = await navigator.serviceWorker.getRegistration();
+        const sub = await reg?.pushManager.getSubscription();
+        if (!cancelled && sub) setPushState("enabled");
+      } catch {
+        // leave the button as-is
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const enablePush = async () => {
@@ -122,10 +185,19 @@ export default function AdminChatsPage() {
     } catch {
       // ignore
     }
-    if (next) audioRef.current?.play().catch(() => {});
+
+    // Play right away (inside the click) as a preview.
+    if (next) {
+      const audio = audioRef.current;
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => setSoundError(true));
+      }
+    }
   };
 
-  // Conversation list: poll every 4s, ding when unread count goes up.
+  // Conversation list: poll every 4s. Ding when any chat (other than the
+  // one you're reading) gets a new customer message.
   const loadList = useCallback(async () => {
     try {
       const data = await api<{ data: Conversation[]; total_unread: number }>(
@@ -135,18 +207,26 @@ export default function AdminChatsPage() {
       setTotalUnread(data.total_unread);
       setLoaded(true);
 
-      if (
-        prevTotalRef.current !== null &&
-        data.total_unread > prevTotalRef.current &&
-        soundOnRef.current
-      ) {
-        audioRef.current?.play().catch(() => {});
+      const next = new Map<number, string>(
+        data.data.map((c) => [c.id, `${c.last_message_at}|${c.last_sender}`]),
+      );
+      const prev = snapshotRef.current;
+
+      if (prev) {
+        const hasNew = data.data.some(
+          (c) =>
+            c.last_sender === "customer" &&
+            prev.get(c.id) !== next.get(c.id) &&
+            c.id !== selectedIdRef.current,
+        );
+        if (hasNew) playSound();
       }
-      prevTotalRef.current = data.total_unread;
+
+      snapshotRef.current = next;
     } catch {
       // keep the last list; try again next tick
     }
-  }, []);
+  }, [playSound]);
 
   useEffect(() => {
     loadList();
@@ -175,6 +255,7 @@ export default function AdminChatsPage() {
     if (selectedId === null) return;
 
     let cancelled = false;
+    let firstLoad = true;
     setMessages([]);
     lastMsgIdRef.current = 0;
 
@@ -183,7 +264,12 @@ export default function AdminChatsPage() {
         const data = await api<{ messages: Msg[] }>(
           `/${selectedId}/messages?after=${lastMsgIdRef.current}`,
         );
-        if (cancelled || !data.messages.length) return;
+        if (cancelled) return;
+
+        const wasFirstLoad = firstLoad;
+        firstLoad = false;
+
+        if (!data.messages.length) return;
 
         lastMsgIdRef.current = Math.max(
           lastMsgIdRef.current,
@@ -197,6 +283,9 @@ export default function AdminChatsPage() {
         });
 
         if (data.messages.some((m) => m.sender === "customer")) {
+          // Ding for new messages in the open chat (not the initial history).
+          if (!wasFirstLoad) playSound();
+
           api(`/${selectedId}/read`, { method: "POST" })
             .then(loadList)
             .catch(() => {});
@@ -213,7 +302,7 @@ export default function AdminChatsPage() {
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [selectedId, loadList]);
+  }, [selectedId, loadList, playSound]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -298,6 +387,12 @@ export default function AdminChatsPage() {
             </button>
           </div>
 
+          {soundError && (
+            <p role="alert" className="text-xs text-[#E8404B]">
+              Couldn't play {SOUND_SRC}. Make sure the file exists at
+              public/sounds/notify.mp3.
+            </p>
+          )}
           {pushState === "denied" && (
             <p role="alert" className="text-xs text-[#E8404B]">
               Notifications are blocked. Allow them in your browser's site
