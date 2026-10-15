@@ -54,6 +54,11 @@ const NAV_ITEMS: NavItem[] = [
     icon: Megaphone,
   },
   {
+    label: "Chat",
+    href: "/admin/chat",
+    icon: Newspaper,
+  },
+  {
     label: "Showroom",
     href: "/admin/showroom",
     icon: CarFront,
