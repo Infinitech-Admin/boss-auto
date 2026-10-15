@@ -162,9 +162,9 @@ export default function BlogPage() {
                     </div>
 
                     <div className="flex flex-1 flex-col p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">
+                      {/* <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">
                         {formatDate(post.created_at)}
-                      </p>
+                      </p> */}
                       <h3 className="mt-2 line-clamp-2 text-xl font-semibold text-white">
                         {post.title}
                       </h3>
