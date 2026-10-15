@@ -8,6 +8,7 @@ import { ArrowRight, Download, Menu, ShoppingCart, X } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import UserMenu from "@/components/layout/user-menu";
 import NotificationBell from "@/components/layout/notification-bell";
+import { Wordmark } from "@/components/layout/wordmark";
 import LanguageSwitcher, {
   GoogleTranslateLoader,
 } from "@/components/layout/language-switcher";
@@ -25,138 +26,29 @@ const navigation = [
 // Full desktop nav starts at xl (1280px). Below that: hamburger drawer.
 const DESKTOP_MIN_WIDTH = 1280;
 
-// Matches header height (72 / 76 / 80px) + 1px border
-const HEADER_OFFSET = "-mb-[73px] sm:-mb-[77px] xl:-mb-[81px]";
+// Header height: 64px phones, 72px tablets, 80px desktop (+1px border).
+// On the homepage the header overlays the hero, so pull content up by that much.
+const HEADER_OFFSET = "-mb-[65px] sm:-mb-[73px] xl:-mb-[81px]";
 
-// Boss Auto Exchange palette
-// red #D41F2D | red hover #E8404B | red text #FF5C68 | blue glow #0B5BA8
-// background #040E21 | text #FFFFFF
+// Palette: red #D41F2D | red text #FF5C68 | navy #040E21 | blue accent #3D8FD9
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 
-// Glow styles shared by the header buttons
-const glowRed =
-  "border-[#FF5C68]/70 shadow-[0_0_22px_rgba(212,31,45,0.75),inset_0_0_12px_rgba(212,31,45,0.25)] hover:border-[#FF5C68] hover:shadow-[0_0_32px_rgba(212,31,45,0.95),inset_0_0_14px_rgba(212,31,45,0.35)]";
-const glowBlue =
-  "border-[#3D8FD9]/80 shadow-[0_0_22px_rgba(61,143,217,0.7),inset_0_0_10px_rgba(61,143,217,0.2)] hover:border-[#FF5C68] hover:shadow-[0_0_28px_rgba(212,31,45,0.85)]";
+// One quiet button style for every round/utility button in the header.
+// The only loud element in the bar is the active red pill.
+const utilBtn =
+  "border border-white/15 bg-white/[0.04] text-white/90 backdrop-blur-md transition-colors duration-200 hover:border-[#FF5C68]/70 hover:bg-white/10 hover:text-white";
 
-// Applies the same glow to the Login button rendered inside <UserMenu />
-const loginGlow =
-  "[&>a]:border-[#3D8FD9]/80 [&>a]:shadow-[0_0_22px_rgba(61,143,217,0.7)] [&>a:hover]:border-[#FF5C68] [&>a:hover]:shadow-[0_0_28px_rgba(212,31,45,0.85)] [&>button]:border-[#3D8FD9]/80 [&>button]:shadow-[0_0_22px_rgba(61,143,217,0.7)] [&>button:hover]:border-[#FF5C68] [&>button:hover]:shadow-[0_0_28px_rgba(212,31,45,0.85)]";
+// Make the Login / account element rendered by <UserMenu /> match utilBtn.
+const accountStyle =
+  "[&>a]:rounded-full [&>a]:border [&>a]:border-white/15 [&>a]:bg-white/[0.04] [&>a:hover]:border-[#FF5C68]/70 [&>a:hover]:bg-white/10 [&>button]:rounded-full [&>button]:border [&>button]:border-white/15 [&>button]:bg-white/[0.04] [&>button:hover]:border-[#FF5C68]/70 [&>button:hover]:bg-white/10";
 
-// Round header buttons: 40px on very small phones, 44px, then 48px.
-const roundBtnSize =
-  "h-10 w-10 min-[400px]:h-11 min-[400px]:w-11 sm:h-12 sm:w-12";
+// Round header buttons: 40px phones, 44px from sm up.
+const roundBtn = "h-10 w-10 sm:h-11 sm:w-11";
 
-// Minimal shape of the event we care about — not in the standard lib.dom types yet.
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
-
-// Wheel graphic. Fills its parent, so size the parent.
-// Spins when an ancestor `group` is hovered (disabled for reduced motion).
-function Wheel({ glow }: { glow: string }) {
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className={`h-full w-full ${glow} group-hover:animate-spin motion-reduce:animate-none [animation-duration:1.2s]`}
-    >
-      {/* Tire */}
-      <circle
-        cx="50"
-        cy="50"
-        r="47"
-        fill="#0A0F1C"
-        stroke="#FFFFFF"
-        strokeWidth="5"
-      />
-      {/* Rim */}
-      <circle
-        cx="50"
-        cy="50"
-        r="30"
-        fill="#1B2436"
-        stroke="#FF5C68"
-        strokeWidth="5"
-      />
-      {/* Spokes */}
-      <g stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round">
-        {[0, 72, 144, 216, 288].map((angle) => (
-          <line
-            key={angle}
-            x1="50"
-            y1="50"
-            x2="50"
-            y2="25"
-            transform={`rotate(${angle} 50 50)`}
-          />
-        ))}
-      </g>
-      {/* Hub */}
-      <circle cx="50" cy="50" r="9" fill="#FFFFFF" />
-      <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
-    </svg>
-  );
-}
-
-// Wheel used as the "O" in BOSS. Sized in em so it scales with the wordmark.
-function WheelO() {
-  return (
-    <span
-      aria-hidden="true"
-      className="ml-[0.11em] mr-[-0.03em] flex h-[0.9em] w-[0.9em] shrink-0 -translate-y-[0.035em] items-center justify-center"
-    >
-      <Wheel glow="drop-shadow-[0_0_8px_rgba(212,31,45,0.95)]" />
-    </span>
-  );
-}
-
-// Small wheel used as the "O" in AUTO. Sized in em of the tag text.
-function TagWheelO() {
-  return (
-    <span
-      aria-hidden="true"
-      className="mx-[0.1em] inline-flex h-[0.95em] w-[0.95em] shrink-0 items-center justify-center"
-    >
-      <Wheel glow="" />
-    </span>
-  );
-}
-
-// Text logo: big white "BOSS" (the O is a wheel) with a red "AUTO EXCHANGE"
-// tag (the O in AUTO is a wheel too).
-// Place inside an element with the `group` class for hover effects.
-// Size is controlled with a text-size class (everything scales with em).
-// `translate="no"` keeps Google Translate from touching the brand name.
-function Wordmark({ className = "" }: { className?: string }) {
-  return (
-    <span
-      translate="no"
-      className={`notranslate flex flex-col items-center whitespace-nowrap leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] ${className}`}
-    >
-      <span
-        role="img"
-        aria-label="Boss"
-        className="flex items-center font-black uppercase italic tracking-[0.08em] text-white [text-shadow:0_0_22px_rgba(212,31,45,0.95),0_0_6px_rgba(255,255,255,0.35),2px_2px_0_#D41F2D] transition-all duration-300 group-hover:[text-shadow:0_0_30px_rgba(255,92,104,1),0_0_8px_rgba(255,255,255,0.5),2px_2px_0_#E8404B]"
-      >
-        <span aria-hidden="true">B</span>
-        <WheelO />
-        <span aria-hidden="true">SS</span>
-      </span>
-      <span
-        role="img"
-        aria-label="Auto Exchange"
-        className="mt-1.5 inline-flex items-center rounded-[3px] bg-[#D41F2D] px-2 py-[3px] text-[0.34em] font-extrabold uppercase italic tracking-[0.24em] text-white shadow-[0_0_16px_rgba(212,31,45,0.85)] transition-colors duration-300 group-hover:bg-[#E8404B]"
-      >
-        <span aria-hidden="true">AUT</span>
-        <TagWheelO />
-        <span aria-hidden="true" className="ml-[0.5em]">
-          Exchange
-        </span>
-      </span>
-    </span>
-  );
 }
 
 export default function Navbar() {
@@ -182,10 +74,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
-
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -200,7 +90,6 @@ export default function Navbar() {
     const updateStandalone = () => {
       const isStandalone =
         standaloneQuery.matches ||
-        // iOS Safari
         (window.navigator as Navigator & { standalone?: boolean })
           .standalone === true;
       setIsAppInstalled(isStandalone);
@@ -213,7 +102,6 @@ export default function Navbar() {
       event.preventDefault();
       setInstallPrompt(event as BeforeInstallPromptEvent);
     };
-
     const handleAppInstalled = () => {
       setInstallPrompt(null);
       setIsAppInstalled(true);
@@ -234,15 +122,12 @@ export default function Navbar() {
 
   const handleInstallClick = async () => {
     if (!installPrompt) return;
-
     await installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      setInstallPrompt(null);
-    }
+    if (outcome === "accepted") setInstallPrompt(null);
   };
 
+  // Drawer: lock scroll, Esc to close, auto-close when resized to desktop
   useEffect(() => {
     if (!isMenuOpen) return;
 
@@ -252,7 +137,6 @@ export default function Navbar() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsMenuOpen(false);
     };
-
     const handleResize = () => {
       if (window.innerWidth >= DESKTOP_MIN_WIDTH) setIsMenuOpen(false);
     };
@@ -273,55 +157,58 @@ export default function Navbar() {
       <GoogleTranslateLoader />
 
       <header
-        className={`sticky top-0 z-50 border-b transition-all duration-300 motion-reduce:transition-none ${isHome ? HEADER_OFFSET : ""} ${isSolid ? "border-[#D41F2D]/20 bg-[#040E21]/90 backdrop-blur-xl" : "border-transparent bg-transparent"}`}
+        className={`sticky top-0 z-50 border-b pt-[env(safe-area-inset-top)] transition-colors duration-300 motion-reduce:transition-none ${isHome ? HEADER_OFFSET : ""} ${isSolid ? "border-white/10 bg-[#040E21]/90 backdrop-blur-xl" : "border-transparent bg-transparent"}`}
       >
         <nav
           aria-label="Main"
-          className="mx-auto max-w-7xl px-3 min-[400px]:px-4 sm:px-6 xl:px-8"
+          className="mx-auto w-full max-w-[1600px] px-3 sm:px-6 xl:px-8"
         >
-          {/* Flex row: logo | nav (centered, desktop only) | actions */}
-          <div className="flex h-[72px] items-center gap-2 min-[400px]:gap-4 sm:h-[76px] xl:h-20 xl:gap-6">
-            {/* LOGO */}
+          {/*
+            3-zone grid: [logo] [nav, truly centered] [actions]
+            auto | 1fr | auto  -> the middle zone can never overlap the sides.
+            Below xl the middle zone is hidden, so the grid collapses to
+            logo (left) + actions (right).
+          */}
+          <div className="grid h-16 grid-cols-[auto_1fr] items-center gap-3 sm:h-[72px] sm:gap-4 xl:h-20 xl:grid-cols-[auto_1fr_auto] xl:gap-6">
+            {/* ZONE 1: LOGO */}
             <Link
               href="/"
               aria-label="Boss Auto Exchange home"
-              className={`group flex w-fit shrink-0 items-center ${focusRing}`}
+              className={`group flex w-fit shrink-0 items-center rounded-md ${focusRing}`}
             >
-              <Wordmark className="text-2xl min-[400px]:text-3xl sm:text-4xl 2xl:text-5xl" />
+              <Wordmark className="text-[26px] sm:text-4xl xl:text-[40px]" />
             </Link>
 
-            {/* DESKTOP NAVIGATION (xl and up) */}
-            <div className="hidden min-w-0 flex-1 justify-center xl:flex">
-              <div className="flex items-center gap-1 rounded-full border border-white/15 bg-[#040E21]/75 p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+            {/* ZONE 2: DESKTOP NAV (xl+) */}
+            <div className="col-start-2 row-start-1 hidden min-w-0 justify-center xl:flex">
+              <ul className="flex items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.04] p-1 backdrop-blur-xl">
                 {navigation.map((item) => {
                   const active = isActive(item.href);
-
                   return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      aria-current={active ? "page" : undefined}
-                      className={`relative flex items-center whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition-all duration-300 2xl:px-4 ${focusRing} ${active ? "bg-[#D41F2D] text-white shadow-[0_0_18px_rgba(212,31,45,0.7)]" : "text-white/85 hover:bg-white/10 hover:text-white"}`}
-                    >
-                      {item.name}
-                    </Link>
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        className={`flex items-center whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold transition-colors duration-200 2xl:px-4 ${focusRing} ${active ? "bg-[#D41F2D] text-white" : "text-white/80 hover:bg-white/10 hover:text-white"}`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
                   );
                 })}
-              </div>
+              </ul>
             </div>
 
-            {/* ACTIONS
-                Phones and tablets: bell, cart, account, menu.
-                Desktop (xl+): also language and install. */}
-            <div className="ml-auto flex shrink-0 items-center gap-1 min-[400px]:gap-2 xl:ml-0">
-              {/* Install App: icon only on xl, with text on 2xl */}
+            {/* ZONE 3: ACTIONS */}
+            <div className="col-start-2 row-start-1 flex min-w-0 items-center justify-end gap-1.5 sm:gap-2 xl:col-start-3">
+              {/* Install App: icon on xl, icon + label on 2xl */}
               {canInstall && (
                 <button
                   type="button"
                   onClick={handleInstallClick}
                   aria-label="Install app"
                   title="Install app"
-                  className={`hidden h-12 w-12 items-center justify-center gap-2 rounded-full border bg-[#D41F2D]/10 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-[#D41F2D]/20 xl:flex 2xl:w-auto 2xl:px-4 ${glowRed} ${focusRing}`}
+                  className={`hidden h-11 w-11 items-center justify-center gap-2 rounded-full text-sm font-semibold xl:flex 2xl:w-auto 2xl:px-4 ${utilBtn} border-[#D41F2D]/60 bg-[#D41F2D]/15 hover:bg-[#D41F2D]/25 ${focusRing}`}
                 >
                   <Download size={18} strokeWidth={2.25} />
                   <span className="hidden whitespace-nowrap 2xl:inline">
@@ -330,21 +217,19 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* Language (Google Translate): desktop only, drawer elsewhere */}
+              {/* Language: desktop only (drawer elsewhere) */}
               <div className="hidden xl:flex">
                 <LanguageSwitcher focusRing={focusRing} />
               </div>
 
-              {/* Announcement notifications */}
-              <NotificationBell className={`${glowBlue} ${focusRing}`} />
+              <NotificationBell className={`${utilBtn} ${focusRing}`} />
 
-              {/* Cart */}
               <Link
                 href="/cart"
                 aria-label={`View cart${totalItems > 0 ? `, ${totalItems} item${totalItems === 1 ? "" : "s"}` : ""}`}
-                className={`relative flex ${roundBtnSize} items-center justify-center rounded-full border bg-[#040E21]/30 text-white backdrop-blur-md transition-all duration-300 hover:text-[#FF5C68] ${glowBlue} ${focusRing}`}
+                className={`relative flex ${roundBtn} shrink-0 items-center justify-center rounded-full ${utilBtn} ${focusRing}`}
               >
-                <ShoppingCart size={20} strokeWidth={2} />
+                <ShoppingCart size={19} strokeWidth={2} />
                 {totalItems > 0 && (
                   <span className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#D41F2D] px-1 text-[10px] font-bold text-white">
                     {totalItems > 99 ? "99+" : totalItems}
@@ -352,24 +237,24 @@ export default function Navbar() {
                 )}
               </Link>
 
-              {/* Account: avatar + "My orders" (or Login when logged out) */}
-              <div className={`flex items-center ${loginGlow}`}>
+              {/* Account: from sm up in the bar; on phones it lives in the drawer */}
+              <div className={`hidden items-center sm:flex ${accountStyle}`}>
                 <UserMenu />
               </div>
 
-              {/* Phone / tablet menu button (hidden on xl+) */}
+              {/* Menu button (below xl) */}
               <button
                 type="button"
                 aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
                 onClick={() => setIsMenuOpen((open) => !open)}
-                className={`flex ${roundBtnSize} items-center justify-center rounded-full border text-white backdrop-blur-md transition-all duration-300 xl:hidden ${isMenuOpen ? `bg-[#D41F2D]/10 ${glowRed}` : `bg-[#040E21]/30 ${glowBlue}`} ${focusRing}`}
+                className={`flex ${roundBtn} shrink-0 items-center justify-center rounded-full xl:hidden ${isMenuOpen ? "border border-[#D41F2D]/70 bg-[#D41F2D]/15 text-white" : utilBtn} ${focusRing}`}
               >
                 {isMenuOpen ? (
-                  <X size={21} strokeWidth={2} />
+                  <X size={20} strokeWidth={2} />
                 ) : (
-                  <Menu size={21} strokeWidth={2} />
+                  <Menu size={20} strokeWidth={2} />
                 )}
               </button>
             </div>
@@ -377,33 +262,30 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* PHONE / TABLET MENU (below xl)
-          overflow-hidden so the closed drawer (parked off-screen to the
-          right) can never add width to the page. */}
+      {/* DRAWER (below xl). overflow-hidden so the closed drawer never adds page width. */}
       <div
         id="mobile-menu"
         aria-hidden={!isMenuOpen}
-        className={`fixed inset-0 z-40 overflow-hidden transition-all duration-500 xl:hidden ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-0 z-40 overflow-hidden transition-opacity duration-300 xl:hidden ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}
       >
-        {/* Backdrop */}
         <button
           type="button"
           aria-label="Close navigation"
           onClick={() => setIsMenuOpen(false)}
+          tabIndex={isMenuOpen ? 0 : -1}
           className="absolute inset-0 cursor-default bg-[#040E21]/70 backdrop-blur-md"
         />
 
-        {/* Navigation Drawer */}
         <div
-          className={`absolute right-0 top-0 h-full w-full max-w-md border-l border-[#D41F2D]/20 bg-[#040E21] shadow-[-20px_0_80px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+          className={`absolute right-0 top-0 flex h-full w-full max-w-sm flex-col border-l border-white/10 bg-[#040E21] pb-[env(safe-area-inset-bottom)] shadow-[-20px_0_80px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
         >
-          {/* Drawer Header */}
-          <div className="flex h-[72px] items-center justify-between border-b border-white/10 px-5 sm:h-[76px] sm:px-6">
+          {/* Drawer header */}
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 pt-[env(safe-area-inset-top)] sm:h-[72px] sm:px-6">
             <Link
               href="/"
               aria-label="Boss Auto Exchange home"
               onClick={() => setIsMenuOpen(false)}
-              className={`group ${focusRing}`}
+              className={`group rounded-md ${focusRing}`}
             >
               <Wordmark className="text-3xl" />
             </Link>
@@ -412,73 +294,39 @@ export default function Navbar() {
               type="button"
               aria-label="Close menu"
               onClick={() => setIsMenuOpen(false)}
-              className={`flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-blue-100 transition-all hover:border-[#D41F2D] hover:text-white hover:shadow-[0_0_18px_rgba(212,31,45,0.55)] ${focusRing}`}
+              className={`flex h-10 w-10 items-center justify-center rounded-full ${utilBtn} ${focusRing}`}
             >
               <X size={19} />
             </button>
           </div>
 
-          {/* Drawer Content */}
-          <div className="flex h-[calc(100%-72px)] flex-col overflow-y-auto px-5 py-7 sm:h-[calc(100%-76px)] sm:px-6">
-            {/* Install App (drawer) */}
-            {canInstall && (
-              <button
-                type="button"
-                onClick={handleInstallClick}
-                className={`mb-6 flex items-center justify-center gap-2 rounded-full border bg-[#D41F2D]/10 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#D41F2D]/20 ${glowRed} ${focusRing}`}
-              >
-                <Download size={16} strokeWidth={2.25} />
-                Install App
-              </button>
-            )}
-
-            {/* Language (drawer) */}
-            <LanguageSwitcher
-              variant="drawer"
-              focusRing={focusRing}
-              className="mb-6"
-            />
-
-            {/* Label */}
-            <div
-              className={`mb-5 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#5FA8E8] transition-all duration-500 ${isMenuOpen ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}
-            >
-              Explore Boss Auto Exchange
+          {/* Drawer body */}
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-6 sm:px-6">
+            {/* Phones only: account lives here */}
+            <div className={`mb-5 flex items-center sm:hidden ${accountStyle}`}>
+              <UserMenu />
             </div>
 
-            {/* Navigation */}
-            <nav>
+            <nav aria-label="Mobile">
               <ul className="space-y-1">
-                {navigation.map((item, index) => {
+                {navigation.map((item) => {
                   const active = isActive(item.href);
-
                   return (
-                    <li
-                      key={item.name}
-                      style={{
-                        transitionDelay: isMenuOpen
-                          ? `${80 + index * 55}ms`
-                          : "0ms",
-                      }}
-                      className={`transition-all duration-500 ease-out ${isMenuOpen ? "translate-x-0 opacity-100" : "translate-x-5 opacity-0"}`}
-                    >
+                    <li key={item.name}>
                       <Link
                         href={item.href}
                         aria-current={active ? "page" : undefined}
                         onClick={() => setIsMenuOpen(false)}
-                        className={`group relative flex min-h-[62px] items-center justify-between rounded-lg border-b border-white/[0.07] px-3 text-xl font-semibold tracking-tight transition-all duration-300 sm:min-h-[68px] sm:text-2xl ${focusRing} ${active ? "border-l-2 border-l-[#D41F2D] bg-gradient-to-r from-[#D41F2D]/25 to-transparent text-white" : "text-white/85 hover:bg-white/5 hover:text-white"}`}
+                        className={`group flex min-h-[56px] items-center justify-between rounded-xl px-4 text-lg font-semibold transition-colors duration-200 ${focusRing} ${active ? "bg-[#D41F2D] text-white" : "text-white/85 hover:bg-white/5 hover:text-white"}`}
                       >
-                        <span className="flex items-center gap-4">
-                          {/* Active indicator */}
-                          <span
-                            className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${active ? "bg-[#D41F2D] shadow-[0_0_14px_rgba(212,31,45,0.8)]" : "bg-transparent group-hover:bg-[#D41F2D]/50"}`}
-                          />
-                          {item.name}
-                        </span>
-
+                        {item.name}
                         <ArrowRight
-                          size={19}
-                          className={`transition-all duration-300 ${active ? "translate-x-0 text-[#FF5C68] opacity-100" : "translate-x-[-6px] text-blue-200/50 opacity-0 group-hover:translate-x-0 group-hover:text-[#FF5C68] group-hover:opacity-100"}`}
+                          size={18}
+                          className={
+                            active
+                              ? "opacity-100"
+                              : "opacity-0 transition-opacity group-hover:opacity-70"
+                          }
                         />
                       </Link>
                     </li>
@@ -486,6 +334,22 @@ export default function Navbar() {
                 })}
               </ul>
             </nav>
+
+            {/* Utilities pinned to the bottom */}
+            <div className="mt-auto space-y-3 pt-8">
+              <LanguageSwitcher variant="drawer" focusRing={focusRing} />
+
+              {canInstall && (
+                <button
+                  type="button"
+                  onClick={handleInstallClick}
+                  className={`flex w-full items-center justify-center gap-2 rounded-full border border-[#D41F2D]/60 bg-[#D41F2D]/15 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#D41F2D]/25 ${focusRing}`}
+                >
+                  <Download size={16} strokeWidth={2.25} />
+                  Install App
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

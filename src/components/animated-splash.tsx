@@ -2,16 +2,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Wordmark } from "@/components/layout/wordmark";
 
 /**
  * AnimatedSplash — "tachometer" version
  * -------------------------------------
- * The wordmark BOSS AUTO EXCHANGE starts dark. Under it, a tachometer
- * sweeps from 0 to redline: the red arc fills, the needle climbs, and the
- * % counter runs. As the needle passes, each letter ignites in order:
- * B → gulong (O) → S → S, and the AUTO EXCHANGE bar is revealed
- * (the O in AUTO is a small spinning gulong too).
- * At redline the wordmark flares, then everything fades into the homepage.
+ * The BOSS AUTO EXCHANGE logo is revealed left to right in step with a
+ * tachometer that sweeps from 0 to redline: the red arc fills, the needle
+ * climbs, and the % counter runs. The tire (the O in AUTO) spins the whole
+ * time. At redline the logo flares, then everything fades into the homepage.
  *
  * - Shows only when running as an installed PWA (standalone).
  * - Once per session.
@@ -107,98 +106,9 @@ export default function AnimatedSplash({
       style={{ ["--bax-fade" as string]: `${fadeMs}ms` }}
     >
       <div className="bax-stage">
-        {/* B [gulong] S S — dark until the needle reaches each letter */}
-        <h1 className="bax-word" aria-label="Boss">
-          <span className="bax-l bax-b" aria-hidden="true">
-            B
-          </span>
-
-          <span className="bax-roll" aria-hidden="true">
-            <svg className="bax-wheel" viewBox="0 0 100 100">
-              <circle
-                cx="50"
-                cy="50"
-                r="47"
-                fill="#0b1020"
-                stroke="#fff"
-                strokeWidth="5"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="41"
-                fill="none"
-                stroke="#D41F2D"
-                strokeWidth="5"
-                strokeDasharray="7 5.2"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="30"
-                fill="#040E21"
-                stroke="#fff"
-                strokeWidth="3"
-              />
-              <g stroke="#fff" strokeWidth="5" strokeLinecap="round">
-                <line x1="50" y1="50" x2="50" y2="22" />
-                <line x1="50" y1="50" x2="76.6" y2="41.4" />
-                <line x1="50" y1="50" x2="66.5" y2="72.6" />
-                <line x1="50" y1="50" x2="33.5" y2="72.6" />
-                <line x1="50" y1="50" x2="23.4" y2="41.4" />
-              </g>
-              <circle
-                cx="50"
-                cy="50"
-                r="8"
-                fill="#D41F2D"
-                stroke="#fff"
-                strokeWidth="2.5"
-              />
-            </svg>
-          </span>
-
-          <span className="bax-l bax-s1" aria-hidden="true">
-            S
-          </span>
-          <span className="bax-l bax-s2" aria-hidden="true">
-            S
-          </span>
-        </h1>
-
-        {/* AUTO EXCHANGE (the O in AUTO is a gulong) — revealed in step with the needle */}
-        <div className="bax-tag" role="img" aria-label="Auto Exchange">
-          <span className="bax-tagtext" aria-hidden="true">
-            <span>Aut</span>
-            <svg className="bax-tagwheel" viewBox="0 0 100 100">
-              <circle
-                cx="50"
-                cy="50"
-                r="47"
-                fill="#0b1020"
-                stroke="#fff"
-                strokeWidth="6"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="30"
-                fill="#1B2436"
-                stroke="#FF5C68"
-                strokeWidth="6"
-              />
-              <g stroke="#fff" strokeWidth="7" strokeLinecap="round">
-                <line x1="50" y1="50" x2="50" y2="24" />
-                <line x1="50" y1="50" x2="74.7" y2="42" />
-                <line x1="50" y1="50" x2="64.5" y2="74" />
-                <line x1="50" y1="50" x2="35.5" y2="74" />
-                <line x1="50" y1="50" x2="25.3" y2="42" />
-              </g>
-              <circle cx="50" cy="50" r="9" fill="#fff" />
-              <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
-            </svg>
-            <span className="bax-tagword">Exchange</span>
-          </span>
+        {/* Logo: revealed in step with the needle, tire spins */}
+        <div className="bax-logo">
+          <Wordmark spin="always" />
         </div>
 
         {/* Tachometer = the loading bar */}
@@ -366,90 +276,21 @@ export default function AnimatedSplash({
         .bax-stage {
           display: flex;
           flex-direction: column;
-          align-items: stretch;
+          align-items: center;
           width: fit-content;
-          font-size: clamp(56px, 19vw, 104px); /* wordmark size drives everything */
+          font-size: clamp(56px, 19vw, 104px); /* logo size drives everything */
         }
 
-        /* ---------- Wordmark ---------- */
-        .bax-word {
-          margin: 0;
+        /* ---------- Logo: revealed left to right with the needle ---------- */
+        .bax-logo {
           display: flex;
-          align-items: center;
           justify-content: center;
-          font-family: "Arial Black", "Helvetica Neue", Arial, system-ui, sans-serif;
-          font-weight: 900;
-          font-style: italic;
           font-size: 1em;
-          line-height: 1;
-          letter-spacing: 0.02em;
-          animation: bax-flare 700ms ease-out 2900ms;
-        }
-        .bax-l {
-          display: inline-block;
-          color: #fff;
-          -webkit-text-stroke: 0.045em var(--red);
-          paint-order: stroke fill;
-          text-shadow: 0 0 0.35em rgba(255,71,87,0.55), 0.04em 0.05em 0 rgba(0,0,0,0.35);
-          opacity: 0.12; /* unlit */
-        }
-        /* each letter ignites as the needle passes */
-        .bax-b  { animation: bax-ignite 520ms ease-out  450ms forwards; }
-        .bax-s1 { animation: bax-ignite 520ms ease-out 1800ms forwards; }
-        .bax-s2 { animation: bax-ignite 520ms ease-out 2350ms forwards; }
-
-        .bax-roll {
-          display: inline-block;
-          width: 0.82em;
-          height: 0.82em;
-          margin: 0 0.06em;
-          filter: drop-shadow(0 0 0.12em rgba(255,71,87,0.7));
-          opacity: 0.12;
-          animation: bax-ignite 520ms ease-out 1150ms forwards;
-        }
-        .bax-wheel {
-          display: block;
-          width: 100%;
-          height: 100%;
-          /* revs up when lit, then idles */
-          animation:
-            bax-rev 900ms cubic-bezier(0.2, 0.8, 0.3, 1) 1150ms forwards,
-            bax-spin 1400ms linear 2050ms infinite;
-        }
-
-        /* ---------- AUTO EXCHANGE ---------- */
-        .bax-tag {
-          margin-top: 0.12em;
-          display: flex;
-          justify-content: center;
-          background: var(--red);
-          color: #fff;
-          font-family: "Arial Black", "Helvetica Neue", Arial, system-ui, sans-serif;
-          font-weight: 900;
-          font-style: italic;
-          font-size: 0.17em;
-          letter-spacing: 0.42em;
-          text-transform: uppercase;
-          padding: 0.45em 0.9em 0.45em 1.3em;
-          box-shadow: 0 0 1.4em rgba(255,71,87,0.45);
           clip-path: inset(0 100% 0 0);
-          animation: bax-reveal var(--drive) linear var(--t0) forwards;
+          animation:
+            bax-reveal var(--drive) linear var(--t0) forwards,
+            bax-flare 700ms ease-out 2900ms;
         }
-        .bax-tagtext {
-          display: inline-flex;
-          align-items: center;
-          line-height: 1;
-        }
-        /* gulong = the O in AUTO; spins while the tag is revealed */
-        .bax-tagwheel {
-          display: block;
-          width: 0.95em;
-          height: 0.95em;
-          flex-shrink: 0;
-          margin: 0 0.1em;
-          animation: bax-spin 700ms linear var(--t0) infinite;
-        }
-        .bax-tagword { margin-left: 0.5em; }
 
         /* ---------- Gauge ---------- */
         .bax-gauge {
@@ -501,7 +342,7 @@ export default function AnimatedSplash({
         .bax-readout::before { content: counter(bax-n) "%"; }
 
         /* ---------- Keyframes ---------- */
-        /* needle, arc, counter and tag reveal share one speed curve */
+        /* needle, arc, counter and logo reveal share one speed curve */
         @keyframes bax-needle {
           0%   { transform: rotate(-120deg); animation-timing-function: linear; }
           85%  { transform: rotate(84deg);   animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1); }
@@ -526,20 +367,10 @@ export default function AnimatedSplash({
           85%  { clip-path: inset(0 15% 0 0);  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1); }
           100% { clip-path: inset(0 0 0 0); }
         }
-        @keyframes bax-ignite {
-          0%   { opacity: 0.12; }
-          20%  { opacity: 1; }
-          32%  { opacity: 0.35; }
-          50%  { opacity: 1; }
-          62%  { opacity: 0.7; }
-          100% { opacity: 1; }
-        }
-        @keyframes bax-rev  { to { transform: rotate(720deg); } }
-        @keyframes bax-spin { to { transform: rotate(360deg); } }
         @keyframes bax-flare {
-          0%   { filter: brightness(1) drop-shadow(0 0 0 rgba(255,71,87,0)); }
-          35%  { filter: brightness(1.35) drop-shadow(0 0 0.22em rgba(255,71,87,0.85)); }
-          100% { filter: brightness(1) drop-shadow(0 0 0 rgba(255,71,87,0)); }
+          0%   { filter: brightness(1) drop-shadow(0 0 0 rgba(61,143,217,0)); }
+          35%  { filter: brightness(1.3) drop-shadow(0 0 0.22em rgba(61,143,217,0.85)); }
+          100% { filter: brightness(1) drop-shadow(0 0 0 rgba(61,143,217,0)); }
         }
 
         @media (prefers-reduced-motion: reduce) {

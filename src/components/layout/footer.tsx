@@ -1,6 +1,7 @@
 // components/layout/footer.tsx
 import Link from "next/link";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Wordmark } from "@/components/layout/wordmark";
 
 // ---------------------------------------------------------------------------
 // Business details
@@ -70,110 +71,6 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D41F2D]";
 
-// Wheel graphic. Fills its parent, so size the parent.
-// Spins when an ancestor `group` is hovered (disabled for reduced motion).
-function Wheel({ glow }: { glow: string }) {
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className={`h-full w-full ${glow} group-hover:animate-spin motion-reduce:animate-none [animation-duration:1.2s]`}
-    >
-      {/* Tire */}
-      <circle
-        cx="50"
-        cy="50"
-        r="47"
-        fill="#0A0F1C"
-        stroke="#FFFFFF"
-        strokeWidth="5"
-      />
-      {/* Rim */}
-      <circle
-        cx="50"
-        cy="50"
-        r="30"
-        fill="#1B2436"
-        stroke="#FF5C68"
-        strokeWidth="5"
-      />
-      {/* Spokes */}
-      <g stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round">
-        {[0, 72, 144, 216, 288].map((angle) => (
-          <line
-            key={angle}
-            x1="50"
-            y1="50"
-            x2="50"
-            y2="25"
-            transform={`rotate(${angle} 50 50)`}
-          />
-        ))}
-      </g>
-      {/* Hub */}
-      <circle cx="50" cy="50" r="9" fill="#FFFFFF" />
-      <circle cx="50" cy="50" r="3.5" fill="#D41F2D" />
-    </svg>
-  );
-}
-
-// Wheel used as the "O" in BOSS. Sized in em so it scales with the wordmark.
-function WheelO() {
-  return (
-    <span
-      aria-hidden="true"
-      className="ml-[0.11em] mr-[-0.03em] flex h-[0.9em] w-[0.9em] shrink-0 -translate-y-[0.035em] items-center justify-center"
-    >
-      <Wheel glow="drop-shadow-[0_0_8px_rgba(212,31,45,0.95)]" />
-    </span>
-  );
-}
-
-// Small wheel used as the "O" in AUTO. Sized in em of the tag text.
-function TagWheelO() {
-  return (
-    <span
-      aria-hidden="true"
-      className="mx-[0.1em] inline-flex h-[0.95em] w-[0.95em] shrink-0 items-center justify-center"
-    >
-      <Wheel glow="" />
-    </span>
-  );
-}
-
-// Text logo: big white "BOSS" (the O is a wheel) with a red "AUTO EXCHANGE"
-// tag (the O in AUTO is a wheel too).
-// Place inside an element with the `group` class for hover effects.
-// Size is controlled with a text-size class (everything scales with em).
-function Wordmark({ className = "" }: { className?: string }) {
-  return (
-    <span
-      translate="no"
-      className={`notranslate flex flex-col items-center whitespace-nowrap leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] ${className}`}
-    >
-      <span
-        role="img"
-        aria-label="Boss"
-        className="flex items-center font-black uppercase italic tracking-[0.08em] text-white [text-shadow:0_0_22px_rgba(212,31,45,0.95),0_0_6px_rgba(255,255,255,0.35),2px_2px_0_#D41F2D] transition-all duration-300 group-hover:[text-shadow:0_0_30px_rgba(255,92,104,1),0_0_8px_rgba(255,255,255,0.5),2px_2px_0_#E8404B]"
-      >
-        <span aria-hidden="true">B</span>
-        <WheelO />
-        <span aria-hidden="true">SS</span>
-      </span>
-      <span
-        role="img"
-        aria-label="Auto Exchange"
-        className="mt-1.5 inline-flex items-center rounded-[3px] bg-[#D41F2D] px-2 py-[3px] text-[0.34em] font-extrabold uppercase italic tracking-[0.24em] text-white shadow-[0_0_16px_rgba(212,31,45,0.85)] transition-colors duration-300 group-hover:bg-[#E8404B]"
-      >
-        <span aria-hidden="true">AUT</span>
-        <TagWheelO />
-        <span aria-hidden="true" className="ml-[0.5em]">
-          Exchange
-        </span>
-      </span>
-    </span>
-  );
-}
-
 const socialLink =
   "flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-400 transition-all duration-300 hover:border-[#D41F2D]/50 hover:bg-[#D41F2D]/10 hover:text-[#FF5C68]";
 
@@ -186,7 +83,7 @@ export default function Footer() {
           <div className="grid gap-12 py-14 md:grid-cols-2 lg:grid-cols-4 lg:py-16">
             {/* Brand */}
             <div className="lg:col-span-1">
-              {/* Logo (text wordmark) */}
+              {/* Logo */}
               <Link
                 href="/"
                 aria-label={`${BUSINESS_NAME} home`}
