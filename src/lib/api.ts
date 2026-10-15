@@ -673,6 +673,7 @@ export interface BlogPost {
   description: string;
   image: string | null;
   video: string | null;
+  push_sent_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -684,6 +685,7 @@ export interface BlogPayload {
   video_path?: string | null;
   remove_image?: boolean;
   remove_video?: boolean;
+  notify?: boolean;
 }
 
 // Public

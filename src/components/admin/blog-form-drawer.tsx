@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Loader2, Trash2, UploadCloud, X } from "lucide-react";
+import { Bell, Loader2, Trash2, UploadCloud, X } from "lucide-react";
 import {
   createBlogPost,
   resolveMediaUrl,
@@ -88,6 +88,10 @@ export default function BlogFormDrawer({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  // Notification: checked by default for new posts, unchecked when editing
+  const [notify, setNotify] = useState(!post);
+  const alreadyNotified = Boolean(post?.push_sent_at);
+
   const uploading = imageProgress !== null || videoProgress !== null;
 
   async function handleImageSelect(file: File) {
@@ -158,6 +162,7 @@ export default function BlogFormDrawer({
       video_path: videoPath ?? undefined,
       remove_image: removeImage || undefined,
       remove_video: removeVideo || undefined,
+      notify: (!alreadyNotified && notify) || undefined,
     };
 
     setSaving(true);
@@ -310,6 +315,31 @@ export default function BlogFormDrawer({
                 )}
               </div>
             </Field>
+
+            {/* Notification */}
+            {alreadyNotified ? (
+              <p className="inline-flex items-center gap-1.5 text-xs text-zinc-500">
+                <Bell size={12} /> Customers were already notified about this
+                post.
+              </p>
+            ) : (
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-3.5">
+                <input
+                  type="checkbox"
+                  checked={notify}
+                  onChange={(e) => setNotify(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 accent-[#D41F2D]"
+                />
+                <span>
+                  <span className="block text-sm font-medium text-white">
+                    Send phone notification
+                  </span>
+                  <span className="block text-xs text-zinc-500">
+                    Everyone who turned on notifications will be alerted.
+                  </span>
+                </span>
+              </label>
+            )}
           </div>
 
           {/* Footer */}
