@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { login, fetchMe, type ApiError } from "@/lib/api";
+import { useAuth } from "@/context/auth-context";
 import { markHasAccount, pendingReturnTo, safeRedirect } from "@/lib/auth-hint";
 import {
   AuthShell,
@@ -24,16 +25,22 @@ interface LoginForm {
 }
 
 // Where each role lands after signing in.
-// Change "/" to "/dashboard" once customer accounts have their own dashboard.
 const ROLE_REDIRECTS: Record<string, string> = {
   admin: "/admin",
-  user: "/",
+  reseller: "/reseller/dashboard",
+  agent: "/agent/dashboard",
+  customer: "/",
 };
 
 const DEFAULT_REDIRECT = "/";
 
+// Partners should always land on their own dashboard, even if an unfinished
+// sell-trade draft exists. Only an explicit ?redirect= overrides it.
+const DASHBOARD_ROLES = ["admin", "reseller", "agent"];
+
 export default function LoginPage() {
   const router = useRouter();
+  const { refresh } = useAuth();
   const [form, setForm] = useState<LoginForm>({
     email: "",
     password: "",
@@ -78,19 +85,25 @@ export default function LoginPage() {
       // sent to login instead of register.
       markHasAccount();
 
+      // Sync the auth context so the navbar and dashboard guards see the
+      // logged-in user before we navigate.
+      await refresh();
+
       // Use the role from the login response; if the API doesn't return
       // the user there, fall back to /me (the session cookie is already set).
-      // The redirect is only for UX — /admin must still be protected on the
-      // server (middleware / layout) and in the API.
+      // The redirect is only for UX: dashboards must still be protected on
+      // the server and in the API.
       const role = data?.user?.role ?? (await fetchMe()).user.role;
 
       // Read the param again at submit time, then fall back to an unfinished
-      // sell-trade draft (never for admins).
+      // sell-trade draft (never for admins, resellers or agents).
       const fromUrl = safeRedirect(
         new URLSearchParams(window.location.search).get("redirect"),
       );
       const returnTo =
-        redirect ?? fromUrl ?? (role === "admin" ? null : pendingReturnTo());
+        redirect ??
+        fromUrl ??
+        (DASHBOARD_ROLES.includes(role) ? null : pendingReturnTo());
 
       const destination = returnTo ?? ROLE_REDIRECTS[role] ?? DEFAULT_REDIRECT;
 
@@ -201,9 +214,9 @@ export default function LoginPage() {
             />
             Remember me
           </label>
-          {/* <Link href="/forgot-password" className={`text-sm ${authLinkClass}`}>
+          <Link href="/forgot-password" className={`text-sm ${authLinkClass}`}>
             Forgot password?
-          </Link> */}
+          </Link>
         </div>
 
         <button type="submit" disabled={loading} className={authButtonClass}>

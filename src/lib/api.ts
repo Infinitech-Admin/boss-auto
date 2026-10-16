@@ -1,5 +1,6 @@
 // Path: lib/api.ts  (REPLACE your existing lib/api.ts; if you use src/, put it in src/lib/api.ts)
 // Changes are marked with "SEO:" comments (isServer, serverApiBase, apiRequest).
+// Changes for careers/approvals are marked with "CAREERS:" comments.
 
 // All BROWSER requests go to our own Next.js origin, through the Route Handler at
 // app/api/proxy/[...path]/route.ts. That handler forwards them to Laravel
@@ -186,12 +187,14 @@ export interface ResendVerificationResponse {
   [key: string]: unknown;
 }
 
+// CAREERS: added `status` so the frontend can tell pending apart from approved.
 export interface AuthUser {
   id: number;
   name: string;
   email: string;
   phone: string | null;
-  role: string;
+  role: string; // "customer" | "reseller" | "agent" | "admin"
+  status?: "pending" | "approved" | "rejected";
 }
 
 export interface LoginResponse {
@@ -785,6 +788,122 @@ export const fetchPushSubscriberCount = () =>
   apiRequest<{ data: { subscribers: number } }>(
     "/admin/announcements/subscribers",
   );
+
+// ---- Careers (public: reseller / agent applications) ----
+// CAREERS: new section
+
+export type ApplicantRole = "reseller" | "agent";
+
+export interface CareerApplicationPayload {
+  name: string;
+  email: string;
+  phone: string;
+  role: ApplicantRole;
+  location: string;
+  experience: string;
+  message?: string;
+  /** Optional profile photo (jpg/png/webp, max 4MB). */
+  photo?: File | null;
+  /** Optional valid ID (jpg/png/webp, max 4MB). */
+  id_document?: File | null;
+}
+
+/**
+ * Public. Creates a pending reseller/agent user — no login until approved.
+ * Sent as multipart/form-data because of the optional photo / ID files.
+ */
+export const submitCareerApplication = (payload: CareerApplicationPayload) => {
+  const formData = new FormData();
+  formData.append("name", payload.name);
+  formData.append("email", payload.email);
+  formData.append("phone", payload.phone);
+  formData.append("role", payload.role);
+  formData.append("location", payload.location);
+  formData.append("experience", payload.experience);
+  if (payload.message) formData.append("message", payload.message);
+  if (payload.photo) formData.append("photo", payload.photo);
+  if (payload.id_document) formData.append("id_document", payload.id_document);
+
+  return apiUpload<{ message: string }>("/career-applications", formData);
+};
+
+// ---- Users (admin: customers + reseller/agent approvals) ----
+// CAREERS: new section
+
+export type UserRole = "customer" | "reseller" | "agent" | "admin";
+export type UserStatus = "pending" | "approved" | "rejected";
+
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  role: UserRole;
+  status: UserStatus;
+  location: string | null;
+  experience: string | null;
+  message: string | null;
+  /** Short-lived signed URLs (absolute, straight from Laravel), or null. */
+  photo_url: string | null;
+  id_url: string | null;
+  email_verified: boolean;
+  approved_at: string | null;
+  created_at: string;
+}
+
+export const fetchAdminUsers = (
+  params?: {
+    role?: string;
+    status?: string;
+    search?: string;
+    page?: number;
+  },
+  options?: { signal?: AbortSignal },
+) => {
+  const query = new URLSearchParams();
+  if (params?.role) query.set("role", params.role);
+  if (params?.status) query.set("status", params.status);
+  if (params?.search) query.set("search", params.search);
+  if (params?.page) query.set("page", String(params.page));
+  const qs = query.toString();
+  return apiRequest<{
+    data: AdminUser[];
+    current_page: number;
+    last_page: number;
+    total: number;
+  }>(`/admin/users${qs ? `?${qs}` : ""}`, { signal: options?.signal });
+};
+
+export const approveAdminUser = (id: number) =>
+  apiRequest<{ data: AdminUser }>(`/admin/users/${id}/approve`, {
+    method: "PATCH",
+  });
+
+export const rejectAdminUser = (id: number) =>
+  apiRequest<{ data: AdminUser }>(`/admin/users/${id}/reject`, {
+    method: "PATCH",
+  });
+
+// ---- Password reset (forgot password + first-time set-password) ----
+
+export interface ResetPasswordPayload {
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
+
+export const forgotPassword = (email: string) =>
+  apiRequest<{ message: string }>("/forgot-password", {
+    method: "POST",
+    body: { email },
+  });
+
+export const resetPassword = (payload: ResetPasswordPayload) =>
+  apiRequest<{ message: string }>("/reset-password", {
+    method: "POST",
+    body: payload,
+  });
 
 export const PRICE_FALLBACK = "Inquire for price";
 

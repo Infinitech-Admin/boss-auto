@@ -18,6 +18,7 @@ import {
   Megaphone,
   Newspaper,
   Search,
+  Users,
   X,
 } from "lucide-react";
 import { fetchMe, logout, type AuthUser } from "@/lib/api";
@@ -67,6 +68,11 @@ const NAV_ITEMS: NavItem[] = [
     label: "Blog",
     href: "/admin/blog",
     icon: Newspaper,
+  },
+  {
+    label: "Users",
+    href: "/admin/users",
+    icon: Users,
   },
   {
     label: "Orders",

@@ -20,6 +20,7 @@ const navigation = [
   { name: "Sell / Trade", href: "/sell-trade" },
   { name: "About", href: "/about" },
   { name: "Blog", href: "/blog" },
+  { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/contact" },
 ];
 
