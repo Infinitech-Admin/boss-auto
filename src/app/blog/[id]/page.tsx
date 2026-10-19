@@ -73,13 +73,13 @@ export default function BlogPostPage() {
 
             {post && (
               <>
-                <p className="mt-6 text-xs uppercase tracking-[0.18em] text-zinc-400">
+                {/* <p className="mt-6 text-xs uppercase tracking-[0.18em] text-zinc-400">
                   {new Date(post.created_at).toLocaleDateString("en-PH", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
-                </p>
+                </p> */}
                 <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
                   {post.title}
                 </h1>
