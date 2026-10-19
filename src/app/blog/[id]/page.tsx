@@ -75,13 +75,13 @@ export default function BlogPostPage() {
   const imageSrc = post ? resolveMediaUrl(post.image, MEDIA_BASE_URL) : "";
   const videoSrc = post ? resolveMediaUrl(post.video, MEDIA_BASE_URL) : "";
 
-  const postedOn = post?.created_at
-    ? new Date(post.created_at).toLocaleDateString("en-PH", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "";
+  // const postedOn = post?.created_at
+  //   ? new Date(post.created_at).toLocaleDateString("en-PH", {
+  //       year: "numeric",
+  //       month: "long",
+  //       day: "numeric",
+  //     })
+  //   : "";
 
   return (
     <>
@@ -122,12 +122,12 @@ export default function BlogPostPage() {
             <article className="mt-6 grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
               {/* Title */}
               <header className="order-1 lg:col-start-2 lg:row-start-1">
-                {postedOn && (
+                {/* {postedOn && (
                   <p className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-zinc-400">
                     <CalendarDays size={14} />
                     {postedOn}
                   </p>
-                )}
+                )} */}
                 <h1 className="mt-2 text-3xl font-black leading-tight tracking-tight sm:text-4xl">
                   {post.title}
                 </h1>
