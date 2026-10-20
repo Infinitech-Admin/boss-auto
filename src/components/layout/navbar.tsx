@@ -218,10 +218,8 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* Language: desktop only (drawer elsewhere) */}
-              <div className="hidden xl:flex">
-                <LanguageSwitcher focusRing={focusRing} />
-              </div>
+              {/* Language: visible on ALL screen sizes (icon-only on phones) */}
+              <LanguageSwitcher focusRing={focusRing} />
 
               <NotificationBell className={`${utilBtn} ${focusRing}`} />
 
@@ -336,11 +334,9 @@ export default function Navbar() {
               </ul>
             </nav>
 
-            {/* Utilities pinned to the bottom */}
-            <div className="mt-auto space-y-3 pt-8">
-              <LanguageSwitcher variant="drawer" focusRing={focusRing} />
-
-              {canInstall && (
+            {/* Utilities pinned to the bottom (language moved to the header) */}
+            {canInstall && (
+              <div className="mt-auto space-y-3 pt-8">
                 <button
                   type="button"
                   onClick={handleInstallClick}
@@ -349,8 +345,8 @@ export default function Navbar() {
                   <Download size={16} strokeWidth={2.25} />
                   Install App
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
