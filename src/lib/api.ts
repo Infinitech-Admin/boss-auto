@@ -1,6 +1,7 @@
 // Path: lib/api.ts  (REPLACE your existing lib/api.ts; if you use src/, put it in src/lib/api.ts)
 // Changes are marked with "SEO:" comments (isServer, serverApiBase, apiRequest).
 // Changes for careers/approvals are marked with "CAREERS:" comments.
+// Changes for the stale-price bug are marked with "FRESH:" comments.
 
 // All BROWSER requests go to our own Next.js origin, through the Route Handler at
 // app/api/proxy/[...path]/route.ts. That handler forwards them to Laravel
@@ -94,6 +95,12 @@ interface ApiRequestOptions {
   body?: unknown;
   headers?: HeadersInit;
   signal?: AbortSignal;
+  /**
+   * FRESH: server-side only. Seconds Next.js may cache this GET.
+   * 0 = never cache (always fetch the latest from Laravel).
+   * Default stays 60 so other endpoints behave exactly as before.
+   */
+  revalidate?: number;
 }
 
 /**
@@ -104,7 +111,13 @@ interface ApiRequestOptions {
  */
 export async function apiRequest<T = unknown>(
   path: string,
-  { method = "GET", body, headers, signal }: ApiRequestOptions = {},
+  {
+    method = "GET",
+    body,
+    headers,
+    signal,
+    revalidate = 60,
+  }: ApiRequestOptions = {},
 ): Promise<T> {
   const isUnsafeMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
 
@@ -121,9 +134,12 @@ export async function apiRequest<T = unknown>(
 
   const response = await fetch(`${base}${path}`, {
     method,
-    // SEO: browser sends the session cookie; server does a public GET cached for 60s
+    // SEO: browser sends the session cookie; server does a public GET.
+    // FRESH: server cache is now configurable per call (0 = no-store).
     ...(isServer
-      ? { next: { revalidate: 60 } }
+      ? revalidate === 0
+        ? { cache: "no-store" as const }
+        : { next: { revalidate } }
       : { credentials: "include" as const }),
     signal,
     headers: {
@@ -282,12 +298,18 @@ export interface VehiclePayload {
 
 // ---- Vehicles (public, used by the storefront) ----
 // Adjust these two paths if your routes/api.php uses different ones.
+// FRESH: revalidate: 0 so price/stock/status changes show up immediately
+// instead of waiting up to 60s (and never differ between list and detail).
 
 export const fetchVehicles = (options?: { signal?: AbortSignal }) =>
-  apiRequest<{ data: Vehicle[] }>("/vehicles", { signal: options?.signal });
+  apiRequest<{ data: Vehicle[] }>("/vehicles", {
+    signal: options?.signal,
+    revalidate: 0,
+  });
 export const fetchSoldVehicles = (options?: { signal?: AbortSignal }) =>
   apiRequest<{ data: Vehicle[] }>("/vehicles/sold", {
     signal: options?.signal,
+    revalidate: 0,
   });
 export const fetchVehicle = (
   id: string | number,
@@ -295,6 +317,7 @@ export const fetchVehicle = (
 ) =>
   apiRequest<{ data: Vehicle }>(`/vehicles/${id}`, {
     signal: options?.signal,
+    revalidate: 0,
   });
 
 // ---- Vehicles (admin CRUD) ----

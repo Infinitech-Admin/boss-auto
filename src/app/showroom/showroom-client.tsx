@@ -1,5 +1,5 @@
 // Path: app/showroom/showroom-client.tsx
-// This is your OLD app/showroom/page.tsx (renamed). Edits are marked with "SEO:" comments.
+// Edits are marked with "SEO:" and "AVAILABLE ONLY:" comments.
 
 "use client";
 
@@ -59,6 +59,10 @@ const PRICE_RANGES = [
   { value: "70k-plus", label: "₱70k+" },
 ];
 
+// AVAILABLE ONLY: the showroom never lists sold / reserved cars.
+const onlyAvailable = (list: Vehicle[] | null | undefined): Vehicle[] =>
+  (list ?? []).filter((v) => v.status === "available");
+
 function Select({
   value,
   onChange,
@@ -95,7 +99,10 @@ export default function ShowroomPage({
 }: {
   initialVehicles: Vehicle[] | null;
 }) {
-  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles ?? []);
+  const [vehicles, setVehicles] = useState<Vehicle[]>(
+    // AVAILABLE ONLY: also filter here, in case a caller passes everything.
+    onlyAvailable(initialVehicles),
+  );
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("newest");
@@ -112,7 +119,8 @@ export default function ShowroomPage({
     setLoadError(null);
     try {
       const { data } = await fetchVehicles({ signal });
-      setVehicles(data ?? []);
+      // AVAILABLE ONLY: sold / reserved cars are dropped right here.
+      setVehicles(onlyAvailable(data));
       setIsLoading(false);
     } catch (err) {
       if (isAbortError(err)) return;

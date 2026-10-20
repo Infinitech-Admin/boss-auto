@@ -1,6 +1,4 @@
-// Path: app/showroom/page.tsx  (NEW server page)
-// STEP 1: rename your OLD app/showroom/page.tsx to app/showroom/showroom-client.tsx
-// STEP 2: put this file in its place (SERVER component, no "use client")
+// Path: app/showroom/page.tsx  (SERVER component, no "use client")
 import type { Metadata } from "next";
 
 import { fetchVehicles, type Vehicle } from "@/lib/api";
@@ -45,14 +43,13 @@ export default async function ShowroomPage() {
   let initialVehicles: Vehicle[] | null = null;
   try {
     const { data } = await fetchVehicles();
-    initialVehicles = data ?? [];
+    // Showroom shows AVAILABLE cars only (sold/reserved never reach the client)
+    initialVehicles = (data ?? []).filter((v) => v.status === "available");
   } catch {
     initialVehicles = null;
   }
 
-  const listed = (initialVehicles ?? []).filter(
-    (v) => v.status === "available" && v.stock > 0,
-  );
+  const listed = (initialVehicles ?? []).filter((v) => v.stock > 0);
 
   const jsonLd = {
     "@context": "https://schema.org",
