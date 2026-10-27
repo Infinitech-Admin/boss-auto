@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  AlertCircle,
   ArrowRight,
   BadgeCheck,
   CarFront,
+  CheckCircle2,
   Film,
   Gauge,
   ImagePlus,
@@ -157,6 +159,12 @@ type FormState = {
 
 type SubmitStatus = "idle" | "submitting" | "error" | "success";
 
+type ToastState = {
+  type: "success" | "error";
+  title: string;
+  message: string;
+};
+
 type Upload = {
   id: string;
   name: string;
@@ -234,6 +242,7 @@ export default function SellTradePage() {
   const [restored, setRestored] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [toast, setToast] = useState<ToastState | null>(null);
 
   // null = still checking, true = logged in, false = guest
   const [authed, setAuthed] = useState<boolean | null>(null);
@@ -248,6 +257,22 @@ export default function SellTradePage() {
   const uploading = uploads.some(
     (u) => !u.media && !u.error && (!u.queued || authed === true),
   );
+
+  // Auto-dismiss the toast (errors stay a bit longer so they can be read).
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(
+      () => setToast(null),
+      toast.type === "success" ? 6000 : 8000,
+    );
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const showError = (message: string) => {
+    setErrorMessage(message);
+    setStatus("error");
+    setToast({ type: "error", title: "Submission failed", message });
+  };
 
   const checkAuth = async () => {
     try {
@@ -315,6 +340,7 @@ export default function SellTradePage() {
   ) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
+    // Editing the form clears the on-page banner (but never mid-submit).
     if (status !== "submitting") setStatus("idle");
   };
 
@@ -480,8 +506,7 @@ export default function SellTradePage() {
     if (status === "submitting") return;
 
     if (uploading) {
-      setErrorMessage("Please wait for your uploads to finish.");
-      setStatus("error");
+      showError("Please wait for your uploads to finish.");
       return;
     }
 
@@ -492,14 +517,12 @@ export default function SellTradePage() {
       form.mileage.trim() === "" ||
       !form.fullName.trim()
     ) {
-      setErrorMessage("Please complete all required fields.");
-      setStatus("error");
+      showError("Please complete all required fields.");
       return;
     }
 
     if (!form.phone.trim() && !form.email.trim()) {
-      setErrorMessage("Please provide a phone number or an email address.");
-      setStatus("error");
+      showError("Please provide a phone number or an email address.");
       return;
     }
 
@@ -513,6 +536,7 @@ export default function SellTradePage() {
 
     setStatus("submitting");
     setErrorMessage("");
+    setToast(null);
 
     try {
       const res = await apiFetch("/sell-trade", {
@@ -545,15 +569,16 @@ export default function SellTradePage() {
       }
 
       if (!res.ok) {
-        const firstError = data?.errors
-          ? (Object.values(data.errors)[0] as string[])?.[0]
-          : null;
-        setErrorMessage(
-          firstError ||
-            data?.message ||
-            "Something went wrong. Please try again.",
+        // Collect every validation message, not just the first one.
+        const allErrors = data?.errors
+          ? (Object.values(data.errors) as string[][]).flat().filter(Boolean)
+          : [];
+
+        showError(
+          allErrors.length > 0
+            ? allErrors.join(" ")
+            : data?.message || "Something went wrong. Please try again.",
         );
-        setStatus("error");
         return;
       }
 
@@ -563,12 +588,19 @@ export default function SellTradePage() {
       });
       void clearStoredFiles();
       setStatus("success");
+      setToast({
+        type: "success",
+        title: "Submitted successfully",
+        message:
+          "Your vehicle details were submitted. Our team will contact you soon.",
+      });
       setForm(initialForm); // the draft effect clears the saved draft
       setRestored(false);
       setUploads([]);
     } catch {
-      setErrorMessage("Unable to reach the server. Please try again.");
-      setStatus("error");
+      showError(
+        "Unable to reach the server. Please check your connection and try again.",
+      );
     }
   };
 
@@ -579,6 +611,47 @@ export default function SellTradePage() {
   return (
     <>
       <Navbar />
+
+      {/* Toast */}
+      {toast && (
+        <div
+          role={toast.type === "error" ? "alert" : "status"}
+          className={`fixed right-4 top-24 z-50 w-[calc(100%-2rem)] max-w-sm rounded-2xl border bg-[#071A38] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.5)] ${
+            toast.type === "success"
+              ? "border-emerald-400/30"
+              : "border-[#D41F2D]/40"
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            {toast.type === "success" ? (
+              <CheckCircle2
+                size={20}
+                className="mt-0.5 shrink-0 text-emerald-400"
+              />
+            ) : (
+              <AlertCircle
+                size={20}
+                className="mt-0.5 shrink-0 text-[#FF5C68]"
+              />
+            )}
+
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-white">{toast.title}</p>
+              <p className="mt-1 text-xs leading-5 text-zinc-300">
+                {toast.message}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              aria-label="Dismiss"
+              onClick={() => setToast(null)}
+            >
+              <X size={16} className="text-zinc-500 hover:text-white" />
+            </button>
+          </div>
+        </div>
+      )}
 
       <main className="min-h-screen bg-[#071A38] text-white">
         <section className="relative overflow-hidden border-b border-[#D41F2D]/20 bg-[#040E21]">
@@ -1031,6 +1104,48 @@ export default function SellTradePage() {
 
                   {/* Actions */}
                   <div className="mt-6 border-t border-white/10 pt-5">
+                    {/* Status banner */}
+                    {status === "error" && (
+                      <div
+                        role="alert"
+                        className="mb-4 flex items-start gap-3 rounded-2xl border border-[#D41F2D]/40 bg-[#D41F2D]/10 p-4"
+                      >
+                        <AlertCircle
+                          size={18}
+                          className="mt-0.5 shrink-0 text-[#FF5C68]"
+                        />
+                        <div>
+                          <p className="text-sm font-bold text-[#FF5C68]">
+                            Submission failed
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-zinc-300">
+                            {errorMessage}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {status === "success" && (
+                      <div
+                        role="status"
+                        className="mb-4 flex items-start gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4"
+                      >
+                        <CheckCircle2
+                          size={18}
+                          className="mt-0.5 shrink-0 text-emerald-400"
+                        />
+                        <div>
+                          <p className="text-sm font-bold text-emerald-400">
+                            Submitted successfully
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-zinc-300">
+                            Your vehicle details were submitted. Our team will
+                            contact you soon.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <button
                         type="submit"
@@ -1089,25 +1204,6 @@ export default function SellTradePage() {
                         Welcome back! Your details were restored and any photos
                         or videos you added are uploading. Review everything,
                         then submit.
-                      </p>
-                    )}
-
-                    {status === "error" && (
-                      <p
-                        role="alert"
-                        className="mt-3 text-center text-[11px] leading-5 text-[#FF5C68]"
-                      >
-                        {errorMessage}
-                      </p>
-                    )}
-
-                    {status === "success" && (
-                      <p
-                        role="status"
-                        className="mt-3 text-center text-[11px] leading-5 text-[#5FA8E8]"
-                      >
-                        Thanks! Your vehicle details were submitted. Our team
-                        will contact you soon.
                       </p>
                     )}
 
