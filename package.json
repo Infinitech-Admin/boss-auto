@@ -10,7 +10,7 @@
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
     "@google-analytics/data": "^7.2.1",
-    "@marsidev/react-turnstile": "^1.6.2",
+    "@marsidev/react-turnstile": "^1.6.3",
     "@next/third-parties": "^16.4.0",
     "@vercel/analytics": "^2.0.1",
     "jspdf": "^4.2.1",

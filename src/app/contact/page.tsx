@@ -2,7 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import {
   ArrowRight,
   Clock3,
@@ -15,6 +16,7 @@ import {
 
 import Navbar from "../../components/layout/navbar";
 import Footer from "../../components/layout/footer";
+import TurnstileWidget from "../../components/security/turnstile-widget";
 
 // ---------------------------------------------------------------------------
 // Business details
@@ -92,7 +94,9 @@ type FormData = {
   message: string;
 };
 
-type FormErrors = Partial<Record<keyof FormData | "privacy", string>>;
+type FormErrors = Partial<
+  Record<keyof FormData | "privacy" | "captcha", string>
+>;
 
 const emptyForm: FormData = {
   firstName: "",
@@ -129,6 +133,8 @@ export default function Contact() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [honeypot, setHoneypot] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
   const [status, setStatus] = useState<{
     type: "success" | "error";
     message: string;
@@ -194,7 +200,16 @@ export default function Contact() {
       return;
     }
 
+    if (!captchaToken) {
+      setErrors((current) => ({
+        ...current,
+        captcha: "Please complete the CAPTCHA before submitting your enquiry.",
+      }));
+      return;
+    }
+
     setPrivacyError("");
+    setErrors((current) => ({ ...current, captcha: "" }));
     setSubmitting(true);
 
     try {
@@ -209,6 +224,7 @@ export default function Contact() {
           looking_for: formData.lookingFor.trim() || null,
           message: formData.message.trim(),
           privacy_accepted: acceptedPrivacy,
+          turnstile_token: captchaToken,
           website: honeypot,
         }),
       });
@@ -233,6 +249,11 @@ export default function Contact() {
           ([key, messages]) => {
             if (key === "privacy_accepted") {
               serverErrors.privacy = messages[0];
+              return;
+            }
+
+            if (key === "captcha") {
+              serverErrors.captcha = messages[0];
               return;
             }
 
@@ -264,6 +285,8 @@ export default function Contact() {
       });
     } finally {
       setSubmitting(false);
+      setCaptchaToken("");
+      turnstileRef.current?.reset();
     }
   };
 
@@ -580,6 +603,23 @@ export default function Contact() {
                     {errors.privacy || privacyError}
                   </p>
                 ) : null}
+
+                <div>
+                  <TurnstileWidget
+                    ref={turnstileRef}
+                    onToken={(token) => {
+                      setCaptchaToken(token);
+                      if (token) {
+                        setErrors((current) => ({ ...current, captcha: "" }));
+                      }
+                    }}
+                  />
+                  {errors.captcha ? (
+                    <p className="mt-2 text-sm text-[#F59AA2]">
+                      {errors.captcha}
+                    </p>
+                  ) : null}
+                </div>
 
                 {status ? (
                   <p

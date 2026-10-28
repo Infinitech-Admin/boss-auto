@@ -13,6 +13,7 @@ const ALLOWED_FIELDS = [
   "looking_for",
   "message",
   "privacy_accepted",
+  "turnstile_token",
   "website", // honeypot
 ] as const;
 

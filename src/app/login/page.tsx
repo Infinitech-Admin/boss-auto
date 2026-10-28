@@ -1,10 +1,10 @@
-// app/login/page.tsx
 
 "use client";
 
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import TurnstileCaptcha from "@/components/TurnstileCaptcha";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { login, fetchMe, type ApiError } from "@/lib/api";
 import { useAuth } from "@/context/auth-context";
@@ -24,7 +24,6 @@ interface LoginForm {
   remember: boolean;
 }
 
-// Where each role lands after signing in.
 const ROLE_REDIRECTS: Record<string, string> = {
   admin: "/admin",
   reseller: "/reseller/dashboard",
@@ -33,30 +32,33 @@ const ROLE_REDIRECTS: Record<string, string> = {
 };
 
 const DEFAULT_REDIRECT = "/";
-
-// Partners should always land on their own dashboard, even if an unfinished
-// sell-trade draft exists. Only an explicit ?redirect= overrides it.
 const DASHBOARD_ROLES = ["admin", "reseller", "agent"];
 
 export default function LoginPage() {
   const router = useRouter();
   const { refresh } = useAuth();
+
   const [form, setForm] = useState<LoginForm>({
     email: "",
     password: "",
     remember: false,
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // If we were sent here from a protected page (e.g. sell-trade), go back
-  // there after signing in. Only same-site paths are allowed.
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaKey, setCaptchaKey] = useState(0);
+
   const [redirect, setRedirect] = useState<string | null>(null);
+
   useEffect(() => {
     setRedirect(
-      safeRedirect(new URLSearchParams(window.location.search).get("redirect")),
+      safeRedirect(
+        new URLSearchParams(window.location.search).get("redirect")
+      )
     );
   }, []);
 
@@ -66,40 +68,54 @@ export default function LoginPage() {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
+
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    if (name === "email" || name === "password") {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (loading) return;
+
     setErrors({});
     setFormError("");
+
+    if (!captchaToken) {
+      setFormError("Please complete the CAPTCHA before signing in.");
+      return;
+    }
+
     setLoading(true);
 
+    // Keep the token for this request only. Turnstile tokens are single-use.
+    const token = captchaToken;
+
     try {
-      const data = await login(form);
+      const data = await login({
+        ...form,
+        turnstile_token: token,
+      });
 
-      // Remember this browser has an account, so guests who come back are
-      // sent to login instead of register.
       markHasAccount();
-
-      // Sync the auth context so the navbar and dashboard guards see the
-      // logged-in user before we navigate.
       await refresh();
 
-      // Use the role from the login response; if the API doesn't return
-      // the user there, fall back to /me (the session cookie is already set).
-      // The redirect is only for UX: dashboards must still be protected on
-      // the server and in the API.
       const role = data?.user?.role ?? (await fetchMe()).user.role;
 
-      // Read the param again at submit time, then fall back to an unfinished
-      // sell-trade draft (never for admins, resellers or agents).
       const fromUrl = safeRedirect(
-        new URLSearchParams(window.location.search).get("redirect"),
+        new URLSearchParams(window.location.search).get("redirect")
       );
+
       const returnTo =
         redirect ??
         fromUrl ??
@@ -109,19 +125,41 @@ export default function LoginPage() {
 
       router.push(destination);
       router.refresh();
+
     } catch (err) {
       const apiErr = err as ApiError;
+
       if (apiErr.errors) {
         const fieldErrors: Record<string, string> = {};
+
         for (const key in apiErr.errors) {
           fieldErrors[key] = apiErr.errors[key][0];
         }
+
         setErrors(fieldErrors);
+
+        if (fieldErrors.captcha || fieldErrors.turnstile_token) {
+          setFormError(
+            "CAPTCHA verification failed. Please try again."
+          );
+        } else if (fieldErrors.email || fieldErrors.password) {
+          setFormError("Please check your login credentials.");
+        } else {
+          setFormError(
+            apiErr.message || "Unable to sign in. Please try again."
+          );
+        }
       } else {
-        setFormError(apiErr.message || "Unable to sign in. Please try again.");
+        setFormError(
+          apiErr.message || "Unable to sign in. Please try again."
+        );
       }
     } finally {
       setLoading(false);
+      setCaptchaToken("");
+
+      // Remount the widget to obtain a fresh token for the next attempt.
+      setCaptchaKey((key) => key + 1);
     }
   }
 
@@ -130,8 +168,11 @@ export default function LoginPage() {
       headline="Your next car is waiting."
       blurb="Sign in to save listings, track offers and pick up where you left off."
     >
-      <form onSubmit={handleSubmit} noValidate>
-        <h1 className="mb-1 text-2xl font-bold text-white">Welcome back</h1>
+      <form onSubmit={handleSubmit}>
+        <h1 className="mb-1 text-2xl font-bold text-white">
+          Welcome back
+        </h1>
+
         <p className="mb-6 text-sm text-zinc-400">
           Sign in to your Boss Auto Exchange account.
         </p>
@@ -149,6 +190,7 @@ export default function LoginPage() {
           <label htmlFor="email" className={authLabelClass}>
             Email
           </label>
+
           <input
             id="email"
             name="email"
@@ -162,6 +204,7 @@ export default function LoginPage() {
             className={authInputClass}
             placeholder="you@example.com"
           />
+
           {errors.email && (
             <p id="email-error" className={authErrorClass}>
               {errors.email}
@@ -173,6 +216,7 @@ export default function LoginPage() {
           <label htmlFor="password" className={authLabelClass}>
             Password
           </label>
+
           <div className="relative">
             <input
               id="password"
@@ -183,19 +227,23 @@ export default function LoginPage() {
               value={form.password}
               onChange={handleChange}
               aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? "password-error" : undefined}
+              aria-describedby={
+                errors.password ? "password-error" : undefined
+              }
               className={`${authInputClass} pr-12`}
               placeholder="Enter your password"
             />
+
             <button
               type="button"
-              onClick={() => setShowPassword((v) => !v)}
+              onClick={() => setShowPassword((value) => !value)}
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-zinc-400 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D41F2D]"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
+
           {errors.password && (
             <p id="password-error" className={authErrorClass}>
               {errors.password}
@@ -214,12 +262,37 @@ export default function LoginPage() {
             />
             Remember me
           </label>
-          <Link href="/forgot-password" className={`text-sm ${authLinkClass}`}>
+
+          <Link
+            href="/forgot-password"
+            className={`text-sm ${authLinkClass}`}
+          >
             Forgot password?
           </Link>
         </div>
 
-        <button type="submit" disabled={loading} className={authButtonClass}>
+        <div className="mb-4">
+          <TurnstileCaptcha
+            key={captchaKey}
+            onVerify={(token) => {
+              setCaptchaToken(token);
+              setFormError("");
+            }}
+            onExpire={() => setCaptchaToken("")}
+            onError={() => {
+              setCaptchaToken("");
+              setFormError(
+                "CAPTCHA could not load. Please refresh and try again."
+              );
+            }}
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading || !captchaToken}
+          className={authButtonClass}
+        >
           {loading && <Loader2 size={16} className="animate-spin" />}
           {loading ? "Signing in..." : "Sign in"}
         </button>

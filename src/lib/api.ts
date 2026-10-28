@@ -1,20 +1,5 @@
-// Path: lib/api.ts  (REPLACE your existing lib/api.ts; if you use src/, put it in src/lib/api.ts)
-// Changes are marked with "SEO:" comments (isServer, serverApiBase, apiRequest).
-// Changes for careers/approvals are marked with "CAREERS:" comments.
-// Changes for the stale-price bug are marked with "FRESH:" comments.
-
-// All BROWSER requests go to our own Next.js origin, through the Route Handler at
-// app/api/proxy/[...path]/route.ts. That handler forwards them to Laravel
-// (using the server-only LARAVEL_API_URL env var), so the browser only ever
-// talks to one origin and CORS never comes into play.
-//
-//   /api/proxy/login                -> {LARAVEL_API_URL}/api/login
-//   /api/proxy/sanctum/csrf-cookie  -> {LARAVEL_API_URL}/sanctum/csrf-cookie
 const API_BASE = "/api/proxy";
 
-// SEO: Server-side code (Server Components, generateMetadata, sitemap) has no
-// browser origin, so it calls Laravel directly instead of going through the
-// proxy. LARAVEL_API_URL is the same server-only env var the proxy route uses.
 const isServer = typeof window === "undefined";
 
 function serverApiBase(): string {
@@ -23,12 +8,6 @@ function serverApiBase(): string {
   return `${url.replace(/\/$/, "")}/api`;
 }
 
-/**
- * Origin that vehicle media paths (e.g. "/storage/vehicles/images/x.jpg")
- * are resolved against. <img>/<video> tags aren't subject to CORS, so media
- * still loads straight from Laravel. Safe to use in client components
- * because it comes from a NEXT_PUBLIC_ variable.
- */
 export const MEDIA_BASE_URL =
   process.env.NEXT_PUBLIC_MEDIA_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
@@ -38,7 +17,6 @@ export interface ApiError extends Error {
   errors?: Record<string, string[]> | null;
 }
 
-/** True when a request was cancelled via AbortController. */
 export function isAbortError(err: unknown): boolean {
   return (
     typeof err === "object" &&
@@ -47,32 +25,12 @@ export function isAbortError(err: unknown): boolean {
   );
 }
 
-/**
- * Reads a cookie by name. The only cookie we ever read here is
- * XSRF-TOKEN, which Laravel deliberately leaves non-httpOnly so the SPA
- * can echo it back as an anti-CSRF header. The actual auth session cookie
- * is httpOnly and is never touched by this code — the browser attaches it
- * automatically on every request because we pass credentials: "include".
- */
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-/**
- * Vehicle images/videos come back from the API as paths relative to the
- * API's own origin (e.g. "/storage/vehicles/images/xyz.jpg", from Laravel's
- * Storage::url()). Since the frontend and API run on different
- * hosts/ports, those relative paths resolve against the wrong origin if
- * rendered as-is.
- *
- * This takes `base` as an argument rather than reading an env var itself,
- * on purpose: it lets a Server Component read a plain (non-NEXT_PUBLIC_)
- * env var like LARAVEL_API_URL on the server and pass the resolved string
- * down as a prop, instead of requiring the value to be exposed to the
- * client bundle.
- */
 export function resolveMediaUrl(
   path: string | null | undefined,
   base: string,
@@ -95,20 +53,9 @@ interface ApiRequestOptions {
   body?: unknown;
   headers?: HeadersInit;
   signal?: AbortSignal;
-  /**
-   * FRESH: server-side only. Seconds Next.js may cache this GET.
-   * 0 = never cache (always fetch the latest from Laravel).
-   * Default stays 60 so other endpoints behave exactly as before.
-   */
   revalidate?: number;
 }
 
-/**
- * Central fetch wrapper. Never reads or writes localStorage/sessionStorage
- * — auth state lives entirely in the httpOnly session cookie set by the
- * API, and CSRF protection lives in the (non-httpOnly, by design) XSRF
- * cookie mirrored back as a header below.
- */
 export async function apiRequest<T = unknown>(
   path: string,
   {
@@ -174,6 +121,7 @@ export interface LoginPayload {
   email: string;
   password: string;
   remember?: boolean;
+  turnstile_token: string;
 }
 
 export interface RegisterPayload {
@@ -219,7 +167,10 @@ export interface LoginResponse {
 }
 
 export const login = (payload: LoginPayload) =>
-  apiRequest<LoginResponse>("/login", { method: "POST", body: payload });
+  apiRequest<LoginResponse>("/login", {
+    method: "POST",
+    body: payload,
+  });
 
 export const register = (payload: RegisterPayload) =>
   apiRequest<RegisterResponse>("/register", { method: "POST", body: payload });
