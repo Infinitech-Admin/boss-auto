@@ -2,6 +2,7 @@
 // Fixes: page-level horizontal drag, gallery swipe bugs, mobile overflow,
 // and (new) oversized mobile arrows + sticky bar overlapping the chat bubble.
 // Changes are marked with "FIX:" comments.
+// NEW: "Ask a question" replaced by "Inquire now" -> opens Messenger.
 
 "use client";
 
@@ -37,6 +38,8 @@ import {
   type ApiError,
   type Vehicle,
 } from "@/lib/api";
+
+const MESSENGER_URL = "https://m.me/bossautoexchange";
 
 /*
   Boss Auto Exchange palette (matches the contact page)
@@ -522,6 +525,9 @@ export default function CarDetailsPage({
     },
   ];
 
+  // Messenger link, tagged with the car id so you know which car was inquired.
+  const inquireHref = `${MESSENGER_URL}?ref=car_${car.id}`;
+
   const cartBtn = `flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF4D5A] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/40 disabled:hover:bg-white/10 ${ring}`;
   const outlineBtn = `inline-flex items-center justify-center rounded-xl border border-[#1A2A52] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:border-[#FF4D5A] hover:text-[#FF4D5A] ${ring}`;
 
@@ -673,16 +679,18 @@ export default function CarDetailsPage({
                     >
                       Book a test drive
                     </button>
-                    <Link
-                      href="/contact"
+                    <a
+                      href={inquireHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className={
                         priced
                           ? outlineBtn
                           : `inline-flex items-center justify-center rounded-xl bg-[#FF4D5A] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`
                       }
                     >
-                      {priced ? "Ask a question" : PRICE_FALLBACK}
-                    </Link>
+                      Inquire now
+                    </a>
                   </div>
                 </aside>
 
@@ -726,12 +734,14 @@ export default function CarDetailsPage({
             {cartLabel}
           </button>
         ) : (
-          <Link
-            href="/contact"
+          <a
+            href={inquireHref}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`flex min-w-0 flex-1 items-center justify-center rounded-xl bg-[#FF4D5A] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#FF6B75] ${ring}`}
           >
-            Inquire
-          </Link>
+            Inquire now
+          </a>
         )}
       </div>
 

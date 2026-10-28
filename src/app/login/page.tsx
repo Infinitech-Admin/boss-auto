@@ -1,3 +1,4 @@
+// app/login/page.tsx
 
 "use client";
 
@@ -37,13 +38,11 @@ const DASHBOARD_ROLES = ["admin", "reseller", "agent"];
 export default function LoginPage() {
   const router = useRouter();
   const { refresh } = useAuth();
-
   const [form, setForm] = useState<LoginForm>({
     email: "",
     password: "",
     remember: false,
   });
-
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
@@ -68,7 +67,6 @@ export default function LoginPage() {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
-
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -185,7 +183,6 @@ export default function LoginPage() {
           <label htmlFor="email" className={authLabelClass}>
             Email
           </label>
-
           <input
             id="email"
             name="email"
@@ -199,7 +196,6 @@ export default function LoginPage() {
             className={authInputClass}
             placeholder="you@example.com"
           />
-
           {errors.email && (
             <p id="email-error" className={authErrorClass}>
               {errors.email}
@@ -211,7 +207,6 @@ export default function LoginPage() {
           <label htmlFor="password" className={authLabelClass}>
             Password
           </label>
-
           <div className="relative">
             <input
               id="password"
@@ -238,7 +233,6 @@ export default function LoginPage() {
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
-
           {errors.password && (
             <p id="password-error" className={authErrorClass}>
               {errors.password}
@@ -294,7 +288,6 @@ export default function LoginPage() {
           {loading && <Loader2 size={16} className="animate-spin" />}
           {loading ? "Signing in..." : "Sign in"}
         </button>
-
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           New to Boss Auto Exchange?{" "}
