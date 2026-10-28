@@ -97,8 +97,6 @@ export default function LoginPage() {
     }
 
     setLoading(true);
-
-    // Keep the token for this request only. Turnstile tokens are single-use.
     const token = captchaToken;
 
     try {
@@ -121,11 +119,11 @@ export default function LoginPage() {
         fromUrl ??
         (DASHBOARD_ROLES.includes(role) ? null : pendingReturnTo());
 
-      const destination = returnTo ?? ROLE_REDIRECTS[role] ?? DEFAULT_REDIRECT;
+      const destination =
+        returnTo ?? ROLE_REDIRECTS[role] ?? DEFAULT_REDIRECT;
 
       router.push(destination);
       router.refresh();
-
     } catch (err) {
       const apiErr = err as ApiError;
 
@@ -139,9 +137,7 @@ export default function LoginPage() {
         setErrors(fieldErrors);
 
         if (fieldErrors.captcha || fieldErrors.turnstile_token) {
-          setFormError(
-            "CAPTCHA verification failed. Please try again."
-          );
+          setFormError("CAPTCHA verification failed. Please try again.");
         } else if (fieldErrors.email || fieldErrors.password) {
           setFormError("Please check your login credentials.");
         } else {
@@ -157,11 +153,10 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
       setCaptchaToken("");
-
-      // Remount the widget to obtain a fresh token for the next attempt.
       setCaptchaKey((key) => key + 1);
     }
   }
+
 
   return (
     <AuthShell
@@ -278,7 +273,10 @@ export default function LoginPage() {
               setCaptchaToken(token);
               setFormError("");
             }}
-            onExpire={() => setCaptchaToken("")}
+            onExpire={() => {
+              setCaptchaToken(""); 
+              setFormError("Verification expired. Please complete it again.");
+            }}
             onError={() => {
               setCaptchaToken("");
               setFormError(
@@ -296,6 +294,7 @@ export default function LoginPage() {
           {loading && <Loader2 size={16} className="animate-spin" />}
           {loading ? "Signing in..." : "Sign in"}
         </button>
+
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           New to Boss Auto Exchange?{" "}

@@ -18,7 +18,7 @@ export default function TurnstileCaptcha({
 
     if (!siteKey) {
         return (
-            <p className="text-sm text-red-600">
+            <p role="alert" className="text-sm text-red-500">
                 CAPTCHA configuration is missing.
             </p>
         );
@@ -34,6 +34,8 @@ export default function TurnstileCaptcha({
                 options={{
                     theme: "auto",
                     size: "flexible",
+                    appearance: "always",
+                    execution: "render",
                 }}
             />
         </div>
