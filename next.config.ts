@@ -65,11 +65,25 @@ const withPWAConfig = withPWA({
   // Reload when the device comes back online.
   reloadOnOnline: true,
 
+  // Keep the default caching rules (images, fonts, JS, CSS), and put
+  // the custom rules below in front of them.
+  extendDefaultRuntimeCaching: true,
+
   // Disable PWA in development.
   disable: process.env.NODE_ENV === "development",
 
   workboxOptions: {
     disableDevLogs: true,
+
+    runtimeCaching: [
+      // Never cache API responses (logged-in data), same-origin
+      // (/api/me, /api/proxy/...) or from the Laravel backend.
+      // The first matching rule wins, so this must stay first.
+      {
+        urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith("/api/"),
+        handler: "NetworkOnly",
+      },
+    ],
   },
 });
 
